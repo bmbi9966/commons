@@ -7,7 +7,7 @@
     <artifactId>commons</artifactId>
     <name>Commons</name>
     <packaging>jar</packaging>
-    <version>5.0.0</version>
+    <version>6.0.0</version>
     <url>https://github.com/hsiafan/commons</url>
 
     <parent>
@@ -56,14 +56,33 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>net.dongliu.commons</Automatic-Module-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
+                <groupId>org.moditect</groupId>
+                <artifactId>moditect-maven-plugin</artifactId>
+                <version>1.0.0.Alpha2</version>
+                <executions>
+                    <execution>
+                        <id>add-module-info</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>add-module-info</goal>
+                        </goals>
+                        <configuration>
+                            <module>
+                                <moduleInfo>
+                                    <name>net.dongliu.commons</name>
+                                    <exports>
+                                        net.dongliu.commons;
+                                        net.dongliu.commons.io;
+                                        net.dongliu.commons.collection;
+                                        !*;
+                                    </exports>
+                                    <requires>
+                                    </requires>
+                                </moduleInfo>
+                            </module>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -90,6 +109,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                        <version>3.7</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
