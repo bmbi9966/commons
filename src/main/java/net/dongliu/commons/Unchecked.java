@@ -1,6 +1,5 @@
 package net.dongliu.commons;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionException;
 import java.util.function.*;
 
@@ -25,11 +24,11 @@ public class Unchecked {
     /**
      * Call a block of code, return result, and wrap thrown exception in CompletionException.
      *
-     * @param callable
+     * @param supplier
      */
-    public static <T> T call(Callable<T> callable) {
+    public static <T> T call(ESupplier<T> supplier) {
         try {
-            return callable.call();
+            return supplier.get();
         } catch (Exception e) {
             throw new CompletionException(e);
         }
@@ -55,15 +54,19 @@ public class Unchecked {
         };
     }
 
+    public interface ESupplier<T> {
+        T get() throws Exception;
+    }
+
     /**
      * Wrap to Supplier interface
      *
      * @return
      */
-    public static <T> Supplier<T> supplier(Callable<T> supplier) {
+    public static <T> Supplier<T> supplier(ESupplier<T> supplier) {
         return () -> {
             try {
-                return supplier.call();
+                return supplier.get();
             } catch (Exception e) {
                 throw new CompletionException(e);
             }
