@@ -4,38 +4,50 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * Supplier that only compute value once. The computed value cannot be null.
+ * Supplier that only compute value once.
  *
  * @param <T>
  */
 public class Lazy<T> implements Supplier<T> {
 
-
+    private volatile boolean init;
     private volatile T value;
+    private volatile Throwable throwable;
     private final Supplier<T> supplier;
 
     private Lazy(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 
+    /**
+     * Create one new Lazy instance.
+     *
+     * @param supplier provider the value
+     * @param <T>      the value type
+     * @return
+     */
     public static <T> Lazy<T> of(Supplier<T> supplier) {
         return new Lazy<>(Objects.requireNonNull(supplier));
     }
 
     @Override
     public T get() {
-        if (value == null) {
+        if (!init) {
             synchronized (this) {
-                if (value == null) {
-                    T value = supplier.get();
-                    if (value == null) {
-                        throw new NullPointerException();
+                if (!init) {
+                    try {
+                        this.value = supplier.get();
+                    } catch (Throwable t) {
+                        this.throwable = t;
+                    } finally {
+                        init = true;
                     }
-                    this.value = value;
                 }
             }
-
         }
-        return value;
+        if (value != null) {
+            return value;
+        }
+        throw Throwables.sneakyThrow(this.throwable);
     }
 }
