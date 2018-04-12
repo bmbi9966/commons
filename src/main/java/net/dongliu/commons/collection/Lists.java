@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
+
 /**
  * Utils method for List
  */
@@ -31,35 +34,35 @@ public class Lists {
      * Create new immutable List.
      */
     public static <T> List<T> of(T v1, T v2) {
-        return Collections.unmodifiableList(Arrays.asList(v1, v2));
+        return unmodifiableList(Arrays.asList(v1, v2));
     }
 
     /**
      * Create new immutable List.
      */
     public static <T> List<T> of(T v1, T v2, T v3) {
-        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3));
+        return unmodifiableList(Arrays.asList(v1, v2, v3));
     }
 
     /**
      * Create new immutable List.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4) {
-        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3, v4));
+        return unmodifiableList(Arrays.asList(v1, v2, v3, v4));
     }
 
     /**
      * Create new immutable List.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5) {
-        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5));
+        return unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5));
     }
 
     /**
      * Create new immutable List.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5, T v6) {
-        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5, v6));
+        return unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5, v6));
     }
 
     /**
@@ -68,7 +71,7 @@ public class Lists {
      */
     @SafeVarargs
     public static <T> List<T> of(T... values) {
-        return Collections.unmodifiableList(Arrays.asList(Arrays.copyOf(values, values.length)));
+        return unmodifiableList(Arrays.asList(Arrays.copyOf(values, values.length)));
     }
 
     /**
@@ -77,7 +80,7 @@ public class Lists {
      * @return list contains the result.
      */
     public static <S, T> List<T> convertTo(List<S> list, Function<S, T> function) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         List<T> newList = new ArrayList<>(list.size());
         for (S e : list) {
             newList.add(function.apply(e));
@@ -91,7 +94,7 @@ public class Lists {
      * @return List which contains the elements in origin list, and accepted by predicate
      */
     public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         List<T> newList = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
         for (T e : list) {
             if (predicate.test(e)) {
@@ -105,7 +108,7 @@ public class Lists {
      * Split list, into multi subLists, each subList has the specified subSize, except the last one.
      */
     public static <T> List<List<T>> split(List<T> list, int subSize) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         if (subSize <= 0) {
             throw new IllegalArgumentException("SubList size must large than 0, but got: " + subSize);
         }
@@ -126,7 +129,7 @@ public class Lists {
      * @return two list
      */
     public static <T> Pair<List<T>, List<T>> partition(List<T> list, Predicate<T> predicate) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         List<T> list1 = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
         List<T> list2 = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
         for (T e : list) {
@@ -147,7 +150,7 @@ public class Lists {
      * @return Optional
      */
     public static <T> Optional<T> first(List<T> list) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         if (list.isEmpty()) {
             return Optional.empty();
         }
@@ -162,7 +165,7 @@ public class Lists {
      */
     @Nullable
     public static <T> T firstOrNull(List<T> list) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         if (list.isEmpty()) {
             return null;
         }
@@ -177,7 +180,7 @@ public class Lists {
      * @return Optional
      */
     public static <T> Optional<T> find(List<T> list, Predicate<T> predicate) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         for (T e : list) {
             if (predicate.test(e)) {
                 return Optional.of(e);
@@ -194,7 +197,7 @@ public class Lists {
      */
     @Nullable
     public static <T> T findOrNull(List<T> list, Predicate<T> predicate) {
-        Objects.requireNonNull(list);
+        requireNonNull(list);
         for (T e : list) {
             if (predicate.test(e)) {
                 return e;

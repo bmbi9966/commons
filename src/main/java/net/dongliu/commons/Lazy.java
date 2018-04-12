@@ -1,5 +1,6 @@
 package net.dongliu.commons;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -9,11 +10,12 @@ import java.util.function.Supplier;
  *
  * @param <T>
  */
-public class Lazy<T> implements Supplier<T> {
+public class Lazy<T> implements Supplier<T>, Serializable {
 
-    private volatile boolean init;
-    private T value;
-    private Throwable throwable;
+    private static final long serialVersionUID = -7365971074093939980L;
+    private transient volatile boolean init;
+    private transient T value;
+    private transient Throwable throwable;
     private final Supplier<T> supplier;
 
     private Lazy(Supplier<T> supplier) {
@@ -28,6 +30,10 @@ public class Lazy<T> implements Supplier<T> {
      * @return the created lazy value
      */
     public static <T> Lazy<T> of(Supplier<T> supplier) {
+        Objects.requireNonNull(supplier);
+        if (supplier instanceof Lazy) {
+            return (Lazy<T>) supplier;
+        }
         return new Lazy<>(Objects.requireNonNull(supplier));
     }
 
