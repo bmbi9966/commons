@@ -26,23 +26,10 @@ public class Sets {
      */
     @SafeVarargs
     public static <T> Set<T> of(T... values) {
-        return Collections.unmodifiableSet(newHashSet(values));
+        Set<T> set = new HashSet<>(Arrays.asList(values));
+        return Collections.unmodifiableSet(set);
     }
 
-    /**
-     * Create a new HashSet
-     */
-    public static <T> HashSet<T> newHashSet() {
-        return new HashSet<>();
-    }
-
-    /**
-     * Create a new HashSet
-     */
-    @SafeVarargs
-    public static <T> HashSet<T> newHashSet(T... values) {
-        return new HashSet<>(Arrays.asList(values));
-    }
 
     /**
      * Convert origin set to new set.

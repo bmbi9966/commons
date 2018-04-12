@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 public class Lazy<T> implements Supplier<T> {
 
     private volatile boolean init;
-    private volatile T value;
-    private volatile Throwable throwable;
+    private T value;
+    private Throwable throwable;
     private final Supplier<T> supplier;
 
     private Lazy(Supplier<T> supplier) {

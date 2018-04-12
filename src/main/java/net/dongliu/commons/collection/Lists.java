@@ -1,5 +1,7 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -32,23 +34,6 @@ public class Lists {
     @SafeVarargs
     public static <T> List<T> of(T... values) {
         return Collections.unmodifiableList(Arrays.asList(Arrays.copyOf(values, values.length)));
-    }
-
-    /**
-     * Create a new ArrayList
-     */
-    public static <T> ArrayList<T> newArrayList() {
-        return new ArrayList<>();
-    }
-
-    /**
-     * Create a new ArrayList
-     */
-    @SafeVarargs
-    public static <T> ArrayList<T> newArrayList(T... values) {
-        ArrayList<T> list = new ArrayList<>(Math.max(INIT_SIZE, values.length));
-        Collections.addAll(list, values);
-        return list;
     }
 
     /**
@@ -102,9 +87,7 @@ public class Lists {
     /**
      * Divide list to two list, the first list contains elements accepted by predicate, the other contains other elements.
      *
-     * @param list
-     * @param predicate
-     * @param <T>
+     * @param list can not be null
      * @return two list
      */
     public static <T> Pair<List<T>, List<T>> partition(List<T> list, Predicate<T> predicate) {
@@ -119,5 +102,69 @@ public class Lists {
             }
         }
         return Pair.of(list1, list2);
+    }
+
+    /**
+     * Fetch the first element of list.
+     * The element should not be null, or NullPointerException will be thrown.
+     *
+     * @param list can not be null
+     * @return Optional
+     */
+    public static <T> Optional<T> first(List<T> list) {
+        Objects.requireNonNull(list);
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(list.get(0));
+    }
+
+    /**
+     * Fetch the first element of list.
+     *
+     * @param list can not be null
+     * @return The first element. If list is empty, return null.
+     */
+    @Nullable
+    public static <T> T firstOrNull(List<T> list) {
+        Objects.requireNonNull(list);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    /**
+     * Fetch the first element accepted by predicate in list.
+     * The element should not be null, or NullPointerException will be thrown.
+     *
+     * @param list can not be null
+     * @return Optional
+     */
+    public static <T> Optional<T> find(List<T> list, Predicate<T> predicate) {
+        Objects.requireNonNull(list);
+        for (T e : list) {
+            if (predicate.test(e)) {
+                return Optional.of(e);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Fetch the first element accepted by predicate in list.
+     *
+     * @param list can not be null
+     * @return The first accepted element. If list is empty, return null.
+     */
+    @Nullable
+    public static <T> T findOrNull(List<T> list, Predicate<T> predicate) {
+        Objects.requireNonNull(list);
+        for (T e : list) {
+            if (predicate.test(e)) {
+                return e;
+            }
+        }
+        return null;
     }
 }
