@@ -1,6 +1,7 @@
 package net.dongliu.commons;
 
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -24,7 +25,7 @@ public class Lazy<T> implements Supplier<T> {
      *
      * @param supplier provider the value
      * @param <T>      the value type
-     * @return
+     * @return the created lazy value
      */
     public static <T> Lazy<T> of(Supplier<T> supplier) {
         return new Lazy<>(Objects.requireNonNull(supplier));
@@ -48,6 +49,18 @@ public class Lazy<T> implements Supplier<T> {
         if (value != null) {
             return value;
         }
+        // always should be unchecked exception
         throw Throwables.sneakyThrow(this.throwable);
+    }
+
+    /**
+     * Create a new lazy value, with value is calculated using function
+     *
+     * @param function the function to calculate value
+     * @param <R>      new value type
+     * @return the new lazy value
+     */
+    public <R> Lazy<R> map(Function<T, R> function) {
+        return Lazy.of(() -> function.apply(get()));
     }
 }

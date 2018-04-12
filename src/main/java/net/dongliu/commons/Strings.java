@@ -54,11 +54,11 @@ public class Strings {
     /**
      * Join strings, with prefix, suffix, and delimiter
      *
-     * @param prefix
-     * @param suffix
-     * @param delimiter
-     * @param strings
-     * @return
+     * @param prefix    the prefix to prepend, can not be null
+     * @param suffix    the suffix to append, can not be null
+     * @param delimiter the delimiter to join multi string items, can not be null
+     * @param strings   the string items
+     * @return new string
      */
     public static String join(CharSequence prefix, CharSequence suffix, CharSequence delimiter,
                               Iterable<? extends CharSequence> strings) {
@@ -85,11 +85,11 @@ public class Strings {
     /**
      * Join strings, with prefix, suffix, and delimiter
      *
-     * @param prefix
-     * @param suffix
-     * @param delimiter
-     * @param strings
-     * @return
+     * @param prefix    the prefix to prepend, can not be null
+     * @param suffix    the suffix to append, can not be null
+     * @param delimiter the delimiter to join multi string items, can not be null
+     * @param strings   the string items
+     * @return new string
      */
     public static String join(CharSequence prefix, CharSequence suffix, CharSequence delimiter,
                               CharSequence... strings) {

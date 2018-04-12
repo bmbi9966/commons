@@ -29,6 +29,41 @@ public class Lists {
 
     /**
      * Create new immutable List.
+     */
+    public static <T> List<T> of(T v1, T v2) {
+        return Collections.unmodifiableList(Arrays.asList(v1, v2));
+    }
+
+    /**
+     * Create new immutable List.
+     */
+    public static <T> List<T> of(T v1, T v2, T v3) {
+        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3));
+    }
+
+    /**
+     * Create new immutable List.
+     */
+    public static <T> List<T> of(T v1, T v2, T v3, T v4) {
+        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3, v4));
+    }
+
+    /**
+     * Create new immutable List.
+     */
+    public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5) {
+        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5));
+    }
+
+    /**
+     * Create new immutable List.
+     */
+    public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5, T v6) {
+        return Collections.unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5, v6));
+    }
+
+    /**
+     * Create new immutable List.
      * This method will do defensive copy for the param values.
      */
     @SafeVarargs

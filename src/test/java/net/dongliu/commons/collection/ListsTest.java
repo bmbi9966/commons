@@ -2,7 +2,10 @@ package net.dongliu.commons.collection;
 
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ListsTest {
 
@@ -34,5 +37,33 @@ public class ListsTest {
         assertEquals(Pair.of(Lists.of(1), Lists.of(2, 3, 4)), Lists.partition(Lists.of(1, 2, 3, 4), i -> i < 2));
         assertEquals(Pair.of(Lists.of(), Lists.of(1, 2, 3, 4)), Lists.partition(Lists.of(1, 2, 3, 4), i -> i < 1));
         assertEquals(Pair.of(Lists.of(), Lists.of()), Lists.partition(Lists.<Integer>of(), i -> i < 1));
+    }
+
+    @Test
+    public void first() {
+        assertEquals(Optional.empty(), Lists.first(Lists.of()));
+        assertEquals(Optional.of(1), Lists.first(Lists.of(1)));
+        assertEquals(Optional.of(1), Lists.first(Lists.of(1, 2)));
+    }
+
+    @Test
+    public void firstOrNull() {
+        assertNull(Lists.firstOrNull(Lists.of()));
+        assertEquals(Integer.valueOf(1), Lists.firstOrNull(Lists.of(1)));
+        assertEquals(Integer.valueOf(1), Lists.firstOrNull(Lists.of(1, 2)));
+    }
+
+    @Test
+    public void find() {
+        assertEquals(Optional.empty(), Lists.find(Lists.<Integer>of(), i -> i > 1));
+        assertEquals(Optional.empty(), Lists.find(Lists.of(1), i -> i > 1));
+        assertEquals(Optional.of(2), Lists.find(Lists.of(1, 2), i -> i > 1));
+    }
+
+    @Test
+    public void findOrNull() {
+        assertNull(Lists.findOrNull(Lists.<Integer>of(), i -> i > 1));
+        assertNull(Lists.findOrNull(Lists.of(1), i -> i > 1));
+        assertEquals(Integer.valueOf(2), Lists.findOrNull(Lists.of(1, 2), i -> i > 1));
     }
 }
