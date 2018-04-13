@@ -73,7 +73,7 @@ public class Objects2 {
             this.memberFields = Reflects.getAllMemberFields(cls);
             String className;
             if (cls.isAnonymousClass()) {
-                className = Strings.afterLast(cls.getName(), ".");
+                className = Strings.subStringAfterLast(cls.getName(), ".");
             } else {
                 className = cls.getSimpleName();
             }

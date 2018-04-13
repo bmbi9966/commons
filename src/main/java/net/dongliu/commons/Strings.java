@@ -143,6 +143,65 @@ public class Strings {
         return sb.toString();
     }
 
+    /**
+     * Return subString before first matched separator. If str does not contains sep, return the origin string.
+     *
+     * @param str the origin str. can not be null
+     * @param sep the separator to get sub string. cannot be null or empty
+     * @return sub string
+     */
+    public static String subStringBefore(String str, String sep) {
+        requireNonNull(str);
+        requireNonNull(sep);
+        if (sep.isEmpty()) {
+            throw new IllegalArgumentException("separator cannot be empty");
+        }
+        int index = str.indexOf(sep);
+        if (index < 0) {
+            return str;
+        }
+        return str.substring(0, index);
+    }
+
+    /**
+     * Return subString before last matched separator. If str does not contains sep, return the origin string.
+     *
+     * @param str the origin str. can not be null
+     * @param sep the separator to get sub string. cannot be null or empty
+     * @return sub string
+     */
+    public static String subStringBeforeLast(String str, String sep) {
+        requireNonNull(str);
+        requireNonNull(sep);
+        if (sep.isEmpty()) {
+            throw new IllegalArgumentException("separator cannot be empty");
+        }
+        int index = str.lastIndexOf(sep);
+        if (index < 0) {
+            return str;
+        }
+        return str.substring(0, index);
+    }
+
+    /**
+     * Return subString after first matched separator. If str does not contains sep, return the origin string.
+     *
+     * @param str the origin str. can not be null
+     * @param sep the separator to get sub string. cannot be null or empty
+     * @return sub string
+     */
+    public static String subStringAfter(String str, String sep) {
+        requireNonNull(str);
+        requireNonNull(sep);
+        if (sep.isEmpty()) {
+            throw new IllegalArgumentException("separator cannot be empty");
+        }
+        int index = str.indexOf(sep);
+        if (index < 0) {
+            return str;
+        }
+        return str.substring(index + sep.length());
+    }
 
     /**
      * Return subString after last separator. If str does not contains sep, return the origin string.
@@ -151,7 +210,7 @@ public class Strings {
      * @param sep the separator to get sub string. cannot be null or empty
      * @return sub string
      */
-    public static String afterLast(String str, String sep) {
+    public static String subStringAfterLast(String str, String sep) {
         requireNonNull(str);
         requireNonNull(sep);
         if (sep.isEmpty()) {

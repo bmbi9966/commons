@@ -2,7 +2,11 @@ package net.dongliu.commons;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class LazyTest {
 
@@ -18,6 +22,33 @@ public class LazyTest {
             throw new RuntimeException();
         });
         lazy.get();
+    }
+
+    @Test
+    public void multiThread() throws InterruptedException {
+        MockSupplier supplier = new MockSupplier();
+        Lazy<String> lazy = Lazy.of(supplier);
+        Thread[] threads = new Thread[100];
+        for (int i = 0; i < 100; i++) {
+            threads[i] = new Thread(lazy::get);
+        }
+        for (Thread thread : threads) {
+            thread.start();
+        }
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        assertEquals("supplier0", lazy.get());
+        assertEquals(1, supplier.count.get());
+    }
+
+    private static class MockSupplier implements Supplier<String> {
+        public final AtomicInteger count = new AtomicInteger(0);
+
+        @Override
+        public String get() {
+            return "supplier" + count.getAndIncrement();
+        }
     }
 
     @Test

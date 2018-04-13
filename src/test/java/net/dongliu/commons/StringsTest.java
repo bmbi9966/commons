@@ -61,4 +61,32 @@ public class StringsTest {
         assertEquals(1, Strings.toDouble("1", 0), 0.0001);
         assertEquals(0, Strings.toDouble("", 0), 0.0001);
     }
+
+    @Test
+    public void subStringBefore() {
+        assertEquals("ab", Strings.subStringBefore("abcdc", "c"));
+        assertEquals("ab", Strings.subStringBefore("ab", "c"));
+        assertEquals("", Strings.subStringBefore("", "c"));
+    }
+
+    @Test
+    public void subStringBeforeLast() {
+        assertEquals("abcd", Strings.subStringBeforeLast("abcdc", "c"));
+        assertEquals("ab", Strings.subStringBeforeLast("ab", "c"));
+        assertEquals("", Strings.subStringBeforeLast("", "c"));
+    }
+
+    @Test
+    public void subStringAfter() {
+        assertEquals("dc", Strings.subStringAfter("abcdc", "c"));
+        assertEquals("ab", Strings.subStringAfter("ab", "c"));
+        assertEquals("", Strings.subStringAfter("", "c"));
+    }
+
+    @Test
+    public void subStringAfterLast() {
+        assertEquals("", Strings.subStringAfterLast("abcdc", "c"));
+        assertEquals("ab", Strings.subStringAfter("ab", "c"));
+        assertEquals("", Strings.subStringAfter("", "c"));
+    }
 }

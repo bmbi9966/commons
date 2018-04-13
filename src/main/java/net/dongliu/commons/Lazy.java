@@ -6,9 +6,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Supplier that only compute value once.
+ * Supplier that only compute value once, despite succeed or fail(thrown Exceptions).
+ * The Lazy supplier also cache the Exception thrown at the initial compute phase, and throw it when meet following calls.
  *
- * @param <T>
+ * @param <T> the value type
  */
 public class Lazy<T> implements Supplier<T>, Serializable {
 
