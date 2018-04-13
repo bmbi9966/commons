@@ -81,6 +81,7 @@
                                         net.dongliu.commons.io;
                                         net.dongliu.commons.collection;
                                         net.dongliu.commons.reflection;
+                                        net.dongliu.commons.concurrent;
                                         !*;
                                     </exports>
                                     <requires>

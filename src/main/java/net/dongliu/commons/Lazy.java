@@ -5,6 +5,9 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static java.util.Objects.requireNonNull;
+import static net.dongliu.commons.Throwables.sneakyThrow;
+
 /**
  * Supplier that only compute value once, despite succeed or fail(thrown Exceptions).
  * The Lazy supplier also cache the Exception thrown at the initial compute phase, and throw it when meet following calls.
@@ -31,11 +34,11 @@ public class Lazy<T> implements Supplier<T>, Serializable {
      * @return the created lazy value
      */
     public static <T> Lazy<T> of(Supplier<T> supplier) {
-        Objects.requireNonNull(supplier);
+        requireNonNull(supplier);
         if (supplier instanceof Lazy) {
             return (Lazy<T>) supplier;
         }
-        return new Lazy<>(Objects.requireNonNull(supplier));
+        return new Lazy<>(requireNonNull(supplier));
     }
 
     @Override
@@ -57,7 +60,7 @@ public class Lazy<T> implements Supplier<T>, Serializable {
             return value;
         }
         // always should be unchecked exception
-        throw Throwables.sneakyThrow(this.throwable);
+        throw sneakyThrow(this.throwable);
     }
 
     /**

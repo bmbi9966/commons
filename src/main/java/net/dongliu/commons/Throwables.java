@@ -7,8 +7,6 @@ import java.util.Objects;
  */
 public class Throwables {
 
-    private static final RuntimeException re = new RuntimeException();
-
     /**
      * Throw the throwable without need to add throws clause to method signature. Usually, it should use like this:
      * <p>
@@ -20,7 +18,8 @@ public class Throwables {
     public static RuntimeException sneakyThrow(Throwable t) {
         Objects.requireNonNull(t);
         Throwables.throwInternal(t);
-        return re;
+        // just for making compiler happy
+        return new RuntimeException("should not reach here");
     }
 
 

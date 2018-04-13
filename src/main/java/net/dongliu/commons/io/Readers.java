@@ -34,11 +34,9 @@ public class Readers {
      * @throws IOException
      */
     public static void transferTo(Reader reader, Appendable appendable) throws IOException {
-        char[] buffer = new char[BUFFER_SIZE];
-        CharBuffer charBuffer = CharBuffer.wrap(buffer);
-        int count;
-        while ((count = reader.read(buffer)) >= 0) {
-            charBuffer.position(0).limit(count);
+        CharBuffer charBuffer = CharBuffer.allocate(BUFFER_SIZE);
+        while (reader.read(charBuffer) >= 0) {
+            charBuffer.flip();
             appendable.append(charBuffer);
         }
     }

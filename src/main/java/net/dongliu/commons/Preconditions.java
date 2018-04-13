@@ -11,7 +11,7 @@ public class Preconditions {
      * @param length len of the original Array/String/List
      * @param offset the offset of sub sequence
      * @param size   the size of sub sequence
-     * @throws IndexOutOfBoundsException
+     * @throws IndexOutOfBoundsException if index range not in Array/String/List
      */
     public static void checkSubRange(int length, int offset, int size) throws IndexOutOfBoundsException {
         if (length < 0 || offset < 0 || size < 0) {
