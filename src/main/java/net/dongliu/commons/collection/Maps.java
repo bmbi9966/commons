@@ -1,13 +1,30 @@
 package net.dongliu.commons.collection;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Utils method for Map
  */
 public class Maps {
+
+    /**
+     * If map is null, return immutable empty map; else return map self.
+     *
+     * @param map the map
+     * @return non-null map
+     */
+    @Nonnull
+    public static <K, V> Map<K, V> nullToEmpty(@Nullable Map<K, V> map) {
+        if (map == null) {
+            return of();
+        }
+        return map;
+    }
 
     /**
      * Create new immutable empty Map

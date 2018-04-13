@@ -18,4 +18,10 @@ public class SetsTest {
         assertEquals(Sets.of(1, 2, 3), Sets.filter(Sets.of(1, 2, 3, 4), i -> i < 4));
         assertEquals(Sets.of(), Sets.filter(Sets.of(1, 2, 3, 4), i -> i > 5));
     }
+
+    @Test
+    public void nullToEmpty() {
+        assertEquals(Sets.of(), Sets.nullToEmpty(null));
+        assertEquals(Sets.of(1, 2, 3), Sets.nullToEmpty(Sets.of(1, 2, 3)));
+    }
 }

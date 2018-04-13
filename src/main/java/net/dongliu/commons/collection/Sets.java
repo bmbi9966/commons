@@ -1,5 +1,7 @@
 package net.dongliu.commons.collection;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -12,6 +14,21 @@ public class Sets {
     private static final int INIT_CAPACITY = 16;
 
     private static final float LOAD_FACTOR = 0.75f;
+
+    /**
+     * If set is null, return immutable empty set; else return set self.
+     *
+     * @param set the set
+     * @param <T> the element type
+     * @return non-null set
+     */
+    @Nonnull
+    public static <T> Set<T> nullToEmpty(@Nullable Set<T> set) {
+        if (set == null) {
+            return of();
+        }
+        return set;
+    }
 
     /**
      * Create new immutable empty Set

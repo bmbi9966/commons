@@ -1,11 +1,24 @@
 package net.dongliu.commons;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
  * Utils methods for String
  */
 public class Strings {
+
+    /**
+     * If str is null, return empty str; else return str self.
+     *
+     * @param str the string
+     * @return nonNull string
+     */
+    @Nonnull
+    public static String nullToEmpty(@Nullable String str) {
+        return str == null ? "" : str;
+    }
 
     /**
      * Parse str to int. If failed, return defaultValue.

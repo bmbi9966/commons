@@ -1,6 +1,7 @@
 package net.dongliu.commons.collection;
 
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
@@ -15,6 +16,21 @@ import static java.util.Objects.requireNonNull;
 public class Lists {
 
     private static final int INIT_SIZE = 16;
+
+    /**
+     * If list is null, return immutable empty list; else return list self.
+     *
+     * @param list the list
+     * @param <T>  the element type
+     * @return non-null list
+     */
+    @Nonnull
+    public static <T> List<T> nullToEmpty(@Nullable List<T> list) {
+        if (list == null) {
+            return of();
+        }
+        return list;
+    }
 
     /**
      * Create new immutable empty List

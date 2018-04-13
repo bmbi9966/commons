@@ -8,6 +8,13 @@ import static org.junit.Assert.assertEquals;
 public class StringsTest {
 
     @Test
+    public void nullToEmpty() {
+        assertEquals("", Strings.nullToEmpty(null));
+        assertEquals("", Strings.nullToEmpty(""));
+        assertEquals("1", Strings.nullToEmpty("1"));
+    }
+
+    @Test
     public void repeat() {
         assertEquals("sasa", Strings.repeat("sa", 2));
         assertEquals("", Strings.repeat("", 2));
