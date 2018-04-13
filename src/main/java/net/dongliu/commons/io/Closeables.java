@@ -1,6 +1,7 @@
 package net.dongliu.commons.io;
 
-import net.dongliu.commons.annotation.Nullable;
+
+import javax.annotation.Nullable;
 
 /**
  * Utils for deal with Closeables and AutoCloseables

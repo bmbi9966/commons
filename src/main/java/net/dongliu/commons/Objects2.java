@@ -1,7 +1,8 @@
 package net.dongliu.commons;
 
-import net.dongliu.commons.annotation.NonNull;
-import net.dongliu.commons.annotation.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -17,8 +18,8 @@ public class Objects2 {
      * @return non-null value
      * @throws NullPointerException if value2 is null
      */
-    @NonNull
-    public static <T> T firstNonNull(@Nullable T value1, @NonNull T value2) {
+    @Nonnull
+    public static <T> T firstNonNull(@Nullable T value1, @Nonnull T value2) {
         if (value1 != null) {
             return value1;
         }

@@ -1,7 +1,7 @@
 package net.dongliu.commons.collection;
 
-import net.dongliu.commons.annotation.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
