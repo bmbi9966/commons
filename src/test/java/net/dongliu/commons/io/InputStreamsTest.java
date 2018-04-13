@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 public class InputStreamsTest {
 
