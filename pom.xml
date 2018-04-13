@@ -80,6 +80,7 @@
                                         net.dongliu.commons;
                                         net.dongliu.commons.io;
                                         net.dongliu.commons.collection;
+                                        net.dongliu.commons.reflection;
                                         !*;
                                     </exports>
                                     <requires>

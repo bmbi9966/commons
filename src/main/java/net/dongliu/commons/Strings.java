@@ -2,7 +2,8 @@ package net.dongliu.commons;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Utils methods for String
@@ -75,10 +76,10 @@ public class Strings {
      */
     public static String join(CharSequence prefix, CharSequence suffix, CharSequence delimiter,
                               Iterable<? extends CharSequence> strings) {
-        Objects.requireNonNull(prefix);
-        Objects.requireNonNull(suffix);
-        Objects.requireNonNull(delimiter);
-        Objects.requireNonNull(strings);
+        requireNonNull(prefix);
+        requireNonNull(suffix);
+        requireNonNull(delimiter);
+        requireNonNull(strings);
         StringBuilder sb = new StringBuilder();
         sb.append(prefix);
         boolean flag = false;
@@ -106,10 +107,10 @@ public class Strings {
      */
     public static String join(CharSequence prefix, CharSequence suffix, CharSequence delimiter,
                               CharSequence... strings) {
-        Objects.requireNonNull(prefix);
-        Objects.requireNonNull(suffix);
-        Objects.requireNonNull(delimiter);
-        Objects.requireNonNull(strings);
+        requireNonNull(prefix);
+        requireNonNull(suffix);
+        requireNonNull(delimiter);
+        requireNonNull(strings);
         StringBuilder sb = new StringBuilder();
         sb.append(prefix);
         for (int i = 0; i < strings.length; i++) {
@@ -126,7 +127,7 @@ public class Strings {
      * Return a new string, which content is repeat times of origin str.
      */
     public static String repeat(String str, int times) {
-        Objects.requireNonNull(str);
+        requireNonNull(str);
         if (times < 0) {
             throw new IllegalArgumentException("repeat count less then zero");
         }
@@ -143,4 +144,23 @@ public class Strings {
     }
 
 
+    /**
+     * Return subString after last separator. If str does not contains sep, return the origin string.
+     *
+     * @param str the origin str. can not be null
+     * @param sep the separator to get sub string. cannot be null or empty
+     * @return sub string
+     */
+    public static String afterLast(String str, String sep) {
+        requireNonNull(str);
+        requireNonNull(sep);
+        if (sep.isEmpty()) {
+            throw new IllegalArgumentException("separator cannot be empty");
+        }
+        int index = str.lastIndexOf(sep);
+        if (index < 0) {
+            return str;
+        }
+        return str.substring(index + sep.length());
+    }
 }
