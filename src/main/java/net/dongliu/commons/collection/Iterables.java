@@ -1,6 +1,7 @@
 package net.dongliu.commons.collection;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Stream;

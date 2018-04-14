@@ -1,7 +1,8 @@
 package net.dongliu.commons;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -16,7 +17,7 @@ public class Strings {
      * @param str the string
      * @return nonNull string
      */
-    @Nonnull
+    @NotNull
     public static String nullToEmpty(@Nullable String str) {
         return str == null ? "" : str;
     }

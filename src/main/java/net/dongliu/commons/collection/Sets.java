@@ -1,7 +1,8 @@
 package net.dongliu.commons.collection;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,7 +23,7 @@ public class Sets {
      * @param <T> the element type
      * @return non-null set
      */
-    @Nonnull
+    @NotNull
     public static <T> Set<T> nullToEmpty(@Nullable Set<T> set) {
         if (set == null) {
             return of();

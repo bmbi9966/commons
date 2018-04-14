@@ -2,10 +2,9 @@ package net.dongliu.commons;
 
 
 import net.dongliu.commons.reflection.Reflects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -27,7 +26,7 @@ public class Objects2 {
      * @return non-null value
      * @throws NullPointerException if value2 is null
      */
-    @Nonnull
+    @NotNull
     public static <T> T elvis(@Nullable T value1, T value2) {
         if (value1 != null) {
             return value1;
@@ -44,7 +43,7 @@ public class Objects2 {
      * @return non-null value
      * @throws NullPointerException if supplier is null or produce null value
      */
-    @Nonnull
+    @NotNull
     public static <T> T elvis(@Nullable T value1, Supplier<T> supplier) {
         if (value1 != null) {
             return value1;
@@ -55,12 +54,11 @@ public class Objects2 {
     /**
      * Get a ToStringHelper to convert specific type object to string.
      */
-    @Nonnull
+    @NotNull
     public static ToStringHelper toStringHelper(Class<?> cls) {
         return new ToStringHelper(requireNonNull(cls));
     }
 
-    @Immutable
     public static class ToStringHelper {
         private final Class<?> cls;
         private final boolean hasToStringMethod;

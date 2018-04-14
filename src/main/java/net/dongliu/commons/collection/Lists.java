@@ -1,8 +1,9 @@
 package net.dongliu.commons.collection;
 
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -24,7 +25,7 @@ public class Lists {
      * @param <T>  the element type
      * @return non-null list
      */
-    @Nonnull
+    @NotNull
     public static <T> List<T> nullToEmpty(@Nullable List<T> list) {
         if (list == null) {
             return of();

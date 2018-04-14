@@ -45,11 +45,14 @@
     </properties>
 
     <dependencies>
+        <!-- jsr305 not finished, just impl by findbugs or other third-part libs.
+        Those lib may conflict with other module when use in module path,
+        so we use jetbrains annotations. -->
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-            <optional>true</optional>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

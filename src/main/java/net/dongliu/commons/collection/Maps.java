@@ -1,7 +1,8 @@
 package net.dongliu.commons.collection;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class Maps {
      * @param map the map
      * @return non-null map
      */
-    @Nonnull
+    @NotNull
     public static <K, V> Map<K, V> nullToEmpty(@Nullable Map<K, V> map) {
         if (map == null) {
             return of();
