@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class InputStreamsTest {
 
@@ -50,5 +51,22 @@ public class InputStreamsTest {
     public void readExactError() throws IOException {
         byte[] buffer = new byte[10];
         InputStreams.readExact(new ByteArrayInputStream(data), buffer, 0, 1024);
+    }
+
+    @Test
+    public void consumeAll() {
+    }
+
+    @Test
+    public void discardAll() {
+    }
+
+    @Test
+    public void empty() throws IOException {
+        InputStream in = InputStreams.empty();
+        assertEquals(-1, in.read());
+        byte[] buffer = new byte[1024];
+        assertEquals(-1, in.read(buffer));
+        assertEquals(0, InputStreams.consumeAll(in));
     }
 }

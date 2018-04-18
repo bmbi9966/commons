@@ -1,6 +1,7 @@
 package net.dongliu.commons.io;
 
 import net.dongliu.commons.Preconditions;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -74,5 +75,71 @@ public class InputStreams {
             return Arrays.copyOf(buffer, read);
         }
         return buffer;
+    }
+
+    /**
+     * Read all data till EOF from InputStream. The InputStream is leaved unclosed.
+     *
+     * @return the total data size read
+     * @throws IOException
+     */
+    public static long consumeAll(InputStream in) throws IOException {
+        long total = 0;
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int read;
+        while ((read = in.read(buffer)) >= 0) {
+            total += read;
+        }
+        return total;
+    }
+
+    /**
+     * Use skip to discard all data from InputStream.
+     * If still has data after InputStream.skip returns 0, use read method to consume data.
+     * The InputStream is leaved unclosed.
+     *
+     * @return the total data size discard
+     * @throws IOException
+     */
+    public static long discardAll(InputStream in) throws IOException {
+        long total = 0;
+        long read;
+        while ((read = in.skip(BUFFER_SIZE)) > 0) {
+            total += read;
+        }
+        total += consumeAll(in);
+        return total;
+    }
+
+    /**
+     * Return a empty input stream with no data.
+     */
+    public static InputStream empty() {
+        return new InputStream() {
+            @Override
+            public int read(@NotNull byte[] b) {
+                return -1;
+            }
+
+            @Override
+            public int read(@NotNull byte[] b, int off, int len) {
+                return -1;
+            }
+
+            @Override
+            public long skip(long n) {
+                return 0;
+            }
+
+            @Override
+            public int available() {
+                return 0;
+            }
+
+            @Override
+            public int read() {
+                return -1;
+            }
+        };
     }
 }
