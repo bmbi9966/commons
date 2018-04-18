@@ -41,53 +41,68 @@ public class Lists {
     }
 
     /**
-     * Create new immutable List
+     * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v) {
-        return Collections.singletonList(v);
+        return Collections.singletonList(requireNonNull(v));
     }
 
     /**
-     * Create new immutable List.
+     * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2) {
-        return unmodifiableList(Arrays.asList(v1, v2));
+        return unmodifiableList(Arrays.asList(requireNonNull(v1), requireNonNull(v2)));
     }
 
     /**
-     * Create new immutable List.
+     * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3) {
-        return unmodifiableList(Arrays.asList(v1, v2, v3));
+        return unmodifiableList(Arrays.asList(requireNonNull(v1), requireNonNull(v2), requireNonNull(v3)));
     }
 
     /**
-     * Create new immutable List.
+     * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4) {
-        return unmodifiableList(Arrays.asList(v1, v2, v3, v4));
+        return unmodifiableList(Arrays.asList(requireNonNull(v1),
+                requireNonNull(v2),
+                requireNonNull(v3),
+                requireNonNull(v4)));
     }
 
     /**
-     * Create new immutable List.
+     * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5) {
-        return unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5));
+        return unmodifiableList(Arrays.asList(requireNonNull(v1),
+                requireNonNull(v2),
+                requireNonNull(v3),
+                requireNonNull(v4),
+                requireNonNull(v5)));
     }
 
     /**
-     * Create new immutable List.
+     * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5, T v6) {
-        return unmodifiableList(Arrays.asList(v1, v2, v3, v4, v5, v6));
+        return unmodifiableList(Arrays.asList(requireNonNull(v1),
+                requireNonNull(v2),
+                requireNonNull(v3),
+                requireNonNull(v4),
+                requireNonNull(v5),
+                requireNonNull(v6)));
     }
 
     /**
-     * Create new immutable List.
+     * Create new immutable List. Values cannot be null.
      * This method will do defensive copy for the param values.
      */
     @SafeVarargs
     public static <T> List<T> of(T... values) {
+        for (T value : values) {
+            requireNonNull(value);
+        }
         return unmodifiableList(Arrays.asList(Arrays.copyOf(values, values.length)));
     }
 

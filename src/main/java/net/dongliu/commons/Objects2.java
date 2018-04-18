@@ -1,7 +1,7 @@
 package net.dongliu.commons;
 
 
-import net.dongliu.commons.reflection.Reflects;
+import net.dongliu.commons.reflection.Classes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +68,7 @@ public class Objects2 {
         protected ToStringHelper(Class<?> cls) {
             this.cls = cls;
             this.hasToStringMethod = classHasStringMethod(cls);
-            this.memberFields = Reflects.getAllMemberFields(cls);
+            this.memberFields = Classes.getAllMemberFields(cls);
             String className;
             if (cls.isAnonymousClass()) {
                 className = Strings.subStringAfterLast(cls.getName(), ".");

@@ -6,6 +6,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Utils method for Map
@@ -34,40 +37,38 @@ public class Maps {
     }
 
     /**
-     * Create new immutable Map
+     * Create new immutable Map. Values cannot be null.
      */
     public static <K, V> Map<K, V> of(K key, V value) {
-        HashMap<K, V> map = new HashMap<>();
-        map.put(key, value);
-        return Collections.unmodifiableMap(map);
+        return Collections.singletonMap(requireNonNull(key), requireNonNull(value));
     }
 
     /**
-     * Create new immutable Map
+     * Create new immutable Map. Values cannot be null.
      */
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2) {
         HashMap<K, V> map = new HashMap<>();
-        map.put(key1, value1);
-        map.put(key2, value2);
+        map.put(requireNonNull(key1), requireNonNull(value1));
+        map.put(requireNonNull(key2), requireNonNull(value2));
         return Collections.unmodifiableMap(map);
     }
 
     /**
-     * Create new immutable Map
+     * Create new immutable Map. Values cannot be null.
      */
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2,
                                       K key3, V value3) {
         HashMap<K, V> map = new HashMap<>();
-        map.put(key1, value1);
-        map.put(key2, value2);
-        map.put(key3, value3);
+        map.put(requireNonNull(key1), requireNonNull(value1));
+        map.put(requireNonNull(key2), requireNonNull(value2));
+        map.put(requireNonNull(key3), requireNonNull(value3));
         return Collections.unmodifiableMap(map);
     }
 
     /**
-     * Create new immutable Map
+     * Create new immutable Map. Values cannot be null.
      */
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2,
@@ -75,15 +76,15 @@ public class Maps {
                                       K key4, V value4) {
 
         HashMap<K, V> map = new HashMap<>();
-        map.put(key1, value1);
-        map.put(key2, value2);
-        map.put(key3, value3);
-        map.put(key4, value4);
+        map.put(requireNonNull(key1), requireNonNull(value1));
+        map.put(requireNonNull(key2), requireNonNull(value2));
+        map.put(requireNonNull(key3), requireNonNull(value3));
+        map.put(requireNonNull(key4), requireNonNull(value4));
         return Collections.unmodifiableMap(map);
     }
 
     /**
-     * Create new immutable Map
+     * Create new immutable Map. Values cannot be null.
      */
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2,
@@ -91,22 +92,22 @@ public class Maps {
                                       K key4, V value4,
                                       K key5, V value5) {
         HashMap<K, V> map = new HashMap<>();
-        map.put(key1, value1);
-        map.put(key2, value2);
-        map.put(key3, value3);
-        map.put(key4, value4);
-        map.put(key5, value5);
+        map.put(requireNonNull(key1), requireNonNull(value1));
+        map.put(requireNonNull(key2), requireNonNull(value2));
+        map.put(requireNonNull(key3), requireNonNull(value3));
+        map.put(requireNonNull(key4), requireNonNull(value4));
+        map.put(requireNonNull(key5), requireNonNull(value5));
         return Collections.unmodifiableMap(map);
     }
 
     /**
-     * Create new immutable Map
+     * Create new immutable Map. Values cannot be null.
      */
     @SafeVarargs
     public static <K, V> Map<K, V> ofEntries(Map.Entry<K, V>... entries) {
         HashMap<K, V> map = new HashMap<>();
         for (Map.Entry<K, V> entry : entries) {
-            map.put(entry.getKey(), entry.getValue());
+            map.put(requireNonNull(entry.getKey()), requireNonNull(entry.getValue()));
         }
         return Collections.unmodifiableMap(map);
     }

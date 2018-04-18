@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Util methods for Set
  */
@@ -39,11 +41,21 @@ public class Sets {
     }
 
     /**
-     * Create new immutable Set.
+     * Create new immutable empty Set. Values cannot be null.
+     */
+    public static <T> Set<T> of(T value) {
+        return Collections.singleton(value);
+    }
+
+    /**
+     * Create new immutable Set. Values cannot be null.
      * This method will do defensive copy for the param values.
      */
     @SafeVarargs
     public static <T> Set<T> of(T... values) {
+        for (T value : values) {
+            requireNonNull(value);
+        }
         Set<T> set = new HashSet<>(Arrays.asList(values));
         return Collections.unmodifiableSet(set);
     }
@@ -55,7 +67,7 @@ public class Sets {
      * @return Set contains the result.
      */
     public static <S, T> Set<T> convertTo(Set<S> set, Function<S, T> function) {
-        Objects.requireNonNull(set);
+        requireNonNull(set);
         Set<T> newSet = new HashSet<>(calculateCapacity(set.size()));
         for (S e : set) {
             newSet.add(function.apply(e));
@@ -69,7 +81,7 @@ public class Sets {
      * @return Set which contains the elements in origin set, and accepted by predicate
      */
     public static <T> Set<T> filter(Set<T> set, Predicate<T> predicate) {
-        Objects.requireNonNull(set);
+        requireNonNull(set);
         Set<T> newSet = new HashSet<>(Math.min(calculateCapacity(set.size()), INIT_CAPACITY));
         for (T e : set) {
             if (predicate.test(e)) {

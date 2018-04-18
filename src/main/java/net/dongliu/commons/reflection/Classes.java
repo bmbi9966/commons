@@ -9,11 +9,7 @@ import java.util.Set;
 
 import static java.util.Collections.unmodifiableList;
 
-/**
- * Util method for reflect
- */
-public class Reflects {
-
+public class Classes {
     /**
      * Get all non-static, non-Synthetic fields, declared in this class and all it's parent classes.
      * If sub class override parent class's filed, will only return sub class's field.
@@ -45,5 +41,33 @@ public class Reflects {
             }
         }
         return unmodifiableList(list);
+    }
+
+    /**
+     * Use Reflection to see if class exists, using classloader which load This class.
+     * The class will not be initialized.
+     *
+     * @param className the full class name
+     * @return true if class exists.
+     */
+    public static boolean exists(String className) {
+        // we cannot get caller's class loader... so just use class load which load this class as default.
+        return exists(className, Classes.class.getClassLoader());
+    }
+
+    /**
+     * Use Reflection to see if class exists, using specified classloader.
+     * The class will not be initialized.
+     *
+     * @param className the full class name
+     * @return true if class exists.
+     */
+    public static boolean exists(String className, ClassLoader classLoader) {
+        try {
+            Class.forName(className, false, classLoader);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }
