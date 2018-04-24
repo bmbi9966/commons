@@ -89,4 +89,14 @@ public class StringsTest {
         assertEquals("ab", Strings.subStringAfter("ab", "c"));
         assertEquals("", Strings.subStringAfter("", "c"));
     }
+
+    @Test
+    public void countOf() {
+        assertEquals(2, Strings.countOf("abcdc", "c"));
+        assertEquals(2, Strings.countOf("abcdc", "c", true));
+        assertEquals(1, Strings.countOf("ababa", "aba"));
+        assertEquals(2, Strings.countOf("ababa", "aba", true));
+        assertEquals(3, Strings.countOf("aaa", "a"));
+        assertEquals(3, Strings.countOf("aaa", "a", true));
+    }
 }

@@ -18,7 +18,7 @@ public class InputStreams {
 
     /**
      * Copy all data in InputStream to OutputStream.
-     * Both in and out are leaved unclosed when copy finished, or Exception occurred.
+     * Both in and out are left unclosed when copy finished, or Exception occurred.
      *
      * @throws IOException
      */
@@ -31,7 +31,18 @@ public class InputStreams {
     }
 
     /**
-     * Read all data in InputStream. The Stream is leaved unclosed when read finished, or Exception occurred.
+     * Read all data in InputStream. The Stream is closed when finished, or Exception occurred.
+     *
+     * @throws IOException
+     */
+    public static byte[] readAllAndClose(InputStream in) throws IOException {
+        try (InputStream in2 = in) {
+            return readAll(in2);
+        }
+    }
+
+    /**
+     * Read all data in InputStream. The Stream is left unclosed when read finished, or Exception occurred.
      *
      * @throws IOException
      */
@@ -78,7 +89,19 @@ public class InputStreams {
     }
 
     /**
-     * Read all data till EOF from InputStream. The InputStream is leaved unclosed.
+     * Read all data till EOF from InputStream.  The Stream is closed when finished, or Exception occurred.
+     *
+     * @return the total data size read
+     * @throws IOException
+     */
+    public static long consumeAllAndClose(InputStream in) throws IOException {
+        try (InputStream in2 = in) {
+            return consumeAll(in2);
+        }
+    }
+
+    /**
+     * Read all data till EOF from InputStream. The InputStream is left unclosed.
      *
      * @return the total data size read
      * @throws IOException
@@ -93,23 +116,6 @@ public class InputStreams {
         return total;
     }
 
-    /**
-     * Use skip to discard all data from InputStream.
-     * If still has data after InputStream.skip returns 0, use read method to consume data.
-     * The InputStream is leaved unclosed.
-     *
-     * @return the total data size discard
-     * @throws IOException
-     */
-    public static long discardAll(InputStream in) throws IOException {
-        long total = 0;
-        long read;
-        while ((read = in.skip(BUFFER_SIZE)) > 0) {
-            total += read;
-        }
-        total += consumeAll(in);
-        return total;
-    }
 
     /**
      * Return a empty input stream with no data.

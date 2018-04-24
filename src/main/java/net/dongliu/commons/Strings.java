@@ -223,4 +223,43 @@ public class Strings {
         }
         return str.substring(index + sep.length());
     }
+
+    /**
+     * Calculate the count of sub string. The sub string do not overlap.
+     *
+     * @param str can not be null
+     * @param sub the sub string, can not be null or empty
+     * @return the sub string occurred count
+     */
+    public static int countOf(String str, String sub) {
+        return countOf(str, sub, false);
+    }
+
+    /**
+     * Calculate the count of sub string.
+     *
+     * @param str     can not be null
+     * @param sub     the sub string, can not be null or empty
+     * @param overlap if the sub found in str can overlap
+     * @return the sub string occurred count
+     */
+    public static int countOf(String str, String sub, boolean overlap) {
+        requireNonNull(str);
+        requireNonNull(sub);
+        if (sub.isEmpty()) {
+            throw new IllegalArgumentException("sub string cannot be empty");
+        }
+        int count = 0;
+        int offset = 0;
+        int index;
+        while ((index = str.indexOf(sub, offset)) != -1) {
+            if (overlap) {
+                offset = index + 1;
+            } else {
+                offset = index + sub.length();
+            }
+            count++;
+        }
+        return count;
+    }
 }

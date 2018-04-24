@@ -42,6 +42,18 @@ public class Readers {
     }
 
     /**
+     * Read all data in Reader. The Reader is closed when read finished or exception occurred.
+     *
+     * @return String read from the reader
+     * @throws IOException
+     */
+    public static String readAllAndClose(Reader reader) throws IOException {
+        try (Reader reader2 = reader) {
+            return readAll(reader2);
+        }
+    }
+
+    /**
      * Read all data in Reader. The Reader is leaved unclosed when read finished, or Exception occurred.
      *
      * @return String read from the reader
@@ -71,6 +83,17 @@ public class Readers {
     }
 
     /**
+     * Read all from Reader to lines. The Reader is closed when read finished or exception occurred.
+     *
+     * @throws IOException
+     */
+    public static List<String> toLinesAndClose(Reader reader) throws IOException {
+        try (Reader reader2 = reader) {
+            return toLines(reader2);
+        }
+    }
+
+    /**
      * Read all from Reader to lines.
      * The Reader is leaved unclosed when copy finished, or Exception occurred.
      */
@@ -87,5 +110,33 @@ public class Readers {
             list.add(line);
         }
         return list;
+    }
+
+    /**
+     * Read and discard all data in reader till EOF. The Reader is closed when read finished or exception occurred.
+     *
+     * @return the char count read from reader.
+     * @throws IOException
+     */
+    public static long consumeAllAndClose(Reader reader) throws IOException {
+        try (Reader reader2 = reader) {
+            return consumeAll(reader2);
+        }
+    }
+
+    /**
+     * Read and discard all data in reader till EOF. The Reader is left unclosed.
+     *
+     * @return the char count read from reader.
+     * @throws IOException
+     */
+    public static long consumeAll(Reader reader) throws IOException {
+        char[] buffer = new char[BUFFER_SIZE];
+        long total = 0;
+        int count;
+        while ((count = reader.read(buffer)) >= 0) {
+            total += count;
+        }
+        return total;
     }
 }
