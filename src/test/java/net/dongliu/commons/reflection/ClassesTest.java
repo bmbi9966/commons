@@ -26,4 +26,16 @@ public class ClassesTest {
         assertFalse(Classes.exists("java.lang.String2"));
     }
 
+    @Test
+    public void hasMethod() {
+        assertTrue(Classes.hasMethod(String.class, "compareToIgnoreCase", String.class));
+        assertFalse(Classes.hasMethod(String.class, "compareToIgnoreCase1", String.class));
+    }
+
+    @Test
+    public void isPrimitiveWrapper() {
+        assertTrue(Classes.isPrimitiveWrapper(Integer.class));
+        assertFalse(Classes.isPrimitiveWrapper(int.class));
+        assertFalse(Classes.isPrimitiveWrapper(String.class));
+    }
 }
