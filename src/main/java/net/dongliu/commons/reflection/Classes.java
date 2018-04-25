@@ -50,15 +50,14 @@ public class Classes {
     }
 
     /**
-     * Use Reflection to see if class exists, using classloader which load This class.
+     * Use Reflection to see if class exists, using context classloader of current thread.
      * The class will not be initialized.
      *
      * @param className the full class name
      * @return true if class exists.
      */
     public static boolean exists(String className) {
-        // we cannot get caller's class loader... so just use class load which load this class as default.
-        return exists(className, Classes.class.getClassLoader());
+        return exists(className, Thread.currentThread().getContextClassLoader());
     }
 
     /**
