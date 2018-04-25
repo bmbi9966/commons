@@ -54,10 +54,6 @@ public class InputStreamsTest {
     }
 
     @Test
-    public void consumeAll() {
-    }
-
-    @Test
     public void discardAll() {
     }
 
@@ -67,6 +63,6 @@ public class InputStreamsTest {
         assertEquals(-1, in.read());
         byte[] buffer = new byte[1024];
         assertEquals(-1, in.read(buffer));
-        assertEquals(0, InputStreams.consumeAll(in));
+        assertEquals(0, InputStreams.discardAll(in));
     }
 }

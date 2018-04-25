@@ -118,9 +118,9 @@ public class Readers {
      * @return the char count read from reader.
      * @throws IOException
      */
-    public static long consumeAllAndClose(Reader reader) throws IOException {
+    public static long discardAllAndClose(Reader reader) throws IOException {
         try (Reader reader2 = reader) {
-            return consumeAll(reader2);
+            return discardAll(reader2);
         }
     }
 
@@ -130,7 +130,7 @@ public class Readers {
      * @return the char count read from reader.
      * @throws IOException
      */
-    public static long consumeAll(Reader reader) throws IOException {
+    public static long discardAll(Reader reader) throws IOException {
         char[] buffer = new char[BUFFER_SIZE];
         long total = 0;
         int count;

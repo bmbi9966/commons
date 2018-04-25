@@ -94,20 +94,33 @@ public class InputStreams {
      * @return the total data size read
      * @throws IOException
      */
-    public static long consumeAllAndClose(InputStream in) throws IOException {
+    public static long discardAllAndClose(InputStream in) throws IOException {
         try (InputStream in2 = in) {
-            return consumeAll(in2);
+            return discardAll(in2);
         }
     }
 
     /**
-     * Read all data till EOF from InputStream. The InputStream is left unclosed.
+     * Skip or read all data till EOF from InputStream. The InputStream is left unclosed.
      *
      * @return the total data size read
      * @throws IOException
      */
-    public static long consumeAll(InputStream in) throws IOException {
+    public static long discardAll(InputStream in) throws IOException {
         long total = 0;
+
+        long skip;
+        while ((skip = in.skip(BUFFER_SIZE)) > 0) {
+            total += skip;
+        }
+
+        // read one byte to see if skip to end
+        int r = in.read();
+        if (r == -1) {
+            return total;
+        }
+
+        total += 1;
         byte[] buffer = new byte[BUFFER_SIZE];
         int read;
         while ((read = in.read(buffer)) >= 0) {
