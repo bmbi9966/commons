@@ -2,6 +2,7 @@ package net.dongliu.commons.concurrent;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
@@ -144,5 +145,32 @@ public class Locks {
         } finally {
             lock.unlock();
         }
+    }
+
+    /**
+     * Upgrade read lock to write lock.
+     * Note: due to restriction of ReentrantReadWriteLock, this method is not atomic, first release all read lock hold
+     * by this thread, and then acquire write lock.
+     * Other thread may acquire write lock when this thread release read lock and acquire write lock.
+     *
+     * @param lock the lock
+     */
+    public static void upgrade(ReentrantReadWriteLock lock) {
+        while (lock.getReadHoldCount() > 0) {
+            lock.readLock().unlock();
+        }
+        lock.writeLock().lock();
+    }
+
+    /**
+     * Downgrade write lock to read lock. The method used with {@link #upgrade(ReentrantReadWriteLock)}.
+     *
+     * @param lock the lock
+     */
+    public static void downgrade(ReentrantReadWriteLock lock) {
+        while (lock.getWriteHoldCount() > 0) {
+            lock.writeLock().unlock();
+        }
+        lock.readLock().lock();
     }
 }
