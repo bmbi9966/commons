@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
 import static java.util.Collections.unmodifiableList;
@@ -236,5 +237,21 @@ public class Lists {
             }
         }
         return null;
+    }
+
+    /**
+     * Convert list to array. This method using method reference, work better than the API in Collection. Call this method as:
+     * <pre>
+     *     List&lt;String&gt; list = Lists.of("1", "2", "3");
+     *     String[] array = Lists.toArray(list, String[]::new);
+     * </pre>
+     *
+     * @param list  the list
+     * @param maker create the target array
+     * @param <T>   element type
+     * @return the target array containing elements in collection
+     */
+    public static <T> T[] toArray(List<T> list, IntFunction<T[]> maker) {
+        return Collections2.toArray(list, maker);
     }
 }
