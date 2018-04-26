@@ -1,5 +1,6 @@
 package net.dongliu.commons.concurrent;
 
+import net.dongliu.commons.Lazy;
 import net.dongliu.commons.collection.Lists;
 
 import java.time.Duration;
@@ -15,8 +16,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  */
 public class Futures {
 
-    private static final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
-            new NamedThreadFactory("delay-executor"));
+    private static final Lazy<ScheduledExecutorService> executorService = Lazy.of(
+            () -> new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("delay-executor")));
 
     /**
      * Just alias for CompletableFuture.completedFuture
@@ -68,7 +69,7 @@ public class Futures {
     public static <T> CompletableFuture<T> delay(T value, Duration duration) {
         requireNonNull(duration);
         CompletableFuture<T> f = new CompletableFuture<>();
-        executorService.schedule(() -> f.complete(value), duration.toMillis(), MILLISECONDS);
+        executorService.get().schedule(() -> f.complete(value), duration.toMillis(), MILLISECONDS);
         return f;
     }
 
@@ -85,7 +86,7 @@ public class Futures {
         requireNonNull(future);
         requireNonNull(duration);
         CompletableFuture<T> f = new CompletableFuture<>();
-        ScheduledFuture<?> sf = executorService.schedule(() -> {
+        ScheduledFuture<?> sf = executorService.get().schedule(() -> {
             if (!future.isDone()) {
                 future.cancel(true);
                 f.completeExceptionally(new TimeoutException());
