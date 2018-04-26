@@ -9,7 +9,8 @@ import java.util.stream.Stream;
 public class Optionals {
 
     /**
-     * Convert Optional to Stream
+     * Convert Optional to Stream.
+     * Note: Java9 has stream method in Optional already.
      */
     public static <T> Stream<T> stream(Optional<T> optional) {
         return optional.map(Stream::of).orElseGet(Stream::empty);
