@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -52,6 +53,25 @@ public class Throwables {
             }
             throwable = cause;
         }
+    }
+
+    /**
+     * Get ancestor cause, util the cause is specific type, or throwable has no cause.
+     *
+     * @param throwable the throwable, cannot be null
+     * @return the cause with specific type, or empty if not such cause.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Throwable> Optional<T> getCauseOf(Throwable throwable, Class<T> cls) {
+        requireNonNull(throwable);
+        Throwable cause = throwable;
+        while (cause != null) {
+            if (cls.isAssignableFrom(cause.getClass())) {
+                return Optional.of((T) cause);
+            }
+            cause = cause.getCause();
+        }
+        return Optional.empty();
     }
 
     /**

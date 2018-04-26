@@ -11,7 +11,7 @@ public class Optionals {
     /**
      * Convert Optional to Stream
      */
-    public static <T> Stream<T> toStream(Optional<T> optional) {
+    public static <T> Stream<T> stream(Optional<T> optional) {
         return optional.map(Stream::of).orElseGet(Stream::empty);
     }
 }

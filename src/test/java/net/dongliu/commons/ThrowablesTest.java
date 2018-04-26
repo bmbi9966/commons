@@ -2,6 +2,10 @@ package net.dongliu.commons;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -28,5 +32,16 @@ public class ThrowablesTest {
         String stackTrace = Throwables.getStackTrace(e);
         assertTrue(stackTrace.contains("java.lang.RuntimeException"));
         assertTrue(stackTrace.contains("my-exception"));
+    }
+
+    @Test
+    public void getCauseOf() {
+        IOException ioe = new IOException();
+        RuntimeException re = new RuntimeException(ioe);
+        Exception e = new Exception(re);
+        assertEquals(Optional.of(e), Throwables.getCauseOf(e, Throwable.class));
+        assertEquals(Optional.of(re), Throwables.getCauseOf(e, RuntimeException.class));
+        assertEquals(Optional.of(ioe), Throwables.getCauseOf(e, IOException.class));
+        assertEquals(Optional.empty(), Throwables.getCauseOf(e, SQLException.class));
     }
 }
