@@ -1,6 +1,9 @@
 package net.dongliu.commons.collection;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 
 import static java.util.Objects.requireNonNull;
@@ -30,5 +33,19 @@ public class Collections2 {
             array[i++] = e;
         }
         return array;
+    }
+
+    /**
+     * Convert origin collection to new List.
+     *
+     * @return list contains the result.
+     */
+    public static <S, T> List<T> convertToList(Collection<S> c, Function<S, T> function) {
+        requireNonNull(c);
+        List<T> newList = new ArrayList<>(c.size());
+        for (S e : c) {
+            newList.add(function.apply(e));
+        }
+        return newList;
     }
 }

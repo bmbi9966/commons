@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -43,6 +44,40 @@ public class Iterables {
         Iterator<T> iterator = iterable.iterator();
         if (iterator.hasNext()) {
             return iterator.next();
+        }
+        return null;
+    }
+
+    /**
+     * Fetch the first element accepted by predicate in Iterable.
+     * The element should not be null, or NullPointerException will be thrown.
+     *
+     * @param iterable can not be null
+     * @return Optional
+     */
+    public static <T> Optional<T> find(Iterable<T> iterable, Predicate<T> predicate) {
+        requireNonNull(iterable);
+        for (T e : iterable) {
+            if (predicate.test(e)) {
+                return Optional.of(e);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Fetch the first element accepted by predicate in Iterable.
+     *
+     * @param list can not be null
+     * @return The first accepted element. If list is empty, return null.
+     */
+    @Nullable
+    public static <T> T findOrNull(Iterable<T> list, Predicate<T> predicate) {
+        requireNonNull(list);
+        for (T e : list) {
+            if (predicate.test(e)) {
+                return e;
+            }
         }
         return null;
     }

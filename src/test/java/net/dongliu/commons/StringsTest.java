@@ -99,4 +99,19 @@ public class StringsTest {
         assertEquals(3, Strings.countOf("aaa", "a"));
         assertEquals(3, Strings.countOf("aaa", "a", true));
     }
+
+    @Test
+    public void trimSuffix() {
+        assertEquals("test123", Strings.trimSuffix("test123tet", "tet"));
+        assertEquals("test123tet", Strings.trimSuffix("test123tet", ""));
+        assertEquals("test123tet", Strings.trimSuffix("test123tet", "x"));
+    }
+
+    @Test
+    public void trimPrefix() {
+        assertEquals("st123", Strings.trimPrefix("test123", "te"));
+        assertEquals("test123", Strings.trimPrefix("test123", "tet"));
+        assertEquals("test123", Strings.trimPrefix("test123", "x"));
+        assertEquals("test123", Strings.trimPrefix("test123", ""));
+    }
 }

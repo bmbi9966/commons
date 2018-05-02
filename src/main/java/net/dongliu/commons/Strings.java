@@ -262,4 +262,36 @@ public class Strings {
         }
         return count;
     }
+
+    /**
+     * If str end with suffix, remove suffix
+     *
+     * @param str    string
+     * @param suffix suffix
+     * @return str without suffix
+     */
+    public static String trimSuffix(String str, String suffix) {
+        requireNonNull(str);
+        requireNonNull(suffix);
+        if (str.endsWith(suffix)) {
+            return str.substring(0, str.length() - suffix.length());
+        }
+        return str;
+    }
+
+    /**
+     * If str start with prefix, remove prefix
+     *
+     * @param str    string
+     * @param prefix suffix
+     * @return str without suffix
+     */
+    public static String trimPrefix(String str, String prefix) {
+        requireNonNull(str);
+        requireNonNull(prefix);
+        if (str.startsWith(prefix)) {
+            return str.substring(prefix.length());
+        }
+        return str;
+    }
 }

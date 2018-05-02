@@ -108,17 +108,28 @@ public class Lists {
     }
 
     /**
+     * Return a new immutable list, which contains the same elements as original list.
+     *
+     * @param list the original list
+     * @param <T>  the element type
+     * @return new immutable list
+     */
+    public static <T> List<T> copy(List<T> list) {
+        requireNonNull(list);
+        if (list.isEmpty()) {
+            return of();
+        }
+        List<T> newList = new ArrayList<>(list);
+        return unmodifiableList(newList);
+    }
+
+    /**
      * Convert origin list to new List.
      *
      * @return list contains the result.
      */
     public static <S, T> List<T> convertTo(List<S> list, Function<S, T> function) {
-        requireNonNull(list);
-        List<T> newList = new ArrayList<>(list.size());
-        for (S e : list) {
-            newList.add(function.apply(e));
-        }
-        return newList;
+        return Collections2.convertToList(list, function);
     }
 
     /**
@@ -135,6 +146,21 @@ public class Lists {
             }
         }
         return newList;
+    }
+
+    /**
+     * Concat two list, to one new list.
+     *
+     * @param list1 list1
+     * @param list2 list 2
+     * @param <T>   element type
+     * @return new List
+     */
+    public static <T> List<T> concat(List<T> list1, List<T> list2) {
+        List<T> list = new ArrayList<>(list1.size() + list2.size());
+        list.addAll(list1);
+        list.addAll(list2);
+        return list;
     }
 
     /**
@@ -213,13 +239,7 @@ public class Lists {
      * @return Optional
      */
     public static <T> Optional<T> find(List<T> list, Predicate<T> predicate) {
-        requireNonNull(list);
-        for (T e : list) {
-            if (predicate.test(e)) {
-                return Optional.of(e);
-            }
-        }
-        return Optional.empty();
+        return Iterables.find(list, predicate);
     }
 
     /**
@@ -230,13 +250,7 @@ public class Lists {
      */
     @Nullable
     public static <T> T findOrNull(List<T> list, Predicate<T> predicate) {
-        requireNonNull(list);
-        for (T e : list) {
-            if (predicate.test(e)) {
-                return e;
-            }
-        }
-        return null;
+        return Iterables.findOrNull(list, predicate);
     }
 
     /**
