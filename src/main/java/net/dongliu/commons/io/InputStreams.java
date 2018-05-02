@@ -31,17 +31,6 @@ public class InputStreams {
     }
 
     /**
-     * Read all data in InputStream. The Stream is closed when finished, or Exception occurred.
-     *
-     * @throws IOException
-     */
-    public static byte[] readAllAndClose(InputStream in) throws IOException {
-        try (InputStream in2 = in) {
-            return readAll(in2);
-        }
-    }
-
-    /**
      * Read all data in InputStream. The Stream is left unclosed when read finished, or Exception occurred.
      *
      * @throws IOException
@@ -86,18 +75,6 @@ public class InputStreams {
             return Arrays.copyOf(buffer, read);
         }
         return buffer;
-    }
-
-    /**
-     * Read all data till EOF from InputStream.  The Stream is closed when finished, or Exception occurred.
-     *
-     * @return the total data size read
-     * @throws IOException
-     */
-    public static long discardAllAndClose(InputStream in) throws IOException {
-        try (InputStream in2 = in) {
-            return discardAll(in2);
-        }
     }
 
     /**

@@ -41,17 +41,6 @@ public class Readers {
         }
     }
 
-    /**
-     * Read all data in Reader. The Reader is closed when read finished or exception occurred.
-     *
-     * @return String read from the reader
-     * @throws IOException
-     */
-    public static String readAllAndClose(Reader reader) throws IOException {
-        try (Reader reader2 = reader) {
-            return readAll(reader2);
-        }
-    }
 
     /**
      * Read all data in Reader. The Reader is leaved unclosed when read finished, or Exception occurred.
@@ -82,16 +71,6 @@ public class Readers {
         return br.lines();
     }
 
-    /**
-     * Read all from Reader to lines. The Reader is closed when read finished or exception occurred.
-     *
-     * @throws IOException
-     */
-    public static List<String> toLinesAndClose(Reader reader) throws IOException {
-        try (Reader reader2 = reader) {
-            return toLines(reader2);
-        }
-    }
 
     /**
      * Read all from Reader to lines.
@@ -110,18 +89,6 @@ public class Readers {
             list.add(line);
         }
         return list;
-    }
-
-    /**
-     * Read and discard all data in reader till EOF. The Reader is closed when read finished or exception occurred.
-     *
-     * @return the char count read from reader.
-     * @throws IOException
-     */
-    public static long discardAllAndClose(Reader reader) throws IOException {
-        try (Reader reader2 = reader) {
-            return discardAll(reader2);
-        }
     }
 
     /**
