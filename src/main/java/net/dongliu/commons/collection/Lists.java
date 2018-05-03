@@ -108,28 +108,29 @@ public class Lists {
     }
 
     /**
-     * Return a new immutable list, which contains the same elements as original list.
+     * Convert origin list to new Array List, the elements are converted by function.
      *
-     * @param list the original list
-     * @param <T>  the element type
-     * @return new immutable list
-     */
-    public static <T> List<T> copy(List<T> list) {
-        requireNonNull(list);
-        if (list.isEmpty()) {
-            return of();
-        }
-        List<T> newList = new ArrayList<>(list);
-        return unmodifiableList(newList);
-    }
-
-    /**
-     * Convert origin list to new List.
-     *
+     * @param function function to convert elements
      * @return list contains the result.
      */
     public static <S, T> List<T> convertTo(List<S> list, Function<S, T> function) {
-        return Collections2.convertToList(list, function);
+        return convertTo(list, ArrayList::new, function);
+    }
+
+    /**
+     * Convert origin list to new List, the new List is construct by maker, the elements are converted by function.
+     *
+     * @param maker    for creating new list
+     * @param function function to convert elements
+     * @return list contains the result.
+     */
+    public static <S, T> List<T> convertTo(List<S> list, IntFunction<List<T>> maker, Function<S, T> function) {
+        requireNonNull(list);
+        List<T> newList = maker.apply(list.size());
+        for (S e : list) {
+            newList.add(function.apply(e));
+        }
+        return newList;
     }
 
     /**
