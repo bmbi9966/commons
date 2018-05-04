@@ -1,7 +1,6 @@
 package net.dongliu.commons.io;
 
 import net.dongliu.commons.Preconditions;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -113,12 +112,12 @@ public class InputStreams {
     public static InputStream empty() {
         return new InputStream() {
             @Override
-            public int read(@NotNull byte[] b) {
+            public int read(byte[] b) {
                 return -1;
             }
 
             @Override
-            public int read(@NotNull byte[] b, int off, int len) {
+            public int read(byte[] b, int off, int len) {
                 return -1;
             }
 

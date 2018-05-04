@@ -1,7 +1,5 @@
 package net.dongliu.commons.concurrent;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,11 +13,11 @@ class NamedThreadFactory implements ThreadFactory {
     private final String namePrefix;
 
     public NamedThreadFactory(String prefix) {
-        this.namePrefix = requireNonNull(prefix) + "-thread-";
+        this.namePrefix = requireNonNull(prefix) + "-worker-";
     }
 
     @Override
-    public Thread newThread(@NotNull Runnable r) {
+    public Thread newThread(Runnable r) {
         Thread t = new Thread(r, namePrefix + threadSeq.getAndIncrement());
         if (t.isDaemon()) {
             t.setDaemon(false);

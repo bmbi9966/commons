@@ -1,7 +1,6 @@
 package net.dongliu.commons.io;
 
 import net.dongliu.commons.Preconditions;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,13 +23,13 @@ public class ByteBufferInputStream extends InputStream {
 
 
     @Override
-    public synchronized int read(@NotNull byte[] b) {
+    public synchronized int read(byte[] b) {
         requireNonNull(b);
         return read(b, 0, b.length);
     }
 
     @Override
-    public synchronized int read(@NotNull byte[] b, int off, int len) {
+    public synchronized int read(byte[] b, int off, int len) {
         requireNonNull(b);
         Preconditions.checkSubRange(b.length, off, len);
         if (!buffer.hasRemaining()) {

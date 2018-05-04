@@ -1,5 +1,7 @@
 package net.dongliu.commons.concurrent;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,6 +20,8 @@ public class ThreadPoolBuilder {
     private Supplier<BlockingQueue<Runnable>> workingQueue = LinkedBlockingQueue::new;
     private Supplier<ThreadFactory> threadFactory = () -> new NamedThreadFactory("thread-pool-" + poolSeq.incrementAndGet());
     private Supplier<RejectedExecutionHandler> rejectedHandler = ThreadPoolExecutor.AbortPolicy::new;
+    @Nullable
+    private TaskExceptionListener taskExceptionListener;
 
     private static final AtomicLong poolSeq = new AtomicLong();
 
@@ -32,7 +36,32 @@ public class ThreadPoolBuilder {
     public ThreadPoolExecutor build() {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize,
                 keepAliveTime.toMillis(), TimeUnit.MILLISECONDS,
-                workingQueue.get(), threadFactory.get(), rejectedHandler.get());
+                workingQueue.get(), threadFactory.get(), rejectedHandler.get()) {
+            @Nullable
+            private final TaskExceptionListener listener = ThreadPoolBuilder.this.taskExceptionListener;
+
+            @Override
+            protected void afterExecute(Runnable r, Throwable t) {
+                super.afterExecute(r, t);
+                if (listener == null) {
+                    return;
+                }
+                if (t == null && r instanceof Future<?> && ((Future<?>) r).isDone()) {
+                    try {
+                        ((Future<?>) r).get();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    } catch (CancellationException e) {
+                        t = e;
+                    } catch (ExecutionException e) {
+                        t = e.getCause();
+                    }
+                }
+                if (t != null) {
+                    listener.onException(r, t);
+                }
+            }
+        };
         executor.allowCoreThreadTimeOut(allowCoreThreadTimeOut);
         return executor;
     }
@@ -106,5 +135,45 @@ public class ThreadPoolBuilder {
     public ThreadPoolBuilder allowCoreThreadTimeOut(boolean allowCoreThreadTimeOut) {
         this.allowCoreThreadTimeOut = allowCoreThreadTimeOut;
         return this;
+    }
+
+    /**
+     * Set Exception listener for this thread pool.
+     * <p></p>
+     * Note that this do not change the exception handler of the ThreadPool, or the Thread that run the task.
+     * If If the task is submit using {@link Executor#execute(Runnable)}, exception will be handler by
+     * <ul>
+     * <li>Thread's ExceptionHandler if exits;</li>
+     * <li>ThreadGroup's ExceptionHandler if exists;</li>
+     * <li>The default ExceptionHandler</li>
+     * </ul>
+     * If noting is set, the default handler will stop the thread, and print exception.
+     * <p></p>
+     * If the task is submit using {@link ExecutorService#submit(Runnable)}, or {@link ExecutorService#submit(Callable)},
+     * The exception will be caught and set to Future, the thread is leaved unaffected.
+     *
+     * @param listener the exception listener
+     * @return self
+     */
+    public ThreadPoolBuilder taskExceptionListener(TaskExceptionListener listener) {
+        this.taskExceptionListener = requireNonNull(listener);
+        return this;
+    }
+
+    /**
+     * Listener that receive the exception of failed task.
+     * Note that this do not change the exception handler of the ThreadPool, or the Thread that run the task.
+     */
+    public interface TaskExceptionListener {
+        /**
+         * Get called when task exception throw, passing a runnable task, and the exception.
+         * If this method throw exception, the thread will be die.
+         *
+         * @param runnable  the task. If the task is submit using {@link Executor#execute(Runnable)}, this is the runnable it'self;
+         *                  If the task is submit using {@link ExecutorService#submit(Runnable)}, or {@link ExecutorService#submit(Callable)},
+         *                  this is a FutureTask Object wrapping the original Callable/Runnable.
+         * @param throwable the exception thrown by task
+         */
+        void onException(Runnable runnable, Throwable throwable);
     }
 }
