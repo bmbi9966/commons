@@ -23,4 +23,19 @@ public class Closeables {
     }
 
 
+    /**
+     * Close the closeable, if exception occurred, silently swallow it.
+     *
+     * @param closeables the instances to be close.
+     */
+    public static void closeQuietly(AutoCloseable... closeables) {
+        for (AutoCloseable closeable : closeables) {
+            if (closeable != null) {
+                try {
+                    closeable.close();
+                } catch (Exception ignore) {
+                }
+            }
+        }
+    }
 }

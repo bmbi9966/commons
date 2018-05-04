@@ -4,12 +4,15 @@ package net.dongliu.commons.collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
-import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -38,61 +41,49 @@ public class Lists {
      * Create new immutable empty List
      */
     public static <T> List<T> of() {
-        return Collections.emptyList();
+        return emptyList();
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v) {
-        return Collections.singletonList(requireNonNull(v));
+        return singletonList(requireNonNull(v));
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2) {
-        return unmodifiableList(Arrays.asList(requireNonNull(v1), requireNonNull(v2)));
+        return new ImmutableList<>(v1, v2);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3) {
-        return unmodifiableList(Arrays.asList(requireNonNull(v1), requireNonNull(v2), requireNonNull(v3)));
+        return new ImmutableList<>(v1, v2, v3);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4) {
-        return unmodifiableList(Arrays.asList(requireNonNull(v1),
-                requireNonNull(v2),
-                requireNonNull(v3),
-                requireNonNull(v4)));
+        return new ImmutableList<>(v1, v2, v3, v4);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5) {
-        return unmodifiableList(Arrays.asList(requireNonNull(v1),
-                requireNonNull(v2),
-                requireNonNull(v3),
-                requireNonNull(v4),
-                requireNonNull(v5)));
+        return new ImmutableList<>(v1, v2, v3, v4, v5);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5, T v6) {
-        return unmodifiableList(Arrays.asList(requireNonNull(v1),
-                requireNonNull(v2),
-                requireNonNull(v3),
-                requireNonNull(v4),
-                requireNonNull(v5),
-                requireNonNull(v6)));
+        return new ImmutableList<>(v1, v2, v3, v4, v5, v6);
     }
 
     /**
@@ -104,39 +95,38 @@ public class Lists {
         for (T value : values) {
             requireNonNull(value);
         }
-        return unmodifiableList(Arrays.asList(Arrays.copyOf(values, values.length)));
+        return new ImmutableList<>((Object[]) values.clone());
+    }
+
+
+    /**
+     * Copy list, return a new immutable list, contains the elements in original list.
+     * This method is for defensive copy list to immutable one.
+     *
+     * @param list the original list.
+     * @param <T>  the element type
+     * @return the new immutable list
+     */
+    public static <T> List<T> copy(List<T> list) {
+        Object[] array = list.toArray();
+        return new ImmutableList<>(array);
     }
 
     /**
-     * Convert origin list to new Array List, the elements are converted by function.
+     * Convert origin list to new immutable List, the elements are converted by specific function.
      *
      * @param function function to convert elements
      * @return list contains the result.
      */
     public static <S, T> List<T> convertTo(List<S> list, Function<S, T> function) {
-        return convertTo(list, ArrayList::new, function);
-    }
-
-    /**
-     * Convert origin list to new List, the new List is construct by maker, the elements are converted by function.
-     *
-     * @param maker    for creating new list
-     * @param function function to convert elements
-     * @return list contains the result.
-     */
-    public static <S, T> List<T> convertTo(List<S> list, IntFunction<List<T>> maker, Function<S, T> function) {
         requireNonNull(list);
-        List<T> newList = maker.apply(list.size());
-        for (S e : list) {
-            newList.add(function.apply(e));
-        }
-        return newList;
+        return Collections2.convertToList(list, function);
     }
 
     /**
-     * Filter list
+     * Filter list, return a new immutable list which contains the elements in origin list which accepted by predicate
      *
-     * @return List which contains the elements in origin list, and accepted by predicate
+     * @return new immutable list
      */
     public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
         requireNonNull(list);
@@ -146,26 +136,35 @@ public class Lists {
                 newList.add(e);
             }
         }
-        return newList;
+        return copy(newList);
     }
 
     /**
-     * Concat two list, to one new list.
+     * Concat two list, to one new immutable list.
      *
      * @param list1 list1
-     * @param list2 list 2
+     * @param list2 list2
      * @param <T>   element type
-     * @return new List
+     * @return new immutable List
      */
     public static <T> List<T> concat(List<T> list1, List<T> list2) {
-        List<T> list = new ArrayList<>(list1.size() + list2.size());
-        list.addAll(list1);
-        list.addAll(list2);
-        return list;
+        requireNonNull(list1);
+        requireNonNull(list2);
+        Object[] values = new Object[list1.size() + list2.size()];
+        int i = 0;
+        for (T v : list1) {
+            values[i++] = v;
+        }
+        for (T v : list2) {
+            values[i++] = v;
+        }
+        return new ImmutableList<>(values);
     }
 
     /**
      * Split list, into multi subLists, each subList has the specified subSize, except the last one.
+     *
+     * @return immutable List of SubLists
      */
     public static <T> List<List<T>> split(List<T> list, int subSize) {
         requireNonNull(list);
@@ -175,11 +174,11 @@ public class Lists {
 
         int size = list.size();
         int count = (size - 1) / subSize + 1;
-        List<List<T>> result = new ArrayList<>(count);
+        List[] result = new List[count];
         for (int i = 0; i < count; i++) {
-            result.add(list.subList(i * subSize, Math.min(size, (i + 1) * subSize)));
+            result[i] = list.subList(i * subSize, Math.min(size, (i + 1) * subSize));
         }
-        return result;
+        return new ImmutableList<>((Object[]) result);
     }
 
     /**
@@ -199,7 +198,7 @@ public class Lists {
                 list2.add(e);
             }
         }
-        return Pair.of(list1, list2);
+        return Pair.of(copy(list1), copy(list2));
     }
 
     /**

@@ -1,6 +1,5 @@
 package net.dongliu.commons.collection;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -27,12 +26,7 @@ public class Collections2 {
      */
     public static <T> T[] toArray(Collection<T> c, IntFunction<T[]> maker) {
         requireNonNull(c);
-        T[] array = maker.apply(c.size());
-        int i = 0;
-        for (T e : c) {
-            array[i++] = e;
-        }
-        return array;
+        return c.toArray(maker.apply(c.size()));
     }
 
     /**
@@ -42,10 +36,11 @@ public class Collections2 {
      */
     public static <S, T> List<T> convertToList(Collection<S> c, Function<S, T> function) {
         requireNonNull(c);
-        List<T> newList = new ArrayList<>(c.size());
-        for (S e : c) {
-            newList.add(function.apply(e));
+        Object[] values = new Object[c.size()];
+        int i = 0;
+        for (S s : c) {
+            values[i++] = function.apply(s);
         }
-        return newList;
+        return new ImmutableList<>(values);
     }
 }

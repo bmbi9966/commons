@@ -45,7 +45,8 @@ public class Arrays2 {
      * @param <T>   array element type
      * @return the target array
      */
-    public static <T> T[] concat(IntFunction<T[]> maker, T[] array1, T[] array2) {
+    @SafeVarargs
+    public static <T> T[] concat(IntFunction<T[]> maker, T[] array1, T... array2) {
         requireNonNull(array1);
         requireNonNull(array2);
         T[] array = maker.apply(array1.length + array2.length);
