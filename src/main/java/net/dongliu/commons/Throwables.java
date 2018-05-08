@@ -25,17 +25,40 @@ public class Throwables {
      */
     public static RuntimeException sneakyThrow(Throwable t) {
         requireNonNull(t);
-        Throwables.throwInternal(t);
-        // just for making compiler happy
-        return new RuntimeException("should not reach here");
+        return Throwables.throwInternal(t);
     }
 
-
     @SuppressWarnings("unchecked")
-    private static <T extends Throwable> void throwInternal(Throwable t) throws T {
+    private static <T extends Throwable> RuntimeException throwInternal(Throwable t) throws T {
         throw (T) t;
     }
 
+    /**
+     * If is unchecked (Error, or RuntimeException), throw the throwable
+     *
+     * @param throwable the throwable
+     */
+    public static void throwIfUnchecked(Throwable throwable) {
+        requireNonNull(throwable);
+        throwIf(throwable, RuntimeException.class);
+        throwIf(throwable, Error.class);
+    }
+
+    /**
+     * If throwable is type T, throw it.
+     *
+     * @param throwable the throwable
+     * @param cls       the type class
+     * @param <T>       the type
+     * @throws T exception
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Throwable> void throwIf(Throwable throwable, Class<T> cls) throws T {
+        requireNonNull(throwable);
+        if (cls.isAssignableFrom(throwable.getClass())) {
+            throw (T) throwable;
+        }
+    }
 
     /**
      * Get root cause of throwable. If throwable do not have a root cause, return its self.

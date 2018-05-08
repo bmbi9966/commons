@@ -3,6 +3,7 @@ package net.dongliu.commons;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -43,5 +44,15 @@ public class ThrowablesTest {
         assertEquals(Optional.of(re), Throwables.getCauseOf(e, RuntimeException.class));
         assertEquals(Optional.of(ioe), Throwables.getCauseOf(e, IOException.class));
         assertEquals(Optional.empty(), Throwables.getCauseOf(e, SQLException.class));
+    }
+
+    @Test
+    public void throwIfUnchecked() {
+        Throwables.throwIfUnchecked(new IOException());
+    }
+
+    @Test(expected = UncheckedIOException.class)
+    public void throwIfUnchecked2() {
+        Throwables.throwIfUnchecked(new UncheckedIOException(new IOException()));
     }
 }

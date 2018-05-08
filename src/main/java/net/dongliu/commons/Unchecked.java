@@ -1,12 +1,18 @@
 package net.dongliu.commons;
 
-import java.util.concurrent.CompletionException;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.function.*;
 
 /**
- * Wrap checked interface to unchecked interface. Exceptions will be wrapped by CompletionException.
+ * Wrap checked interface to unchecked interface.
+ * If exception is caught, Unchecked Exception will be throw as it is,
+ * IOException will be wrapped by UncheckedIOException,
+ * Other Checked Exception will be wrapped by RuntimeException.
  */
 public class Unchecked {
+    private Unchecked() {
+    }
 
     /**
      * Run a block of code, wrap exception in CompletionException.
@@ -17,7 +23,7 @@ public class Unchecked {
         try {
             runnable.run();
         } catch (Exception e) {
-            throw new CompletionException(e);
+            throw wrapAndThrown(e);
         }
     }
 
@@ -30,7 +36,7 @@ public class Unchecked {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw new CompletionException(e);
+            throw wrapAndThrown(e);
         }
     }
 
@@ -49,7 +55,7 @@ public class Unchecked {
             try {
                 runnable.run();
             } catch (Exception e) {
-                throw new CompletionException(e);
+                throw wrapAndThrown(e);
             }
         };
     }
@@ -68,7 +74,7 @@ public class Unchecked {
             try {
                 return supplier.get();
             } catch (Exception e) {
-                throw new CompletionException(e);
+                throw wrapAndThrown(e);
             }
         };
     }
@@ -88,7 +94,7 @@ public class Unchecked {
             try {
                 consumer.accept(v);
             } catch (Exception e) {
-                throw new CompletionException(e);
+                throw wrapAndThrown(e);
             }
         };
     }
@@ -109,7 +115,7 @@ public class Unchecked {
             try {
                 return predicate.test(v);
             } catch (Exception e) {
-                throw new CompletionException(e);
+                throw wrapAndThrown(e);
             }
         };
     }
@@ -131,7 +137,7 @@ public class Unchecked {
             try {
                 return function.apply(v);
             } catch (Exception e) {
-                throw new CompletionException(e);
+                throw wrapAndThrown(e);
             }
         };
     }
@@ -151,7 +157,7 @@ public class Unchecked {
             try {
                 consumer.accept(v1, v2);
             } catch (Exception e) {
-                throw new CompletionException(e);
+                throw wrapAndThrown(e);
             }
         };
     }
@@ -173,8 +179,16 @@ public class Unchecked {
             try {
                 return function.apply(v1, v2);
             } catch (Exception e) {
-                throw new CompletionException(e);
+                throw wrapAndThrown(e);
             }
         };
+    }
+
+    private static RuntimeException wrapAndThrown(Exception e) {
+        Throwables.throwIfUnchecked(e);
+        if (e instanceof IOException) {
+            throw new UncheckedIOException((IOException) e);
+        }
+        throw new RuntimeException(e);
     }
 }
