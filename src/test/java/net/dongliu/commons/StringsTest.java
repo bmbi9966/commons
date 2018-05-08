@@ -114,4 +114,24 @@ public class StringsTest {
         assertEquals("test123", Strings.trimPrefix("test123", "x"));
         assertEquals("test123", Strings.trimPrefix("test123", ""));
     }
+
+    @Test
+    public void capitalize() {
+        assertEquals("", Strings.capitalize(""));
+        assertEquals("1", Strings.capitalize("1"));
+        assertEquals("爱1", Strings.capitalize("爱1"));
+        assertEquals("Char", Strings.capitalize("Char"));
+        assertEquals("C", Strings.capitalize("c"));
+        assertEquals("Char", Strings.capitalize("char"));
+    }
+
+    @Test
+    public void deCapitalize() {
+        assertEquals("", Strings.deCapitalize(""));
+        assertEquals("1", Strings.deCapitalize("1"));
+        assertEquals("爱1", Strings.deCapitalize("爱1"));
+        assertEquals("char", Strings.deCapitalize("Char"));
+        assertEquals("c", Strings.deCapitalize("C"));
+        assertEquals("char", Strings.deCapitalize("char"));
+    }
 }

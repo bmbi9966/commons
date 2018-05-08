@@ -294,4 +294,42 @@ public class Strings {
         }
         return str;
     }
+
+    /**
+     * Return str, with first char is uppercase. If the first char of original str is already uppercase, or str is empty, return str self.
+     * Note: this method do not handle surrogate correctly.
+     *
+     * @param str the original str
+     * @return new string with first char uppercase
+     */
+    public static String capitalize(String str) {
+        requireNonNull(str);
+        if (str.isEmpty()) {
+            return str;
+        }
+        char c = str.charAt(0);
+        if (Character.isUpperCase(c)) {
+            return str;
+        }
+        return Character.toUpperCase(c) + str.substring(1);
+    }
+
+    /**
+     * Return str, with first char is lowercase. If the first char of original str is already lowercase, or str is empty, return str self.
+     * Note: this method do not handle surrogate correctly.
+     *
+     * @param str the original str
+     * @return new string with first char lowercase
+     */
+    public static String deCapitalize(String str) {
+        requireNonNull(str);
+        if (str.isEmpty()) {
+            return str;
+        }
+        char c = str.charAt(0);
+        if (Character.isLowerCase(c)) {
+            return str;
+        }
+        return Character.toLowerCase(c) + str.substring(1);
+    }
 }
