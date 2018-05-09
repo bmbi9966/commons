@@ -1,8 +1,9 @@
 package net.dongliu.commons;
 
-import org.junit.Test;
+import net.dongliu.commons.io.Bits;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BitsTest {
 

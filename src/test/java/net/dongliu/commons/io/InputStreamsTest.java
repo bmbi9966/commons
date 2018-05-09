@@ -1,7 +1,7 @@
 package net.dongliu.commons.io;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,15 +10,16 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Random;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class InputStreamsTest {
 
     private static byte[] data = {1, 2, 5, 7, 8, 10, 22};
     private static byte[] dataLarge;
 
-    @BeforeClass
+    @BeforeAll
     public static void init() {
         dataLarge = new byte[10000];
         Random random = new Random();
@@ -45,12 +46,10 @@ public class InputStreamsTest {
     public void readExact() throws IOException {
         byte[] bytes = InputStreams.readExact(new ByteArrayInputStream(dataLarge), 1024);
         assertArrayEquals(Arrays.copyOf(dataLarge, 1024), bytes);
-    }
 
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void readExactError() throws IOException {
         byte[] buffer = new byte[10];
-        InputStreams.readExact(new ByteArrayInputStream(data), buffer, 0, 1024);
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> InputStreams.readExact(new ByteArrayInputStream(dataLarge), buffer, 0, 1024));
     }
 
     @Test

@@ -1,20 +1,21 @@
 package net.dongliu.commons;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ThrowablesTest {
 
-    @Test(expected = Exception.class)
+    @Test
     public void sneakyThrow() {
-        throw Throwables.sneakyThrow(new Exception());
+        assertThrows(Exception.class, () -> {throw Throwables.sneakyThrow(new Exception());});
     }
 
     @Test
@@ -49,10 +50,8 @@ public class ThrowablesTest {
     @Test
     public void throwIfUnchecked() {
         Throwables.throwIfUnchecked(new IOException());
+        assertThrows(UncheckedIOException.class,
+                () -> Throwables.throwIfUnchecked(new UncheckedIOException(new IOException())));
     }
 
-    @Test(expected = UncheckedIOException.class)
-    public void throwIfUnchecked2() {
-        Throwables.throwIfUnchecked(new UncheckedIOException(new IOException()));
-    }
 }

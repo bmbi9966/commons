@@ -1,10 +1,9 @@
 package net.dongliu.commons;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static net.dongliu.commons.Objects2.toStringHelper;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Objects2Test {
 
@@ -14,16 +13,8 @@ public class Objects2Test {
         assertEquals("2", Objects2.elvis(null, "2"));
         assertEquals("1", Objects2.elvis("1", () -> "2"));
         assertEquals("2", Objects2.elvis(null, () -> "2"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void elvisException() {
-        Objects2.elvis(null, (Object) null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void elvisException2() {
-        Objects2.elvis(null, () -> null);
+        assertThrows(NullPointerException.class, () -> Objects2.elvis(null, (Object) null));
+        assertThrows(NullPointerException.class, () -> Objects2.elvis(null, () -> null));
     }
 
     @Test

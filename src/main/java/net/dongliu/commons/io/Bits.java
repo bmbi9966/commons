@@ -1,4 +1,4 @@
-package net.dongliu.commons;
+package net.dongliu.commons.io;
 
 /**
  * Util for bit operation.

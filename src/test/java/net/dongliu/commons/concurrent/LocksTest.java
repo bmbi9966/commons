@@ -1,13 +1,13 @@
 package net.dongliu.commons.concurrent;
 
 import net.dongliu.commons.concurrent.Locks.LockResource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LocksTest {
 

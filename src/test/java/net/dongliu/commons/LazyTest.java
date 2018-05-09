@@ -1,12 +1,13 @@
 package net.dongliu.commons;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LazyTest {
 
@@ -16,12 +17,12 @@ public class LazyTest {
         assertSame(lazy.get(), lazy.get());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void exception() {
         Lazy lazy = Lazy.of(() -> {
             throw new RuntimeException();
         });
-        lazy.get();
+        assertThrows(RuntimeException.class, lazy::get);
     }
 
     @Test

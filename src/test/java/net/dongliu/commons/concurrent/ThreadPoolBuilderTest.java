@@ -1,20 +1,20 @@
 package net.dongliu.commons.concurrent;
 
 import net.dongliu.commons.collection.Lists;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ThreadPoolBuilderTest {
 
     @Test
-    @Ignore("remove annoying output")
+    @Disabled("remove annoying output")
     public void taskExceptionListener() throws InterruptedException {
         List<String> messages = new ArrayList<>();
         ThreadPoolExecutor executor = new ThreadPoolBuilder()

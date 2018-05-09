@@ -1,7 +1,7 @@
 package net.dongliu.commons.concurrent;
 
 import net.dongliu.commons.collection.Lists;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
@@ -9,8 +9,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 import static java.lang.System.currentTimeMillis;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FuturesTest {
 
@@ -20,10 +21,10 @@ public class FuturesTest {
         assertEquals(Integer.valueOf(1), future.join());
     }
 
-    @Test(expected = CompletionException.class)
+    @Test
     public void failed() {
         CompletableFuture<Integer> future = Futures.failed(new RuntimeException());
-        future.join();
+        assertThrows(CompletionException.class, future::join);
     }
 
     @Test
@@ -40,13 +41,10 @@ public class FuturesTest {
         CompletableFuture<Integer> future = Futures.delay(10, Duration.ofMillis(10));
         future = Futures.timeout(future, Duration.ofMillis(20));
         assertEquals(Integer.valueOf(10), future.join());
-    }
 
-    @Test(expected = CompletionException.class)
-    public void timeout2() {
-        CompletableFuture<Integer> future = Futures.delay(10, Duration.ofMillis(20));
+        future = Futures.delay(10, Duration.ofMillis(20));
         future = Futures.timeout(future, Duration.ofMillis(10));
-        future.join();
+        assertThrows(CompletionException.class, future::join);
     }
 
     @Test
