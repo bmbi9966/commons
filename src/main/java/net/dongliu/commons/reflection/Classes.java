@@ -97,10 +97,12 @@ public class Classes {
         }
     }
 
-    private static final Set<Class<?>> wrapperClasses = Sets.of(
-            Byte.class, Short.class, Integer.class, Long.class,
-            Float.class, Double.class, Boolean.class, Character.class
-    );
+    private static class ClassSetHolder {
+        private static final Set<Class<?>> wrapperClasses = Sets.of(
+                Byte.class, Short.class, Integer.class, Long.class,
+                Float.class, Double.class, Boolean.class, Character.class
+        );
+    }
 
     /**
      * If class is primitive wrapper class(Integer, Boolean, etc).
@@ -109,6 +111,6 @@ public class Classes {
      * @return true if is primitive wrapper class
      */
     public static boolean isPrimitiveWrapper(Class<?> cls) {
-        return wrapperClasses.contains(requireNonNull(cls));
+        return ClassSetHolder.wrapperClasses.contains(requireNonNull(cls));
     }
 }

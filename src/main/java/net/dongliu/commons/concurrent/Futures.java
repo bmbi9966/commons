@@ -137,6 +137,7 @@ public class Futures {
         }
         return CompletableFuture.anyOf(futures)
                 .thenCompose(none -> Arrays.stream(futures).filter(CompletableFuture::isDone)
-                        .findAny().orElse(null));
+                        .findAny()
+                        .orElseThrow(() -> new RuntimeException("should not happen")));
     }
 }

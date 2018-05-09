@@ -1,11 +1,12 @@
 package net.dongliu.commons;
 
 import java.io.Serializable;
+import java.util.concurrent.CompletionException;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
-import static net.dongliu.commons.Throwables.sneakyThrow;
+import static net.dongliu.commons.Throwables.throwIfUnchecked;
 
 /**
  * Supplier that only compute value once, despite succeed or fail(thrown Exceptions).
@@ -59,7 +60,8 @@ public class Lazy<T> implements Supplier<T>, Serializable {
             return value;
         }
         // always should be unchecked exception
-        throw sneakyThrow(this.throwable);
+        throwIfUnchecked(throwable);
+        throw new CompletionException(throwable);
     }
 
     /**
