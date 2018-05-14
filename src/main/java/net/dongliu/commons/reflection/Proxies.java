@@ -9,7 +9,7 @@ import java.lang.reflect.Proxy;
 public class Proxies {
 
     /**
-     * Create Proxy form interface.
+     * Create Proxy form interface. This is a convenient alias for {@link Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)}
      *
      * @param cls     the interface class
      * @param handler the InvocationHandler

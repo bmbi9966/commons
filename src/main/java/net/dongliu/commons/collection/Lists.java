@@ -4,12 +4,15 @@ package net.dongliu.commons.collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -98,13 +101,20 @@ public class Lists {
 
     /**
      * Copy list, return a new immutable list, contains the elements in original list.
-     * This method is for defensive copy list to immutable one.
+     * If original list is already ImmutableList, return its self.
      *
      * @param list the original list.
      * @param <T>  the element type
-     * @return the new immutable list
+     * @return the immutable list
      */
     public static <T> List<T> copy(List<T> list) {
+        requireNonNull(list);
+        if (list instanceof ImmutableList) {
+            return list;
+        }
+        if (list.isEmpty()) {
+            return Lists.of();
+        }
         Object[] array = list.toArray();
         return new ImmutableList<>(array);
     }

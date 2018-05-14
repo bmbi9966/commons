@@ -4,6 +4,8 @@ package net.dongliu.commons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static java.lang.Character.toLowerCase;
+import static java.lang.Character.toUpperCase;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -28,7 +30,7 @@ public class Strings {
     public static int toInt(String str, int defaultValue) {
         try {
             return Integer.parseInt(str);
-        } catch (Exception e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return defaultValue;
         }
     }
@@ -39,7 +41,7 @@ public class Strings {
     public static long toLong(String str, long defaultValue) {
         try {
             return Long.parseLong(str);
-        } catch (Exception e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return defaultValue;
         }
     }
@@ -50,7 +52,7 @@ public class Strings {
     public static float toFloat(String str, float defaultValue) {
         try {
             return Float.parseFloat(str);
-        } catch (Exception e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return defaultValue;
         }
     }
@@ -61,7 +63,7 @@ public class Strings {
     public static double toDouble(String str, double defaultValue) {
         try {
             return Double.parseDouble(str);
-        } catch (Exception e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return defaultValue;
         }
     }
@@ -311,7 +313,7 @@ public class Strings {
         if (Character.isUpperCase(c)) {
             return str;
         }
-        return Character.toUpperCase(c) + str.substring(1);
+        return toUpperCase(c) + str.substring(1);
     }
 
     /**
@@ -330,6 +332,6 @@ public class Strings {
         if (Character.isLowerCase(c)) {
             return str;
         }
-        return Character.toLowerCase(c) + str.substring(1);
+        return toLowerCase(c) + str.substring(1);
     }
 }

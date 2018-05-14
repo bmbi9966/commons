@@ -65,12 +65,12 @@ public class Executors2 {
 
     /**
      * Create a thread factory, with thread name as pattern $prefix-thread-$seq.
-     * The Thread Priority is set to NORMAL, Daemon is set to false, and use ThreadGroup as current thread.
+     * The Thread Priority is set to NORMAL, Daemon is set to true, and use ThreadGroup as current thread.
      *
      * @param prefix the thread name prefix
      * @return Thread Factory
      */
     public static ThreadFactory newNamedThreadFactory(String prefix) {
-        return new NamedThreadFactory(requireNonNull(prefix));
+        return new DefaultThreadFactory(requireNonNull(prefix));
     }
 }

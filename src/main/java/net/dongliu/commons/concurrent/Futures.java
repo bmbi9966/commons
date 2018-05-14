@@ -17,7 +17,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class Futures {
 
     private static final Lazy<ScheduledExecutorService> executorService = Lazy.of(
-            () -> new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("delay-executor")));
+            () -> new ScheduledThreadPoolExecutor(1, new DefaultThreadFactory("delay-executor")));
 
     /**
      * Just alias for CompletableFuture.completedFuture
