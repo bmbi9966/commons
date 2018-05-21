@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.Objects.requireNonNull;
 
 /**
- * ThreadFactory that can set thread prefix name, each thread has name $prefix-thread-$seq.
+ * ThreadFactory that can set thread prefix name, each thread has name $prefix-worker-$seq.
  */
 class DefaultThreadFactory implements ThreadFactory {
     private final AtomicInteger threadSeq = new AtomicInteger(1);

@@ -64,7 +64,7 @@ public class Executors2 {
     }
 
     /**
-     * Create a thread factory, with thread name as pattern $prefix-thread-$seq.
+     * Create a thread factory, with thread name as pattern $prefix-worker-$seq.
      * The Thread Priority is set to NORMAL, Daemon is set to true, and use ThreadGroup as current thread.
      *
      * @param prefix the thread name prefix

@@ -1,7 +1,5 @@
 package net.dongliu.commons;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.function.*;
 
 /**
@@ -23,7 +21,7 @@ public class Unchecked {
         try {
             runnable.run();
         } catch (Exception e) {
-            throw wrapAndThrown(e);
+            throw Throwables.wrapAndThrow(e);
         }
     }
 
@@ -36,7 +34,7 @@ public class Unchecked {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw wrapAndThrown(e);
+            throw Throwables.wrapAndThrow(e);
         }
     }
 
@@ -55,7 +53,7 @@ public class Unchecked {
             try {
                 runnable.run();
             } catch (Exception e) {
-                throw wrapAndThrown(e);
+                throw Throwables.wrapAndThrow(e);
             }
         };
     }
@@ -74,7 +72,7 @@ public class Unchecked {
             try {
                 return supplier.get();
             } catch (Exception e) {
-                throw wrapAndThrown(e);
+                throw Throwables.wrapAndThrow(e);
             }
         };
     }
@@ -94,7 +92,7 @@ public class Unchecked {
             try {
                 consumer.accept(v);
             } catch (Exception e) {
-                throw wrapAndThrown(e);
+                throw Throwables.wrapAndThrow(e);
             }
         };
     }
@@ -115,7 +113,7 @@ public class Unchecked {
             try {
                 return predicate.test(v);
             } catch (Exception e) {
-                throw wrapAndThrown(e);
+                throw Throwables.wrapAndThrow(e);
             }
         };
     }
@@ -137,7 +135,7 @@ public class Unchecked {
             try {
                 return function.apply(v);
             } catch (Exception e) {
-                throw wrapAndThrown(e);
+                throw Throwables.wrapAndThrow(e);
             }
         };
     }
@@ -157,7 +155,7 @@ public class Unchecked {
             try {
                 consumer.accept(v1, v2);
             } catch (Exception e) {
-                throw wrapAndThrown(e);
+                throw Throwables.wrapAndThrow(e);
             }
         };
     }
@@ -179,16 +177,9 @@ public class Unchecked {
             try {
                 return function.apply(v1, v2);
             } catch (Exception e) {
-                throw wrapAndThrown(e);
+                throw Throwables.wrapAndThrow(e);
             }
         };
     }
 
-    private static RuntimeException wrapAndThrown(Exception e) {
-        Throwables.throwIfUnchecked(e);
-        if (e instanceof IOException) {
-            throw new UncheckedIOException((IOException) e);
-        }
-        throw new RuntimeException(e);
-    }
 }
