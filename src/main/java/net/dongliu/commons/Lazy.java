@@ -71,7 +71,7 @@ public class Lazy<T> implements Supplier<T>, Serializable {
      * @param <R>      new value type
      * @return the new lazy value
      */
-    public <R> Lazy<R> map(Function<T, R> function) {
+    public <R> Lazy<R> map(Function<? super T, ? extends R> function) {
         return Lazy.of(() -> function.apply(get()));
     }
 }

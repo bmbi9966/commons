@@ -34,7 +34,7 @@ public class Collections2 {
      *
      * @return list contains the result.
      */
-    public static <S, T> List<T> convertToList(Collection<S> c, Function<S, T> function) {
+    public static <S, T> List<T> convertToList(Collection<S> c, Function<? super S, ? extends T> function) {
         requireNonNull(c);
         Object[] values = new Object[c.size()];
         int i = 0;

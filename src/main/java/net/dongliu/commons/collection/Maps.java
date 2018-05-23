@@ -124,7 +124,8 @@ public class Maps {
      * @param <U>         the target value type
      * @return new immutable map
      */
-    public static <K, R, V, U> Map<R, U> convert(Map<K, V> map, Function<K, R> keyMapper, Function<V, U> valueMapper) {
+    public static <K, R, V, U> Map<R, U> convert(Map<K, V> map, Function<? super K, ? extends R> keyMapper,
+                                                 Function<? super V, ? extends U> valueMapper) {
         requireNonNull(map);
         requireNonNull(keyMapper);
         requireNonNull(valueMapper);
@@ -146,7 +147,7 @@ public class Maps {
      * @param <U>         the target value type
      * @return new immutable map
      */
-    public static <K, V, U> Map<K, U> convert(Map<K, V> map, Function<V, U> valueMapper) {
+    public static <K, V, U> Map<K, U> convert(Map<K, V> map, Function<? super V, ? extends U> valueMapper) {
         requireNonNull(map);
         requireNonNull(valueMapper);
         if (map.isEmpty()) {

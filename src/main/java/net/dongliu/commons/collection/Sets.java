@@ -68,7 +68,7 @@ public class Sets {
      *
      * @return immutable set contains the result.
      */
-    public static <S, T> Set<T> convert(Set<S> set, Function<S, T> function) {
+    public static <S, T> Set<T> convert(Set<S> set, Function<? super S, ? extends T> function) {
         requireNonNull(set);
         Set<T> newSet = new HashSet<>(calculateCapacity(set.size()));
         for (S e : set) {
@@ -84,7 +84,7 @@ public class Sets {
      * @deprecated use {@link #convert(Set, Function)}
      */
     @Deprecated
-    public static <S, T> Set<T> convertTo(Set<S> set, Function<S, T> function) {
+    public static <S, T> Set<T> convertTo(Set<S> set, Function<? super S, ? extends T> function) {
         return convert(set, function);
     }
 
@@ -93,7 +93,7 @@ public class Sets {
      *
      * @return immutable set which contains the elements in origin set, and accepted by predicate
      */
-    public static <T> Set<T> filter(Set<T> set, Predicate<T> predicate) {
+    public static <T> Set<T> filter(Set<T> set, Predicate<? super T> predicate) {
         requireNonNull(set);
         Set<T> newSet = new HashSet<>(Math.min(calculateCapacity(set.size()), INIT_CAPACITY));
         for (T e : set) {

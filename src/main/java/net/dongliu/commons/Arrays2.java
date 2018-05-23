@@ -24,7 +24,7 @@ public class Arrays2 {
      * @param <T>      target array element type
      * @return the target array
      */
-    public static <S, T> T[] convert(S[] array, IntFunction<T[]> maker, Function<S, T> function) {
+    public static <S, T> T[] convert(S[] array, IntFunction<T[]> maker, Function<? super S, ? extends T> function) {
         requireNonNull(array);
         T[] target = maker.apply(array.length);
         for (int i = 0; i < array.length; i++) {

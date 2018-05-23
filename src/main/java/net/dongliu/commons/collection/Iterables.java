@@ -55,7 +55,7 @@ public class Iterables {
      * @param iterable can not be null
      * @return Optional
      */
-    public static <T> Optional<T> find(Iterable<T> iterable, Predicate<T> predicate) {
+    public static <T> Optional<T> find(Iterable<T> iterable, Predicate<? super T> predicate) {
         requireNonNull(iterable);
         for (T e : iterable) {
             if (predicate.test(e)) {
@@ -72,7 +72,7 @@ public class Iterables {
      * @return The first accepted element. If list is empty, return null.
      */
     @Nullable
-    public static <T> T findOrNull(Iterable<T> list, Predicate<T> predicate) {
+    public static <T> T findOrNull(Iterable<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
         for (T e : list) {
             if (predicate.test(e)) {

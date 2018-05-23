@@ -125,7 +125,7 @@ public class Lists {
      * @param function function to convert elements
      * @return list contains the result.
      */
-    public static <S, T> List<T> convert(List<S> list, Function<S, T> function) {
+    public static <S, T> List<T> convert(List<S> list, Function<? super S, ? extends T> function) {
         requireNonNull(list);
         return Collections2.convertToList(list, function);
     }
@@ -138,7 +138,7 @@ public class Lists {
      * @deprecated use {@link #convert(List, Function)}
      */
     @Deprecated
-    public static <S, T> List<T> convertTo(List<S> list, Function<S, T> function) {
+    public static <S, T> List<T> convertTo(List<S> list, Function<? super S, ? extends T> function) {
         requireNonNull(list);
         return Collections2.convertToList(list, function);
     }
@@ -148,7 +148,7 @@ public class Lists {
      *
      * @return new immutable list
      */
-    public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+    public static <T> List<T> filter(List<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
         List<T> newList = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
         for (T e : list) {
@@ -207,7 +207,7 @@ public class Lists {
      * @param list can not be null
      * @return two list
      */
-    public static <T> Pair<List<T>, List<T>> partition(List<T> list, Predicate<T> predicate) {
+    public static <T> Pair<List<T>, List<T>> partition(List<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
         List<T> list1 = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
         List<T> list2 = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
@@ -258,7 +258,7 @@ public class Lists {
      * @param list can not be null
      * @return Optional
      */
-    public static <T> Optional<T> find(List<T> list, Predicate<T> predicate) {
+    public static <T> Optional<T> find(List<T> list, Predicate<? super T> predicate) {
         return Iterables.find(list, predicate);
     }
 
@@ -269,7 +269,7 @@ public class Lists {
      * @return The first accepted element. If list is empty, return null.
      */
     @Nullable
-    public static <T> T findOrNull(List<T> list, Predicate<T> predicate) {
+    public static <T> T findOrNull(List<T> list, Predicate<? super T> predicate) {
         return Iterables.findOrNull(list, predicate);
     }
 
