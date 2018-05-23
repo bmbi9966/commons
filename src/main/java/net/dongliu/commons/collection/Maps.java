@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static java.util.Collections.*;
 import static java.util.Objects.requireNonNull;
@@ -111,4 +113,71 @@ public class Maps {
         return unmodifiableMap(map);
     }
 
+    /**
+     * Convert map to new immutable map, with key converted by keyMapper, and value converted by valueMapper.
+     *
+     * @param map         the original map
+     * @param valueMapper the function to convert map value
+     * @param <K>         the key type
+     * @param <R>         the target key type
+     * @param <V>         the original value type
+     * @param <U>         the target value type
+     * @return new immutable map
+     */
+    public static <K, R, V, U> Map<R, U> convert(Map<K, V> map, Function<K, R> keyMapper, Function<V, U> valueMapper) {
+        requireNonNull(map);
+        requireNonNull(keyMapper);
+        requireNonNull(valueMapper);
+        if (map.isEmpty()) {
+            return Maps.of();
+        }
+        Map<R, U> result = new HashMap<>();
+        map.forEach((k, v) -> result.put(keyMapper.apply(k), valueMapper.apply(v)));
+        return unmodifiableMap(result);
+    }
+
+    /**
+     * Convert map to new immutable map, with key not modified, and value converted by function.
+     *
+     * @param map         the original map
+     * @param valueMapper the function to convert map value
+     * @param <K>         the key type
+     * @param <V>         the original value type
+     * @param <U>         the target value type
+     * @return new immutable map
+     */
+    public static <K, V, U> Map<K, U> convert(Map<K, V> map, Function<V, U> valueMapper) {
+        requireNonNull(map);
+        requireNonNull(valueMapper);
+        if (map.isEmpty()) {
+            return Maps.of();
+        }
+        Map<K, U> result = new HashMap<>();
+        map.forEach((k, v) -> result.put(k, valueMapper.apply(v)));
+        return unmodifiableMap(result);
+    }
+
+    /**
+     * Filter map to new immutable map, contains the entries accepted by predicate.
+     *
+     * @param map       the origin map
+     * @param predicate the predicate to filter map entries
+     * @param <K>       the key type
+     * @param <V>       the value type
+     * @return the new immutable map
+     */
+    public static <K, V> Map<K, V> filter(Map<K, V> map, Predicate<? super Map.Entry<K, V>> predicate) {
+        requireNonNull(map);
+        requireNonNull(predicate);
+        if (map.isEmpty()) {
+            return Maps.of();
+        }
+        Map<K, V> result = new HashMap<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (predicate.test(entry)) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return unmodifiableMap(result);
+    }
 }

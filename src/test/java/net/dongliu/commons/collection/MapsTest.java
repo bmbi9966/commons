@@ -33,4 +33,17 @@ public class MapsTest {
         assertEquals(2, map.size());
         assertEquals(1, (int) map.get("1"));
     }
+
+    @Test
+    void convert() {
+        Map<String, Integer> map = Maps.of("1", 1, "2", 2);
+        assertEquals(Maps.of(1, 1, 2, 2), Maps.convert(map, Integer::valueOf, v -> v));
+        assertEquals(Maps.of("1", "1", "2", "2"), Maps.convert(map, String::valueOf));
+    }
+
+    @Test
+    void filter() {
+        Map<String, Integer> map = Maps.of("1", 1, "2", 2);
+        assertEquals(Maps.of("1", 1), Maps.filter(map, e -> e.getValue() < 2));
+    }
 }

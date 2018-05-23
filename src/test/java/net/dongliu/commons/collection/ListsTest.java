@@ -12,9 +12,9 @@ public class ListsTest {
 
     @Test
     public void convertTo() {
-        assertEquals(Lists.of(1, 2, 3), Lists.convertTo(Lists.of("1", "2", "3"), Integer::valueOf));
-        assertEquals(Lists.of(1), Lists.convertTo(Lists.of("1"), Integer::valueOf));
-        assertEquals(Lists.of(), Lists.convertTo(Lists.<String>of(), Integer::valueOf));
+        assertEquals(Lists.of(1, 2, 3), Lists.convert(Lists.of("1", "2", "3"), Integer::valueOf));
+        assertEquals(Lists.of(1), Lists.convert(Lists.of("1"), Integer::valueOf));
+        assertEquals(Lists.of(), Lists.convert(Lists.<String>of(), Integer::valueOf));
     }
 
     @Test

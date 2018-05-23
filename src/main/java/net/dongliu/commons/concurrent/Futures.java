@@ -118,7 +118,7 @@ public class Futures {
             throw new IllegalArgumentException("no future");
         }
         return CompletableFuture.allOf(futures)
-                .thenApply(none -> Lists.convertTo(Arrays.asList(futures), CompletableFuture::join));
+                .thenApply(none -> Lists.convert(Arrays.asList(futures), CompletableFuture::join));
     }
 
     /**

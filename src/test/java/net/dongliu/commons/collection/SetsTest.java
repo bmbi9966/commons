@@ -8,9 +8,9 @@ public class SetsTest {
 
     @Test
     public void convertTo() {
-        assertEquals(Sets.of(1, 2, 3), Sets.convertTo(Sets.of("1", "2", "3"), Integer::valueOf));
-        assertEquals(Sets.of(1), Sets.convertTo(Sets.of("1"), Integer::valueOf));
-        assertEquals(Sets.of(), Sets.convertTo(Sets.<String>of(), Integer::valueOf));
+        assertEquals(Sets.of(1, 2, 3), Sets.convert(Sets.of("1", "2", "3"), Integer::valueOf));
+        assertEquals(Sets.of(1), Sets.convert(Sets.of("1"), Integer::valueOf));
+        assertEquals(Sets.of(), Sets.convert(Sets.<String>of(), Integer::valueOf));
     }
 
     @Test

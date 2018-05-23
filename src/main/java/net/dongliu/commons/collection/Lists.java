@@ -125,6 +125,19 @@ public class Lists {
      * @param function function to convert elements
      * @return list contains the result.
      */
+    public static <S, T> List<T> convert(List<S> list, Function<S, T> function) {
+        requireNonNull(list);
+        return Collections2.convertToList(list, function);
+    }
+
+    /**
+     * Convert origin list to new immutable List, the elements are converted by specific function.
+     *
+     * @param function function to convert elements
+     * @return list contains the result.
+     * @deprecated use {@link #convert(List, Function)}
+     */
+    @Deprecated
     public static <S, T> List<T> convertTo(List<S> list, Function<S, T> function) {
         requireNonNull(list);
         return Collections2.convertToList(list, function);

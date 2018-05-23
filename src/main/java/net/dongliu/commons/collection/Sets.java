@@ -63,19 +63,29 @@ public class Sets {
         return unmodifiableSet(set);
     }
 
-
     /**
      * Convert origin set to new immutable hash set.
      *
      * @return immutable set contains the result.
      */
-    public static <S, T> Set<T> convertTo(Set<S> set, Function<S, T> function) {
+    public static <S, T> Set<T> convert(Set<S> set, Function<S, T> function) {
         requireNonNull(set);
         Set<T> newSet = new HashSet<>(calculateCapacity(set.size()));
         for (S e : set) {
             newSet.add(function.apply(e));
         }
         return unmodifiableSet(newSet);
+    }
+
+    /**
+     * Convert origin set to new immutable hash set.
+     *
+     * @return immutable set contains the result.
+     * @deprecated use {@link #convert(Set, Function)}
+     */
+    @Deprecated
+    public static <S, T> Set<T> convertTo(Set<S> set, Function<S, T> function) {
+        return convert(set, function);
     }
 
     /**
