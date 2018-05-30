@@ -1,5 +1,6 @@
 package net.dongliu.commons.concurrent;
 
+import java.time.Duration;
 import java.util.concurrent.*;
 
 import static java.util.Objects.requireNonNull;
@@ -72,5 +73,33 @@ public class Executors2 {
      */
     public static ThreadFactory newNamedThreadFactory(String prefix) {
         return new DefaultThreadFactory(requireNonNull(prefix));
+    }
+
+    /**
+     * Shutdown Executor and wait task finished.
+     *
+     * <p>
+     * Previously submitted tasks are executed, but no new tasks will be accepted.
+     * This method blocks until all tasks have completed execution after a shutdown request,
+     * or the timeout occurs, or the current thread is interrupted, whichever happens first.
+     * If thread is interrupted, or timeout occurred, will stop all executing tasks by interrupt thread, and cancel
+     * all waiting tasks.
+     * </p>
+     *
+     * @param executor the executor to terminate
+     * @param timeout  the timeout duration to wait tasks finished.
+     */
+    public static void shutdownAndAwait(ExecutorService executor, Duration timeout) {
+        requireNonNull(executor);
+        requireNonNull(timeout);
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(timeout.toNanos(), TimeUnit.NANOSECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }

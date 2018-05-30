@@ -69,4 +69,14 @@ public class BuffersTest {
         assertEquals(1L, Buffers.ensureGetULong(buffer));
         assertThrows(ArithmeticException.class, () -> Buffers.ensureGetULong(buffer));
     }
+
+    @Test
+    void ensureGetUInt() {
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        buffer.putInt(1);
+        buffer.putInt(-1);
+        buffer.flip();
+        assertEquals(1, Buffers.ensureGetUInt(buffer));
+        assertThrows(ArithmeticException.class, () -> Buffers.ensureGetUInt(buffer));
+    }
 }

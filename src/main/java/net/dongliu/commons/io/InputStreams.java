@@ -13,7 +13,7 @@ import java.util.Arrays;
  */
 public class InputStreams {
 
-    private static final int BUFFER_SIZE = 8 * 1024;
+    private static final int BUFFER_SIZE = 16 * 1024;
 
     /**
      * Copy all data in InputStream to OutputStream.

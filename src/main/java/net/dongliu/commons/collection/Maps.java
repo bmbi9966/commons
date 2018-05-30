@@ -5,8 +5,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static java.util.Collections.*;
 import static java.util.Objects.requireNonNull;
@@ -167,7 +167,7 @@ public class Maps {
      * @param <V>       the value type
      * @return the new immutable map
      */
-    public static <K, V> Map<K, V> filter(Map<K, V> map, Predicate<? super Map.Entry<K, V>> predicate) {
+    public static <K, V> Map<K, V> filter(Map<K, V> map, BiPredicate<? super K, ? super V> predicate) {
         requireNonNull(map);
         requireNonNull(predicate);
         if (map.isEmpty()) {
@@ -175,7 +175,7 @@ public class Maps {
         }
         Map<K, V> result = new HashMap<>();
         for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (predicate.test(entry)) {
+            if (predicate.test(entry.getKey(), entry.getValue())) {
                 result.put(entry.getKey(), entry.getValue());
             }
         }

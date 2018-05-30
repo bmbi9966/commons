@@ -44,6 +44,6 @@ public class MapsTest {
     @Test
     void filter() {
         Map<String, Integer> map = Maps.of("1", 1, "2", 2);
-        assertEquals(Maps.of("1", 1), Maps.filter(map, e -> e.getValue() < 2));
+        assertEquals(Maps.of("1", 1), Maps.filter(map, (k, v) -> v < 2));
     }
 }

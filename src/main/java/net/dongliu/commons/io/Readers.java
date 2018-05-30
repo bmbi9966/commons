@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  */
 public class Readers {
 
-    private static final int BUFFER_SIZE = 4 * 1024;
+    private static final int BUFFER_SIZE = 8 * 1024;
 
     /**
      * Copy all data in Reader to Writer.

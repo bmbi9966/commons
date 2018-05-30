@@ -66,6 +66,21 @@ public class Buffers {
         return ((long) buffer.getInt()) & 0xffffffffL;
     }
 
+    /**
+     * Get four bytes, as unsigned long value from buffer. If the value can not hold in unsigned int,
+     * a exception thrown.
+     *
+     * @return a int value hold the unsigned int value.
+     * @throws ArithmeticException if int can not hold this unsigned int value
+     */
+    public static int ensureGetUInt(ByteBuffer buffer) {
+        int v = buffer.getInt();
+        if (v < 0) {
+            throw new ArithmeticException("overflow unsigned long");
+        }
+        return v;
+    }
+
 
     /**
      * Get eight bytes, as unsigned long value from buffer. If the value can not hold in unsigned long,
