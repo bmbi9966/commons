@@ -76,27 +76,16 @@ public class Strings {
      * @param delimiter the delimiter to join multi string items, can not be null
      * @param strings   the string items
      * @return new string
+     * @deprecated use {@link Joiner}
      */
+    @Deprecated
     public static String join(CharSequence prefix, CharSequence suffix, CharSequence delimiter,
                               Iterable<? extends CharSequence> strings) {
         requireNonNull(prefix);
         requireNonNull(suffix);
         requireNonNull(delimiter);
         requireNonNull(strings);
-        StringBuilder sb = new StringBuilder();
-        sb.append(prefix);
-        boolean flag = false;
-        for (CharSequence str : strings) {
-            sb.append(str).append(delimiter);
-            if (!flag) {
-                flag = true;
-            }
-        }
-        if (flag) {
-            sb.setLength(sb.length() - delimiter.length());
-        }
-        sb.append(suffix);
-        return sb.toString();
+        return Joiner.of(prefix, suffix, delimiter).join(strings);
     }
 
     /**
@@ -107,23 +96,16 @@ public class Strings {
      * @param delimiter the delimiter to join multi string items, can not be null
      * @param strings   the string items
      * @return new string
+     * @deprecated use {@link Joiner}
      */
+    @Deprecated
     public static String join(CharSequence prefix, CharSequence suffix, CharSequence delimiter,
                               CharSequence... strings) {
         requireNonNull(prefix);
         requireNonNull(suffix);
         requireNonNull(delimiter);
         requireNonNull(strings);
-        StringBuilder sb = new StringBuilder();
-        sb.append(prefix);
-        for (int i = 0; i < strings.length; i++) {
-            sb.append(strings[i]);
-            if (i != strings.length - 1) {
-                sb.append(delimiter);
-            }
-        }
-        sb.append(suffix);
-        return sb.toString();
+        return Joiner.of(prefix, suffix, delimiter).join((Object[]) strings);
     }
 
     /**

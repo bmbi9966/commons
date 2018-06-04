@@ -17,7 +17,28 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class Futures {
 
     private static final Lazy<ScheduledExecutorService> executorService = Lazy.of(
-            () -> new ScheduledThreadPoolExecutor(1, new DefaultThreadFactory("delay-executor")));
+            () -> new ScheduledThreadPoolExecutor(1, ThreadFactories.newDaemonThreadFactory("delay-executor")));
+
+    /**
+     * Just future get value, but throwing uncheck exception.
+     *
+     * @param future the future
+     * @param <T>    the future value type
+     * @return the future value
+     */
+    public static <T> T join(Future<T> future) {
+        if (future instanceof CompletableFuture) {
+            return ((CompletableFuture<T>) future).join();
+        }
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new CancellationException();
+        } catch (ExecutionException e) {
+            throw new CompletionException(e.getCause());
+        }
+    }
 
     /**
      * Just alias for CompletableFuture.completedFuture

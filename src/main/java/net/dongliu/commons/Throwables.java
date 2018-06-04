@@ -146,7 +146,7 @@ public class Throwables {
             throw new UncheckedTimeoutException((TimeoutException) e);
         }
         if (e instanceof ExecutionException) {
-            throw new CompletionException(e);
+            throw new CompletionException(e.getCause());
         }
         // Common checked exceptions that not in java.base module.
         // SQLException

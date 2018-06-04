@@ -18,7 +18,7 @@ public class ThreadPoolBuilder {
     private Duration keepAliveTime = Duration.ofSeconds(30);
     private boolean allowCoreThreadTimeOut = false;
     private Supplier<BlockingQueue<Runnable>> workingQueue = LinkedBlockingQueue::new;
-    private Supplier<ThreadFactory> threadFactory = () -> new DefaultThreadFactory("thread-pool-" + poolSeq.incrementAndGet());
+    private Supplier<ThreadFactory> threadFactory = () -> ThreadFactories.newDaemonThreadFactory("thread-pool-" + poolSeq.incrementAndGet());
     private Supplier<RejectedExecutionHandler> rejectedHandler = ThreadPoolExecutor.AbortPolicy::new;
     @Nullable
     private TaskExceptionListener taskExceptionListener;

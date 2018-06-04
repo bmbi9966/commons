@@ -21,7 +21,7 @@ public class Executors2 {
      * @return ThreadPool
      */
     public static ExecutorService newFixedThreadPool(int poolSize, int queueSize, String threadNamePrefix) {
-        return newFixedThreadPool(poolSize, queueSize, newNamedThreadFactory(threadNamePrefix));
+        return newFixedThreadPool(poolSize, queueSize, ThreadFactories.newDaemonThreadFactory(threadNamePrefix));
     }
 
     /**
@@ -62,17 +62,6 @@ public class Executors2 {
      */
     public static ThreadPoolBuilder threadPoolBuilder() {
         return new ThreadPoolBuilder();
-    }
-
-    /**
-     * Create a thread factory, with thread name as pattern $prefix-worker-$seq.
-     * The Thread Priority is set to NORMAL, Daemon is set to true, and use ThreadGroup as current thread.
-     *
-     * @param prefix the thread name prefix
-     * @return Thread Factory
-     */
-    public static ThreadFactory newNamedThreadFactory(String prefix) {
-        return new DefaultThreadFactory(requireNonNull(prefix));
     }
 
     /**
