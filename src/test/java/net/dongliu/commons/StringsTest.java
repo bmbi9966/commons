@@ -22,6 +22,7 @@ public class StringsTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void join() {
         assertEquals("1, 2, 3", Strings.join("", "", ", ", Lists.of("1", "2", "3")));
         assertEquals("(1, 2, 3)", Strings.join("(", ")", ", ", Lists.of("1", "2", "3")));
