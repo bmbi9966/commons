@@ -1,7 +1,5 @@
 package net.dongliu.commons;
 
-import net.dongliu.commons.exception.UncheckedReflectiveOperationException;
-import net.dongliu.commons.exception.UncheckedTimeoutException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -9,9 +7,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.util.Optional;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 import static java.util.Objects.requireNonNull;
 
@@ -119,38 +114,5 @@ public class Throwables {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    /**
-     * If e is unchecked error or exception, throw directly. Else, wrap to correspond runtime exception, and then throw.
-     * <p>
-     * You may want to tell compiler exception is thrown, use:
-     * </p>
-     * <pre>
-     *  throw wrapAndThrown(e);
-     * </pre>
-     *
-     * @param e the exception
-     * @return RuntimeException for throw.just for making compiler happier
-     */
-    /*public*/ static RuntimeException wrapAndThrow(Throwable e) {
-        requireNonNull(e);
-        throwIfUnchecked(e);
-        if (e instanceof IOException) {
-            throw new UncheckedIOException((IOException) e);
-        }
-        if (e instanceof ReflectiveOperationException) {
-            throw new UncheckedReflectiveOperationException((ReflectiveOperationException) e);
-        }
-        if (e instanceof TimeoutException) {
-            throw new UncheckedTimeoutException((TimeoutException) e);
-        }
-        if (e instanceof ExecutionException) {
-            throw new CompletionException(e.getCause());
-        }
-        // Common checked exceptions that not in java.base module.
-        // SQLException
-        // IntrospectionException
-        throw new RuntimeException(e);
     }
 }

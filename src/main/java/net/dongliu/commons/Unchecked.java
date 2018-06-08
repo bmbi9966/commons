@@ -21,7 +21,7 @@ public class Unchecked {
         try {
             runnable.run();
         } catch (Exception e) {
-            throw Throwables.wrapAndThrow(e);
+            throw Throwables.sneakyThrow(e);
         }
     }
 
@@ -34,7 +34,7 @@ public class Unchecked {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw Throwables.wrapAndThrow(e);
+            throw Throwables.sneakyThrow(e);
         }
     }
 
@@ -53,7 +53,7 @@ public class Unchecked {
             try {
                 runnable.run();
             } catch (Exception e) {
-                throw Throwables.wrapAndThrow(e);
+                throw Throwables.sneakyThrow(e);
             }
         };
     }
@@ -72,7 +72,7 @@ public class Unchecked {
             try {
                 return supplier.get();
             } catch (Exception e) {
-                throw Throwables.wrapAndThrow(e);
+                throw Throwables.sneakyThrow(e);
             }
         };
     }
@@ -92,7 +92,7 @@ public class Unchecked {
             try {
                 consumer.accept(v);
             } catch (Exception e) {
-                throw Throwables.wrapAndThrow(e);
+                throw Throwables.sneakyThrow(e);
             }
         };
     }
@@ -113,7 +113,7 @@ public class Unchecked {
             try {
                 return predicate.test(v);
             } catch (Exception e) {
-                throw Throwables.wrapAndThrow(e);
+                throw Throwables.sneakyThrow(e);
             }
         };
     }
@@ -135,7 +135,7 @@ public class Unchecked {
             try {
                 return function.apply(v);
             } catch (Exception e) {
-                throw Throwables.wrapAndThrow(e);
+                throw Throwables.sneakyThrow(e);
             }
         };
     }
@@ -155,7 +155,7 @@ public class Unchecked {
             try {
                 consumer.accept(v1, v2);
             } catch (Exception e) {
-                throw Throwables.wrapAndThrow(e);
+                throw Throwables.sneakyThrow(e);
             }
         };
     }
@@ -177,7 +177,7 @@ public class Unchecked {
             try {
                 return function.apply(v1, v2);
             } catch (Exception e) {
-                throw Throwables.wrapAndThrow(e);
+                throw Throwables.sneakyThrow(e);
             }
         };
     }
