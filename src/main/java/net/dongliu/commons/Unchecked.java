@@ -4,18 +4,16 @@ import java.util.function.*;
 
 /**
  * Wrap checked interface to unchecked interface.
- * If exception is caught, Unchecked Exception will be throw as it is,
- * IOException will be wrapped by UncheckedIOException,
- * Other Checked Exception will be wrapped by RuntimeException.
+ * If exception is caught, both checked exceptions and unchecked exceptions will be thrown silently.
  */
 public class Unchecked {
     private Unchecked() {
     }
 
     /**
-     * Run a block of code, wrap exception in CompletionException.
+     * Run a block of code
      *
-     * @param runnable
+     * @param runnable the code to run
      */
     public static void run(ERunnable runnable) {
         try {
@@ -26,9 +24,9 @@ public class Unchecked {
     }
 
     /**
-     * Call a block of code, return result, and wrap thrown exception in CompletionException.
+     * Call a block of code, return result
      *
-     * @param supplier
+     * @param supplier the code to run
      */
     public static <T> T call(ESupplier<T> supplier) {
         try {
@@ -46,7 +44,7 @@ public class Unchecked {
     /**
      * Wrap to Runnable interface
      *
-     * @return
+     * @return wrapped runnable
      */
     public static Runnable runnable(ERunnable runnable) {
         return () -> {
