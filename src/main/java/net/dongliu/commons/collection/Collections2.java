@@ -1,9 +1,11 @@
 package net.dongliu.commons.collection;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
 
@@ -42,5 +44,26 @@ public class Collections2 {
             values[i++] = function.apply(s);
         }
         return new ImmutableList<>(values);
+    }
+
+    /**
+     * Divide collection to two immutable list, the first list contains elements accepted by predicate,
+     * the other contains other elements.
+     *
+     * @param list can not be null
+     * @return two list
+     */
+    public static <T> Pair<List<T>, List<T>> partitionToList(Collection<T> list, Predicate<? super T> predicate) {
+        requireNonNull(list);
+        List<T> list1 = new ArrayList<>(Math.min(16, list.size()));
+        List<T> list2 = new ArrayList<>(Math.min(16, list.size()));
+        for (T e : list) {
+            if (predicate.test(e)) {
+                list1.add(e);
+            } else {
+                list2.add(e);
+            }
+        }
+        return Pair.of(Lists.copy(list1), Lists.copy(list2));
     }
 }

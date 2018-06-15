@@ -113,4 +113,64 @@ public class Classes {
     public static boolean isPrimitiveWrapper(Class<?> cls) {
         return ClassSetHolder.wrapperClasses.contains(requireNonNull(cls));
     }
+
+    /**
+     * If is private class
+     *
+     * @param cls the class
+     * @return true if is private class
+     */
+    public static boolean isPrivate(Class<?> cls) {
+        return Modifier.isPrivate(cls.getModifiers());
+    }
+
+    /**
+     * If is public class
+     *
+     * @param cls the class
+     * @return true if is public class
+     */
+    public static boolean isPublic(Class<?> cls) {
+        return Modifier.isPublic(cls.getModifiers());
+    }
+
+    /**
+     * If is protected class
+     *
+     * @param cls the class
+     * @return true if is protected class
+     */
+    public static boolean isProtected(Class<?> cls) {
+        return Modifier.isProtected(cls.getModifiers());
+    }
+
+    /**
+     * If is abstract class
+     *
+     * @param cls the class
+     * @return true if is abstract class
+     */
+    public static boolean isAbstract(Class<?> cls) {
+        return Modifier.isAbstract(cls.getModifiers());
+    }
+
+    /**
+     * If is interface class
+     *
+     * @param cls the class
+     * @return true if is interface
+     */
+    public static boolean isInterface(Class<?> cls) {
+        return Modifier.isInterface(cls.getModifiers());
+    }
+
+    /**
+     * If is final class
+     *
+     * @param cls the class
+     * @return true if is final class
+     */
+    public static boolean isFinal(Class<?> cls) {
+        return Modifier.isFinal(cls.getModifiers());
+    }
 }

@@ -202,23 +202,15 @@ public class Lists {
     }
 
     /**
-     * Divide list to two list, the first list contains elements accepted by predicate, the other contains other elements.
+     * Divide list to two immutable list, the first list contains elements accepted by predicate,
+     * the other contains other elements.
      *
      * @param list can not be null
      * @return two list
      */
     public static <T> Pair<List<T>, List<T>> partition(List<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
-        List<T> list1 = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
-        List<T> list2 = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
-        for (T e : list) {
-            if (predicate.test(e)) {
-                list1.add(e);
-            } else {
-                list2.add(e);
-            }
-        }
-        return Pair.of(copy(list1), copy(list2));
+        return Collections2.partitionToList(list, predicate);
     }
 
     /**
