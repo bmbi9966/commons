@@ -120,7 +120,8 @@ public class Lists {
     }
 
     /**
-     * Convert origin list to new immutable List, the elements are converted by specific function.
+     * Convert origin list to new List, the elements are converted by specific function.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @param function function to convert elements
      * @return list contains the result.
@@ -131,7 +132,8 @@ public class Lists {
     }
 
     /**
-     * Convert origin list to new immutable List, the elements are converted by specific function.
+     * Convert origin list to new List, the elements are converted by specific function.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @param function function to convert elements
      * @return list contains the result.
@@ -144,9 +146,10 @@ public class Lists {
     }
 
     /**
-     * Filter list, return a new immutable list which contains the elements in origin list which accepted by predicate
+     * Filter list, return a new list which contains the elements in origin list which accepted by predicate.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
-     * @return new immutable list
+     * @return new list
      */
     public static <T> List<T> filter(List<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
@@ -156,35 +159,62 @@ public class Lists {
                 newList.add(e);
             }
         }
-        return copy(newList);
+        return newList;
     }
 
     /**
-     * Concat two list, to one new immutable list.
+     * Concat two lists, to one new list.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @param list1 list1
      * @param list2 list2
      * @param <T>   element type
-     * @return new immutable List
+     * @return new List
      */
     public static <T> List<T> concat(List<T> list1, List<T> list2) {
         requireNonNull(list1);
         requireNonNull(list2);
-        Object[] values = new Object[list1.size() + list2.size()];
-        int i = 0;
-        for (T v : list1) {
-            values[i++] = v;
+        int totalSize = Math.addExact(list1.size(), list2.size());
+        List<T> list = new ArrayList<>(totalSize);
+        list.addAll(list1);
+        list.addAll(list2);
+        return list;
+    }
+
+    /**
+     * Concat multi lists, to one new list.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     *
+     * @param list1      list1
+     * @param list2      list2
+     * @param otherLists other lists to concat
+     * @param <T>        element type
+     * @return new List
+     */
+    public static <T> List<T> concat(List<T> list1, List<T> list2, List<T>... otherLists) {
+        requireNonNull(list1);
+        requireNonNull(list2);
+        requireNonNull(otherLists);
+        int totalSize = Math.addExact(list1.size(), list2.size());
+        for (List<T> list : otherLists) {
+            requireNonNull(list);
+            totalSize = Math.addExact(totalSize, list.size());
         }
-        for (T v : list2) {
-            values[i++] = v;
+
+        List<T> list = new ArrayList<>(totalSize);
+        list.addAll(list1);
+        list.addAll(list2);
+        for (List<T> otherList : otherLists) {
+            list.addAll(otherList);
         }
-        return new ImmutableList<>(values);
+        return list;
     }
 
     /**
      * Split list, into multi subLists, each subList has the specified subSize, except the last one.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
-     * @return immutable List of SubLists
+     * @return List of SubLists
      */
     public static <T> List<List<T>> split(List<T> list, int subSize) {
         requireNonNull(list);
@@ -194,16 +224,17 @@ public class Lists {
 
         int size = list.size();
         int count = (size - 1) / subSize + 1;
-        List[] result = new List[count];
+        List<List<T>> result = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            result[i] = list.subList(i * subSize, Math.min(size, (i + 1) * subSize));
+            result.add(list.subList(i * subSize, Math.min(size, (i + 1) * subSize)));
         }
-        return new ImmutableList<>((Object[]) result);
+        return result;
     }
 
     /**
-     * Divide list to two immutable list, the first list contains elements accepted by predicate,
+     * Divide list to two list, the first list contains elements accepted by predicate,
      * the other contains other elements.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @param list can not be null
      * @return two list

@@ -33,22 +33,27 @@ public class Collections2 {
 
     /**
      * Convert origin collection to new List.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @return list contains the result.
      */
     public static <S, T> List<T> convertToList(Collection<S> c, Function<? super S, ? extends T> function) {
         requireNonNull(c);
-        Object[] values = new Object[c.size()];
+        if (c.isEmpty()) {
+            return Lists.of();
+        }
+        List<T> list = new ArrayList<>(c.size());
         int i = 0;
         for (S s : c) {
-            values[i++] = function.apply(s);
+            list.add(function.apply(s));
         }
-        return new ImmutableList<>(values);
+        return list;
     }
 
     /**
-     * Divide collection to two immutable list, the first list contains elements accepted by predicate,
+     * Divide collection to two list, the first list contains elements accepted by predicate,
      * the other contains other elements.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @param list can not be null
      * @return two list
@@ -64,6 +69,6 @@ public class Collections2 {
                 list2.add(e);
             }
         }
-        return Pair.of(Lists.copy(list1), Lists.copy(list2));
+        return Pair.of(list1, list2);
     }
 }

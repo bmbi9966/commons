@@ -3,6 +3,7 @@ package net.dongliu.commons.collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiPredicate;
@@ -114,7 +115,8 @@ public class Maps {
     }
 
     /**
-     * Convert map to new immutable map, with key converted by keyMapper, and value converted by valueMapper.
+     * Convert map to new map, with key converted by keyMapper, and value converted by valueMapper.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
      *
      * @param map         the original map
      * @param valueMapper the function to convert map value
@@ -122,7 +124,7 @@ public class Maps {
      * @param <R>         the target key type
      * @param <V>         the original value type
      * @param <U>         the target value type
-     * @return new immutable map
+     * @return new map
      */
     public static <K, R, V, U> Map<R, U> convert(Map<K, V> map, Function<? super K, ? extends R> keyMapper,
                                                  Function<? super V, ? extends U> valueMapper) {
@@ -134,38 +136,35 @@ public class Maps {
         }
         Map<R, U> result = new HashMap<>();
         map.forEach((k, v) -> result.put(keyMapper.apply(k), valueMapper.apply(v)));
-        return unmodifiableMap(result);
+        return result;
     }
 
     /**
-     * Convert map to new immutable map, with key not modified, and value converted by function.
+     * Convert map to new map, with key not modified, and value converted by function.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
      *
      * @param map         the original map
      * @param valueMapper the function to convert map value
      * @param <K>         the key type
      * @param <V>         the original value type
      * @param <U>         the target value type
-     * @return new immutable map
+     * @return new map
      */
     public static <K, V, U> Map<K, U> convert(Map<K, V> map, Function<? super V, ? extends U> valueMapper) {
         requireNonNull(map);
         requireNonNull(valueMapper);
-        if (map.isEmpty()) {
-            return Maps.of();
-        }
-        Map<K, U> result = new HashMap<>();
-        map.forEach((k, v) -> result.put(k, valueMapper.apply(v)));
-        return unmodifiableMap(result);
+        return convert(map, k -> k, valueMapper);
     }
 
     /**
-     * Filter map to new immutable map, contains the entries accepted by predicate.
+     * Filter map to new map, contains the entries accepted by predicate.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
      *
      * @param map       the origin map
      * @param predicate the predicate to filter map entries
      * @param <K>       the key type
      * @param <V>       the value type
-     * @return the new immutable map
+     * @return the new map
      */
     public static <K, V> Map<K, V> filter(Map<K, V> map, BiPredicate<? super K, ? super V> predicate) {
         requireNonNull(map);
@@ -179,6 +178,73 @@ public class Maps {
                 result.put(entry.getKey(), entry.getValue());
             }
         }
-        return unmodifiableMap(result);
+        return result;
+    }
+
+    /**
+     * Merge tow maps, to a new map, contains key-value in both map. If map1 and map2 contains the same key,
+     * the value from map2 will be used.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     *
+     * @param map1 map1
+     * @param map2 map2
+     * @param <K>  map key type
+     * @param <V>  map value type
+     * @return new map
+     */
+    public static <K, V> Map<K, V> merge(Map<K, V> map1, Map<K, V> map2) {
+        requireNonNull(map1);
+        requireNonNull(map2);
+        Map<K, V> map = new HashMap<>();
+        map.putAll(map1);
+        map.putAll(map2);
+        return map;
+    }
+
+    /**
+     * Create new map from a collection of keys, the values are constructed by valueMaker.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     *
+     * @param keys       the key collections
+     * @param valueMaker to make value from key
+     * @param <K>        key type
+     * @param <V>        value type
+     * @return new map
+     */
+    public static <K, V> Map<K, V> fromKeys(Collection<? extends K> keys, Function<? super K, ? extends V> valueMaker) {
+        requireNonNull(keys);
+        requireNonNull(valueMaker);
+        if (keys.isEmpty()) {
+            return Maps.of();
+        }
+        Map<K, V> map = new HashMap<>();
+        for (K key : keys) {
+            map.put(key, valueMaker.apply(key));
+        }
+        return map;
+    }
+
+    /**
+     * Create new map from a collection of values, the values are constructed by keyMaker.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     *
+     * @param values   the value collections
+     * @param keyMaker to get key from value
+     * @param <K>      key type
+     * @param <V>      value type
+     * @return new map
+     */
+    public static <K, V> Map<K, V> fromValues(Collection<? extends V> values,
+                                              Function<? super V, ? extends K> keyMaker) {
+        requireNonNull(values);
+        requireNonNull(keyMaker);
+        if (values.isEmpty()) {
+            return Maps.of();
+        }
+        Map<K, V> map = new HashMap<>();
+        for (V value : values) {
+            map.put(keyMaker.apply(value), value);
+        }
+        return map;
     }
 }

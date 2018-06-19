@@ -64,9 +64,10 @@ public class Sets {
     }
 
     /**
-     * Convert origin set to new immutable hash set.
+     * Convert origin set to new set.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Set returned.
      *
-     * @return immutable set contains the result.
+     * @return set contains the result.
      */
     public static <S, T> Set<T> convert(Set<S> set, Function<? super S, ? extends T> function) {
         requireNonNull(set);
@@ -74,13 +75,14 @@ public class Sets {
         for (S e : set) {
             newSet.add(function.apply(e));
         }
-        return unmodifiableSet(newSet);
+        return newSet;
     }
 
     /**
-     * Convert origin set to new immutable hash set.
+     * Convert origin set to new set.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Set returned.
      *
-     * @return immutable set contains the result.
+     * @return set contains the result.
      * @deprecated use {@link #convert(Set, Function)}
      */
     @Deprecated
@@ -89,9 +91,10 @@ public class Sets {
     }
 
     /**
-     * Filter set, to new immutable hash set.
+     * Filter set, to new set.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Set returned.
      *
-     * @return immutable set which contains the elements in origin set, and accepted by predicate
+     * @return set which contains the elements in origin set, and accepted by predicate
      */
     public static <T> Set<T> filter(Set<T> set, Predicate<? super T> predicate) {
         requireNonNull(set);
@@ -101,7 +104,7 @@ public class Sets {
                 newSet.add(e);
             }
         }
-        return unmodifiableSet(newSet);
+        return newSet;
     }
 
     private static int calculateCapacity(int size) {
