@@ -1,10 +1,18 @@
 package net.dongliu.commons;
 
+import net.dongliu.commons.exception.UndeclaredLambdaException;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.function.*;
 
 /**
  * Wrap checked interface to unchecked interface.
- * If exception is caught, both checked exceptions and unchecked exceptions will be thrown silently.
+ * <p>
+ * If exception occurred, unchecked exceptions will be thrown directly,
+ * {@link IOException} will be wrapped in {@link UncheckedIOException},
+ * other checked exceptions will be wrapped in {@link UndeclaredLambdaException}
+ * </p>
  */
 public class Unchecked {
     private Unchecked() {
@@ -19,7 +27,7 @@ public class Unchecked {
         try {
             runnable.run();
         } catch (Exception e) {
-            throw Throwables.sneakyThrow(e);
+            throw toRuntimeException(e);
         }
     }
 
@@ -32,7 +40,7 @@ public class Unchecked {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw Throwables.sneakyThrow(e);
+            throw toRuntimeException(e);
         }
     }
 
@@ -51,7 +59,7 @@ public class Unchecked {
             try {
                 runnable.run();
             } catch (Exception e) {
-                throw Throwables.sneakyThrow(e);
+                throw toRuntimeException(e);
             }
         };
     }
@@ -63,14 +71,14 @@ public class Unchecked {
     /**
      * Wrap to Supplier interface
      *
-     * @return
+     * @return the Supplier
      */
     public static <T> Supplier<T> supplier(ESupplier<T> supplier) {
         return () -> {
             try {
                 return supplier.get();
             } catch (Exception e) {
-                throw Throwables.sneakyThrow(e);
+                throw toRuntimeException(e);
             }
         };
     }
@@ -83,14 +91,14 @@ public class Unchecked {
     /**
      * Wrap to Consumer interface
      *
-     * @return
+     * @return the Consumer
      */
     public static <T> Consumer<T> consumer(EConsumer<T> consumer) {
         return v -> {
             try {
                 consumer.accept(v);
             } catch (Exception e) {
-                throw Throwables.sneakyThrow(e);
+                throw toRuntimeException(e);
             }
         };
     }
@@ -103,15 +111,15 @@ public class Unchecked {
     /**
      * Wrap to Predicate interface
      *
-     * @param <T>
-     * @return
+     * @param <T> type to test
+     * @return Predicate
      */
     public static <T> Predicate<T> predicate(EPredicate<T> predicate) {
         return v -> {
             try {
                 return predicate.test(v);
             } catch (Exception e) {
-                throw Throwables.sneakyThrow(e);
+                throw toRuntimeException(e);
             }
         };
     }
@@ -124,16 +132,16 @@ public class Unchecked {
     /**
      * Wrap to Function interface
      *
-     * @param <T>
-     * @param <R>
-     * @return
+     * @param <T> function param type
+     * @param <R> function return type
+     * @return the Function
      */
     public static <T, R> Function<T, R> function(EFunction<T, R> function) {
         return v -> {
             try {
                 return function.apply(v);
             } catch (Exception e) {
-                throw Throwables.sneakyThrow(e);
+                throw toRuntimeException(e);
             }
         };
     }
@@ -146,14 +154,14 @@ public class Unchecked {
     /**
      * Wrap to BiConsumer interface
      *
-     * @return
+     * @return the BiConsumer
      */
     public static <T, U> BiConsumer<T, U> biConsumer(EBiConsumer<T, U> consumer) {
         return (v1, v2) -> {
             try {
                 consumer.accept(v1, v2);
             } catch (Exception e) {
-                throw Throwables.sneakyThrow(e);
+                throw toRuntimeException(e);
             }
         };
     }
@@ -166,18 +174,27 @@ public class Unchecked {
     /**
      * Wrap to BiFunction interface
      *
-     * @param <T>
-     * @param <R>
-     * @return
+     * @param <T> first function param type
+     * @param <U> second function param type
+     * @param <R> function return type
+     * @return the BiFunction
      */
     public static <T, U, R> BiFunction<T, U, R> biFunction(EBiFunction<T, U, R> function) {
         return (v1, v2) -> {
             try {
                 return function.apply(v1, v2);
             } catch (Exception e) {
-                throw Throwables.sneakyThrow(e);
+                throw toRuntimeException(e);
             }
         };
+    }
+
+    private static RuntimeException toRuntimeException(Exception e) {
+        Throwables.throwIfUnchecked(e);
+        if (e instanceof IOException) {
+            throw new UncheckedIOException((IOException) e);
+        }
+        return new UndeclaredLambdaException(e);
     }
 
 }
