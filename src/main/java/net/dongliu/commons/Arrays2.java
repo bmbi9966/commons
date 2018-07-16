@@ -54,4 +54,5 @@ public class Arrays2 {
         System.arraycopy(array2, 0, array, array1.length, array1.length);
         return array;
     }
+
 }

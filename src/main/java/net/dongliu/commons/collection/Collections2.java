@@ -26,7 +26,7 @@ public class Collections2 {
      * @param <T>   element type
      * @return the target array containing elements in collection
      */
-    public static <T> T[] toArray(Collection<T> c, IntFunction<T[]> maker) {
+    public static <T> T[] toArray(Collection<? extends T> c, IntFunction<T[]> maker) {
         requireNonNull(c);
         return c.toArray(maker.apply(c.size()));
     }
@@ -71,4 +71,23 @@ public class Collections2 {
         }
         return Pair.of(list1, list2);
     }
+
+    /**
+     * Traverse on a collection.
+     *
+     * @param c        the collection
+     * @param consumer the consumer
+     * @param <T>      the data type
+     */
+    public static <T> void forEach(Collection<T> c, LastElementAwareConsumer<? super T> consumer) {
+        requireNonNull(c);
+        requireNonNull(consumer);
+        int size = c.size();
+        int i = 0;
+        for (T value : c) {
+            ++i;
+            consumer.on(value, i == size);
+        }
+    }
+
 }

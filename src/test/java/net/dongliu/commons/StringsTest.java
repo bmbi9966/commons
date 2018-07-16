@@ -135,4 +135,20 @@ public class StringsTest {
         assertEquals("c", Strings.deCapitalize("C"));
         assertEquals("char", Strings.deCapitalize("char"));
     }
+
+    @Test
+    void padLeft() {
+        assertEquals("", Strings.padLeft("", 0, '1'));
+        assertEquals("test", Strings.padLeft("test", 2, '1'));
+        assertEquals("test", Strings.padLeft("test", 4, '1'));
+        assertEquals("11test", Strings.padLeft("test", 6, '1'));
+    }
+
+    @Test
+    void padRight() {
+        assertEquals("", Strings.padRight("", 0, '1'));
+        assertEquals("test", Strings.padRight("test", 2, '1'));
+        assertEquals("test", Strings.padRight("test", 4, '1'));
+        assertEquals("test11", Strings.padRight("test", 6, '1'));
+    }
 }

@@ -4,6 +4,8 @@ package net.dongliu.commons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 import static java.lang.Character.toLowerCase;
 import static java.lang.Character.toUpperCase;
 import static java.util.Objects.requireNonNull;
@@ -315,5 +317,43 @@ public class Strings {
             return str;
         }
         return toLowerCase(c) + str.substring(1);
+    }
+
+    /**
+     * Pad the string, at left, to len, with padding char. If str size already equals or larger than len, return string self.
+     *
+     * @param str     the str to be pad
+     * @param len     the desired len of padded str
+     * @param padding the padding char
+     * @return padded str
+     */
+    public static String padLeft(String str, int len, char padding) {
+        requireNonNull(str);
+        if (str.length() >= len) {
+            return str;
+        }
+        char[] chars = new char[len];
+        Arrays.fill(chars, 0, len - str.length(), padding);
+        str.getChars(0, str.length(), chars, len - str.length());
+        return new String(chars);
+    }
+
+    /**
+     * Pad the string, at right, to len, with padding char. If str size already equals or larger than len, return string self.
+     *
+     * @param str     the str to be pad
+     * @param len     the desired len of padded str
+     * @param padding the padding char
+     * @return padded str
+     */
+    public static String padRight(String str, int len, char padding) {
+        requireNonNull(str);
+        if (str.length() >= len) {
+            return str;
+        }
+        char[] chars = new char[len];
+        str.getChars(0, str.length(), chars, 0);
+        Arrays.fill(chars, str.length(), len, padding);
+        return new String(chars);
     }
 }

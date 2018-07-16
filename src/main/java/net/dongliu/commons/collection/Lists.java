@@ -308,7 +308,20 @@ public class Lists {
      * @param <T>   element type
      * @return the target array containing elements in collection
      */
-    public static <T> T[] toArray(List<T> list, IntFunction<T[]> maker) {
+    public static <T> T[] toArray(List<? extends T> list, IntFunction<T[]> maker) {
         return Collections2.toArray(list, maker);
+    }
+
+    /**
+     * Traverse on a list.
+     *
+     * @param list     the list
+     * @param consumer the consumer
+     * @param <T>      the data type
+     */
+    public static <T> void forEach(List<T> list, LastElementAwareConsumer<? super T> consumer) {
+        requireNonNull(list);
+        requireNonNull(consumer);
+        Collections2.forEach(list, consumer);
     }
 }
