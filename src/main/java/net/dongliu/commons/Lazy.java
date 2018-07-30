@@ -1,29 +1,46 @@
 package net.dongliu.commons;
 
-import java.io.Serializable;
-import java.util.concurrent.CompletionException;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
-import static net.dongliu.commons.Throwables.throwIfUnchecked;
 
 /**
  * Supplier that only compute value once, despite succeed or fail(thrown Exceptions).
  * The Lazy supplier also cache the Exception thrown at the initial compute phase, and throw it when meet following calls.
+ * This class is ThreadSafe.
+ * This class is not serializable.
  *
  * @param <T> the value type
  */
-public class Lazy<T> implements Supplier<T>, Serializable {
+public class Lazy<T> implements Supplier<T> {
 
-    private static final long serialVersionUID = -7365971074093939980L;
-    private transient volatile boolean init;
-    private transient T value;
-    private transient Throwable throwable;
-    private final Supplier<T> supplier;
+    private boolean init;
+    private Supplier<T> supplier;
 
     private Lazy(Supplier<T> supplier) {
-        this.supplier = supplier;
+        Supplier<T> originalSupplier = requireNonNull(supplier);
+        this.supplier = () -> {
+            synchronized (this) {
+                Supplier<T> directSupplier;
+                if (!init) {
+                    T value;
+                    try {
+                        value = originalSupplier.get();
+                        directSupplier = () -> value;
+                    } catch (Throwable t) {
+                        directSupplier = () -> {
+                            throw t;
+                        };
+                    }
+                    this.supplier = directSupplier;
+                    this.init = true;
+                } else {
+                    directSupplier = this.supplier;
+                }
+                return directSupplier.get();
+            }
+        };
     }
 
     /**
@@ -43,25 +60,7 @@ public class Lazy<T> implements Supplier<T>, Serializable {
 
     @Override
     public T get() {
-        if (!init) {
-            synchronized (this) {
-                if (!init) {
-                    try {
-                        this.value = supplier.get();
-                    } catch (Throwable t) {
-                        this.throwable = t;
-                    } finally {
-                        init = true;
-                    }
-                }
-            }
-        }
-        if (value != null) {
-            return value;
-        }
-        // always should be unchecked exception
-        throwIfUnchecked(throwable);
-        throw new CompletionException(throwable);
+        return supplier.get();
     }
 
     /**
