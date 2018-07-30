@@ -12,11 +12,11 @@ public class Hexes {
     /**
      * Return a hex encoder.
      *
-     * @param upperCase if use upper case hex chars
+     * @param uppercase if use upper case hex chars
      * @return a hex encoder
      */
-    public static Encoder encoder(boolean upperCase) {
-        return upperCase ? decodeUpper.get() : decodeLower.get();
+    public static Encoder encoder(boolean uppercase) {
+        return uppercase ? decodeUpper.get() : decodeLower.get();
     }
 
     /**
@@ -56,10 +56,10 @@ public class Hexes {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F'
         };
-        private final boolean upperCase;
+        private final boolean uppercase;
 
-        private Encoder(boolean upperCase) {
-            this.upperCase = upperCase;
+        private Encoder(boolean uppercase) {
+            this.uppercase = uppercase;
         }
 
 
@@ -71,7 +71,7 @@ public class Hexes {
          */
         public String encode(byte[] data) {
             requireNonNull(data);
-            return encode(data, upperCase ? HEX_CHARS_UPPER : HEX_CHARS_LOWER);
+            return encode(data, uppercase ? HEX_CHARS_UPPER : HEX_CHARS_LOWER);
         }
 
         private String encode(byte[] data, char[] hexChars) {
