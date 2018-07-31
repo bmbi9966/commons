@@ -1,6 +1,7 @@
 package net.dongliu.commons;
 
 
+import net.dongliu.commons.concurrent.ClassProcessorLoader;
 import net.dongliu.commons.reflection.Classes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +60,34 @@ public class Objects2 {
         return new ToStringHelper(requireNonNull(cls));
     }
 
+    private static class ToStringCacheHolder {
+        private static final ClassProcessorLoader<Object, ToStringHelper> cache = ClassProcessorLoader.of(
+                Objects2::toStringHelper
+        );
+    }
+
+    /**
+     * Convert object to string, by concat each filed name and value, using reflection.
+     *
+     * <p>
+     * Implementation Details: This method use a internal weak ToStringHelper cache to speed up.
+     * </p>
+     *
+     * @param value the object to convert to string
+     * @return string represent of value
+     */
+    public static String toString(@Nullable Object value) {
+        if (value == null) {
+            return "null";
+        }
+        ToStringHelper toStringHelper = ToStringCacheHolder.cache.get(value.getClass());
+        return toStringHelper.toString(value);
+    }
+
+    /**
+     * A class to convert object to string, by concat each filed name and value, using reflection.
+     * This class is immutable, use should reuse ToStringHelper for all instances of one type.
+     */
     public static class ToStringHelper {
         private final Class<?> cls;
         private final boolean hasToStringMethod;
