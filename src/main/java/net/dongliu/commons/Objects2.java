@@ -1,6 +1,7 @@
 package net.dongliu.commons;
 
 
+import net.dongliu.commons.collection.Lists;
 import net.dongliu.commons.reflection.Classes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,10 +61,10 @@ public class Objects2 {
     }
 
     private static class ToStringCacheHolder {
-        private static ClassValue<ToStringHelper> cache = new ClassValue<ToStringHelper>() {
+        private static final ClassValue<ToStringHelper> cache = new ClassValue<ToStringHelper>() {
             @Override
             protected ToStringHelper computeValue(Class<?> type) {
-                return toStringHelper(type);
+                return new ToStringHelper(requireNonNull(type));
             }
         };
     }
@@ -98,8 +99,12 @@ public class Objects2 {
 
         protected ToStringHelper(Class<?> cls) {
             this.cls = cls;
-            this.hasToStringMethod = classHasStringMethod(cls);
-            this.memberFields = Classes.getAllMemberFields(cls);
+            this.hasToStringMethod = hasToStringMethod(cls);
+            List<Field> memberFields = Classes.getAllMemberFields(cls);
+            for (Field field : memberFields) {
+                field.setAccessible(true);
+            }
+            this.memberFields = memberFields;
             String className;
             if (cls.isAnonymousClass()) {
                 className = Strings.subStringAfterLast(cls.getName(), ".");
@@ -117,63 +122,65 @@ public class Objects2 {
          * Array field of object, will convert to string using Arrays.toString;
          * otherwise, will use call field value's toString method.
          *
-         * @param value the value
+         * @param obj the value
          * @return the string representation of this object value. If object is null, return "null"
          */
-        public String toString(@Nullable Object value) {
-            if (value == null) {
+        public String toString(@Nullable Object obj) {
+            if (obj == null) {
                 return "null";
             }
-            if (!this.cls.equals(value.getClass())) {
-                throw new IllegalArgumentException("value type " + value.getClass().getName() + " not match with ToStringHelper");
+            if (!this.cls.equals(obj.getClass())) {
+                throw new IllegalArgumentException("value type " + obj.getClass().getName() + " not match with ToStringHelper");
             }
 
             if (hasToStringMethod) {
-                return value.toString();
+                return obj.toString();
             }
 
             if (cls.isArray()) {
-                return arrayToString(value);
+                return arrayToString(obj);
             }
 
             StringBuilder sb = new StringBuilder();
             sb.append(className).append('{');
-            for (Field field : memberFields) {
-                field.setAccessible(true);
-                sb.append(field.getName()).append('=');
-
-                Class<?> type = field.getType();
-                if (type.isPrimitive()) {
-                    try {
-                        appendPrimitiveField(sb, field, value);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    Object fieldValue;
-                    try {
-                        fieldValue = field.get(value);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                    if (fieldValue == null) {
-                        sb.append("null");
-                    } else if (fieldValue.getClass().isArray()) {
-                        sb.append(arrayToString(fieldValue));
-                    } else {
-                        sb.append(fieldValue.toString());
-                    }
+            Lists.forEach(memberFields, (field, last) -> {
+                appendFiledKeyAndValue(sb, obj, field);
+                if (!last) {
+                    sb.append(", ");
                 }
-                sb.append(", ");
-            }
-            if (!memberFields.isEmpty()) {
-                sb.setLength(sb.length() - 2);
-            }
+            });
             sb.append('}');
             return sb.toString();
         }
 
-        private boolean classHasStringMethod(Class<?> cls) {
+        private void appendFiledKeyAndValue(StringBuilder sb, Object obj, Field field) {
+            sb.append(field.getName()).append('=');
+
+            Class<?> type = field.getType();
+            if (type.isPrimitive()) {
+                try {
+                    appendPrimitiveField(sb, field, obj);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                Object fieldValue;
+                try {
+                    fieldValue = field.get(obj);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                if (fieldValue == null) {
+                    sb.append("null");
+                } else if (fieldValue.getClass().isArray()) {
+                    sb.append(arrayToString(fieldValue));
+                } else {
+                    sb.append(fieldValue.toString());
+                }
+            }
+        }
+
+        private boolean hasToStringMethod(Class<?> cls) {
             try {
                 Method method = cls.getDeclaredMethod("toString");
                 // may have strange generated method return different type?
