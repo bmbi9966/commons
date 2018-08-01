@@ -4,16 +4,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RetrierTest {
+class RetryTest {
 
     @Test
     void test() {
         int[] ia = {0};
-        Retrier.of(5).run(() -> ia[0]++);
+        Retry.of(5).run(() -> ia[0]++);
         assertEquals(1, ia[0]);
 
         ia[0] = 0;
-        Retrier.of(5).run(new Runnable() {
+        Retry.of(5).run(new Runnable() {
             private int count;
 
             @Override
@@ -25,7 +25,7 @@ class RetrierTest {
             }
         });
 
-        assertThrows(RuntimeException.class, () -> Retrier.of(5).run(new Runnable() {
+        assertThrows(RuntimeException.class, () -> Retry.of(5).run(new Runnable() {
             private int count;
 
             @Override
@@ -41,7 +41,7 @@ class RetrierTest {
     @Test
     void call() {
         int[] ia = {0};
-        assertEquals(Integer.valueOf(0), Retrier.of(5).call(() -> ia[0]++));
+        assertEquals(Integer.valueOf(0), Retry.of(5).call(() -> ia[0]++));
         assertEquals(1, ia[0]);
     }
 

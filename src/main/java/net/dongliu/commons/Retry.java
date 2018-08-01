@@ -9,11 +9,11 @@ import static java.util.Objects.requireNonNull;
 /**
  * For retry execute code.
  */
-public class Retrier {
+public class Retry {
     private final int times;
     private final IntFunction<Duration> intervalProvider;
 
-    private Retrier(int times, IntFunction<Duration> intervalProvider) {
+    private Retry(int times, IntFunction<Duration> intervalProvider) {
         this.times = times;
         this.intervalProvider = intervalProvider;
     }
@@ -24,7 +24,7 @@ public class Retrier {
      * @param times retry times
      * @return new retrier
      */
-    public static Retrier of(int times) {
+    public static Retry of(int times) {
         return of(times, i -> Duration.ZERO);
     }
 
@@ -35,12 +35,12 @@ public class Retrier {
      * @param intervalProvider provide interval between retries
      * @return new retrier
      */
-    public static Retrier of(int times, IntFunction<Duration> intervalProvider) {
+    public static Retry of(int times, IntFunction<Duration> intervalProvider) {
         requireNonNull(intervalProvider);
         if (times <= 0) {
             throw new IllegalArgumentException("illegal times: " + times);
         }
-        return new Retrier(times, intervalProvider);
+        return new Retry(times, intervalProvider);
     }
 
     /**
