@@ -1,7 +1,6 @@
 package net.dongliu.commons;
 
 
-import net.dongliu.commons.concurrent.ClassProcessorLoader;
 import net.dongliu.commons.reflection.Classes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,9 +60,12 @@ public class Objects2 {
     }
 
     private static class ToStringCacheHolder {
-        private static final ClassProcessorLoader<Object, ToStringHelper> cache = ClassProcessorLoader.of(
-                Objects2::toStringHelper
-        );
+        private static ClassValue<ToStringHelper> cache = new ClassValue<ToStringHelper>() {
+            @Override
+            protected ToStringHelper computeValue(Class<?> type) {
+                return toStringHelper(type);
+            }
+        };
     }
 
     /**
