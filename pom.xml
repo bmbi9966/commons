@@ -7,7 +7,7 @@
     <artifactId>commons</artifactId>
     <name>Commons</name>
     <packaging>jar</packaging>
-    <version>6.8.1</version>
+    <version>6.9.0</version>
     <url>https://github.com/hsiafan/commons</url>
 
     <parent>
@@ -47,9 +47,6 @@
     </properties>
 
     <dependencies>
-        <!-- jsr305 not finished, just impl by findbugs or other third-part libs.
-        Those lib may conflict with other module when use in module path,
-        so we use jetbrains annotations. -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
