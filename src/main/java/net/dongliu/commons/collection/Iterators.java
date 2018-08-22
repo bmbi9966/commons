@@ -1,7 +1,5 @@
 package net.dongliu.commons.collection;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -48,7 +46,6 @@ public class Iterators {
      * @param <T> the element type
      * @return the next element of iterator.
      */
-    @Nullable
     public static <T> T nextOrNull(Iterator<T> it) {
         requireNonNull(it);
         if (it.hasNext()) {

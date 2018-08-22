@@ -1,8 +1,5 @@
 package net.dongliu.commons.collection;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,8 +26,7 @@ public class Sets {
      * @param <T> the element type
      * @return non-null set
      */
-    @NotNull
-    public static <T> Set<T> nullToEmpty(@Nullable Set<T> set) {
+    public static <T> Set<T> nullToEmpty(Set<T> set) {
         if (set == null) {
             return of();
         }

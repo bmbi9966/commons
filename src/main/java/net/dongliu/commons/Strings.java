@@ -1,9 +1,6 @@
 package net.dongliu.commons;
 
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Arrays;
 
 import static java.lang.Character.toLowerCase;
@@ -21,8 +18,7 @@ public class Strings {
      * @param str the string
      * @return nonNull string
      */
-    @NotNull
-    public static String nullToEmpty(@Nullable String str) {
+    public static String nullToEmpty(String str) {
         return str == null ? "" : str;
     }
 

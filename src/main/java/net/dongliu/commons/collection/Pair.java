@@ -1,7 +1,5 @@
 package net.dongliu.commons.collection;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
@@ -17,9 +15,7 @@ import static java.util.Objects.requireNonNull;
 public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
 
     private static final long serialVersionUID = -6468644647295390377L;
-    @NotNull
     private final K key;
-    @NotNull
     private final V value;
 
     private Pair(K key, V value) {
@@ -30,18 +26,16 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
     /**
      * Create a new pair
      */
-    public static <K, V> Pair<K, V> of(@NotNull K key, @NotNull V value) {
+    public static <K, V> Pair<K, V> of(K key, V value) {
         return new Pair<>(key, value);
     }
 
     @Override
-    @NotNull
     public K getKey() {
         return key;
     }
 
     @Override
-    @NotNull
     public V getValue() {
         return value;
     }
@@ -49,21 +43,20 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
     /**
      * Create one new pair, replace the key with newKey.
      */
-    public Pair<K, V> withKey(@NotNull K newKey) {
+    public Pair<K, V> withKey(K newKey) {
         return new Pair<>(newKey, value);
     }
 
     /**
      * Create one new pair, replace the value with newValue.
      */
-    public Pair<K, V> withValue(@NotNull V newValue) {
+    public Pair<K, V> withValue(V newValue) {
         return new Pair<>(key, newValue);
     }
 
     /**
      * The first value of this tuple
      */
-    @NotNull
     public K first() {
         return key;
     }
@@ -71,7 +64,6 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
     /**
      * The second value of this tuple
      */
-    @NotNull
     public V second() {
         return value;
     }
@@ -79,14 +71,14 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
     /**
      * Create one new pair, replace the first value with new value.
      */
-    public Pair<K, V> withFirst(@NotNull K first) {
+    public Pair<K, V> withFirst(K first) {
         return new Pair<>(first, second());
     }
 
     /**
      * Create one new pair, replace the second value with new value.
      */
-    public Pair<K, V> withSecond(@NotNull V second) {
+    public Pair<K, V> withSecond(V second) {
         return new Pair<>(first(), second);
     }
 
@@ -96,7 +88,7 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
      * @param third the new value
      * @return Triple hold the Pair's value and new value
      */
-    public <C> Triple<K, V, C> append(@NotNull C third) {
+    public <C> Triple<K, V, C> append(C third) {
         return Triple.of(first(), second(), third);
     }
 
@@ -106,7 +98,7 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
      * @param value the new value
      * @return Triple hold new value and the Pair's value
      */
-    public <A> Triple<A, K, V> prepend(@NotNull A value) {
+    public <A> Triple<A, K, V> prepend(A value) {
         return Triple.of(value, first(), second());
     }
 

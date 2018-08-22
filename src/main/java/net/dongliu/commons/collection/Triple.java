@@ -1,7 +1,5 @@
 package net.dongliu.commons.collection;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,11 +10,8 @@ import static java.util.Objects.requireNonNull;
  * This is the max tuple we provide. Usually, you should not use this class, define a Data Class for you need.
  */
 public class Triple<A, B, C> implements Serializable {
-    @NotNull
     private final A first;
-    @NotNull
     private final B second;
-    @NotNull
     private final C third;
 
     private Triple(A first, B second, C third) {
@@ -35,28 +30,27 @@ public class Triple<A, B, C> implements Serializable {
     /**
      * Create one new tuple, replace first value with new value.
      */
-    public Triple<A, B, C> withFirst(@NotNull A first) {
+    public Triple<A, B, C> withFirst(A first) {
         return new Triple<>(first, second, third);
     }
 
     /**
      * Create one new tuple, replace second value with new value.
      */
-    public Triple<A, B, C> withSecond(@NotNull B second) {
+    public Triple<A, B, C> withSecond(B second) {
         return new Triple<>(first, second, third);
     }
 
     /**
      * Create one new tuple, replace second value with new value.
      */
-    public Triple<A, B, C> withThrid(@NotNull C third) {
+    public Triple<A, B, C> withThrid(C third) {
         return new Triple<>(first, second, third);
     }
 
     /**
      * The first value of this tuple
      */
-    @NotNull
     public A first() {
         return first;
     }
@@ -64,7 +58,6 @@ public class Triple<A, B, C> implements Serializable {
     /**
      * The second value of this tuple
      */
-    @NotNull
     public B second() {
         return second;
     }
@@ -72,7 +65,6 @@ public class Triple<A, B, C> implements Serializable {
     /**
      * The third value of this tuple
      */
-    @NotNull
     public C third() {
         return third;
     }

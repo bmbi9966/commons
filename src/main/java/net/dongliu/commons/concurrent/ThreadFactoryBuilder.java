@@ -1,7 +1,5 @@
 package net.dongliu.commons.concurrent;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
@@ -16,10 +14,8 @@ public class ThreadFactoryBuilder {
     private int priority = Thread.NORM_PRIORITY;
     private String name;
     private ThreadNameBuilder threadNameBuilder = ((poolName, threadSeq) -> poolName + "-worker-" + threadSeq);
-    @Nullable
-    private UncaughtExceptionHandler uncaughtExceptionHandler;
-    @Nullable
-    private ClassLoader classLoader;
+    private UncaughtExceptionHandler uncaughtExceptionHandler = null;
+    private ClassLoader classLoader = null;
 
     /**
      * Create a new ThreadFactory with name.
@@ -130,15 +126,13 @@ public class ThreadFactoryBuilder {
         private final boolean daemon;
         private final int priority;
         private final ThreadNameBuilder threadNameBuilder;
-        @Nullable
         private final UncaughtExceptionHandler uncaughtExceptionHandler;
-        @Nullable
         private final ClassLoader contextClassLoader;
 
         protected DefaultThreadFactory(String name, ThreadNameBuilder threadNameBuilder,
                                        boolean daemon, int priority,
-                                       @Nullable UncaughtExceptionHandler uncaughtExceptionHandler,
-                                       @Nullable ClassLoader contextClassLoader) {
+                                       UncaughtExceptionHandler uncaughtExceptionHandler,
+                                       ClassLoader contextClassLoader) {
             this.name = requireNonNull(name);
             this.threadNameBuilder = requireNonNull(threadNameBuilder);
             this.daemon = daemon;

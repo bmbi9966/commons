@@ -1,7 +1,5 @@
 package net.dongliu.commons;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -66,7 +64,6 @@ public class Throwables {
      * @param throwable the throwable, cannot be null
      * @return the root cause.
      */
-    @NotNull
     public static Throwable getRootCause(Throwable throwable) {
         requireNonNull(throwable);
         while (true) {
@@ -103,7 +100,6 @@ public class Throwables {
      * @param t the throwable, cannot be null
      * @return the string represent stacktrace of throwable
      */
-    @NotNull
     public static String getStackTrace(Throwable t) {
         requireNonNull(t);
         try (StringWriter writer = new StringWriter();

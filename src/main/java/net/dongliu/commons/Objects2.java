@@ -3,8 +3,6 @@ package net.dongliu.commons;
 
 import net.dongliu.commons.collection.Lists;
 import net.dongliu.commons.reflection.Classes;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -27,8 +25,7 @@ public class Objects2 {
      * @return non-null value
      * @throws NullPointerException if value2 is null
      */
-    @NotNull
-    public static <T> T elvis(@Nullable T value1, T value2) {
+    public static <T> T elvis(T value1, T value2) {
         if (value1 != null) {
             return value1;
         }
@@ -44,8 +41,7 @@ public class Objects2 {
      * @return non-null value
      * @throws NullPointerException if supplier is null or produce null value
      */
-    @NotNull
-    public static <T> T elvis(@Nullable T value1, Supplier<T> supplier) {
+    public static <T> T elvis(T value1, Supplier<T> supplier) {
         if (value1 != null) {
             return value1;
         }
@@ -55,7 +51,6 @@ public class Objects2 {
     /**
      * Get a ToStringHelper to convert specific type object to string.
      */
-    @NotNull
     public static ToStringHelper toStringHelper(Class<?> cls) {
         return new ToStringHelper(requireNonNull(cls));
     }
@@ -79,7 +74,7 @@ public class Objects2 {
      * @param value the object to convert to string
      * @return string represent of value
      */
-    public static String toString(@Nullable Object value) {
+    public static String toString(Object value) {
         if (value == null) {
             return "null";
         }
@@ -125,7 +120,7 @@ public class Objects2 {
          * @param obj the value
          * @return the string representation of this object value. If object is null, return "null"
          */
-        public String toString(@Nullable Object obj) {
+        public String toString(Object obj) {
             if (obj == null) {
                 return "null";
             }

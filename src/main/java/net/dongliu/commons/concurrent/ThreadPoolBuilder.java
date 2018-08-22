@@ -1,7 +1,5 @@
 package net.dongliu.commons.concurrent;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -20,8 +18,7 @@ public class ThreadPoolBuilder {
     private Supplier<BlockingQueue<Runnable>> workingQueue = LinkedBlockingQueue::new;
     private Supplier<ThreadFactory> threadFactory = () -> ThreadFactories.newDaemonThreadFactory("thread-pool-" + poolSeq.incrementAndGet());
     private Supplier<RejectedExecutionHandler> rejectedHandler = ThreadPoolExecutor.AbortPolicy::new;
-    @Nullable
-    private TaskExceptionListener taskExceptionListener;
+    private TaskExceptionListener taskExceptionListener = null;
 
     private static final AtomicLong poolSeq = new AtomicLong();
 
@@ -37,7 +34,6 @@ public class ThreadPoolBuilder {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize,
                 keepAliveTime.toMillis(), TimeUnit.MILLISECONDS,
                 workingQueue.get(), threadFactory.get(), rejectedHandler.get()) {
-            @Nullable
             private final TaskExceptionListener listener = ThreadPoolBuilder.this.taskExceptionListener;
 
             @Override

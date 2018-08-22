@@ -1,9 +1,6 @@
 package net.dongliu.commons.collection;
 
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +26,7 @@ public class Lists {
      * @param <T>  the element type
      * @return non-null list
      */
-    @NotNull
-    public static <T> List<T> nullToEmpty(@Nullable List<T> list) {
+    public static <T> List<T> nullToEmpty(List<T> list) {
         if (list == null) {
             return of();
         }
@@ -191,6 +187,7 @@ public class Lists {
      * @param <T>        element type
      * @return new List
      */
+    @SafeVarargs
     public static <T> List<T> concat(List<T> list1, List<T> list2, List<T>... otherLists) {
         requireNonNull(list1);
         requireNonNull(list2);
@@ -265,7 +262,6 @@ public class Lists {
      * @param list can not be null
      * @return The first element. If list is empty, return null.
      */
-    @Nullable
     public static <T> T firstOrNull(List<T> list) {
         requireNonNull(list);
         if (list.isEmpty()) {
@@ -291,7 +287,6 @@ public class Lists {
      * @param list can not be null
      * @return The first accepted element. If list is empty, return null.
      */
-    @Nullable
     public static <T> T findOrNull(List<T> list, Predicate<? super T> predicate) {
         return Iterables.findOrNull(list, predicate);
     }
