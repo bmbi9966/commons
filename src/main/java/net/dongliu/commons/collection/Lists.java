@@ -9,6 +9,7 @@ import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
 import static java.lang.Math.addExact;
+import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
@@ -54,35 +55,35 @@ public class Lists {
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2) {
-        return new ImmutableList<>(v1, v2);
+        return unmodifiableList(asList(v1, v2));
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3) {
-        return new ImmutableList<>(v1, v2, v3);
+        return unmodifiableList(asList(v1, v2, v3));
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4) {
-        return new ImmutableList<>(v1, v2, v3, v4);
+        return unmodifiableList(asList(v1, v2, v3, v4));
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5) {
-        return new ImmutableList<>(v1, v2, v3, v4, v5);
+        return unmodifiableList(asList(v1, v2, v3, v4, v5));
     }
 
     /**
      * Create new immutable List. Values cannot be null.
      */
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5, T v6) {
-        return new ImmutableList<>(v1, v2, v3, v4, v5, v6);
+        return unmodifiableList(asList(v1, v2, v3, v4, v5, v6));
     }
 
     /**
@@ -94,7 +95,7 @@ public class Lists {
         for (T value : values) {
             requireNonNull(value);
         }
-        return new ImmutableList<>((Object[]) values.clone());
+        return unmodifiableList(asList((T[]) values.clone()));
     }
 
 
@@ -108,14 +109,12 @@ public class Lists {
      */
     public static <T> List<T> copy(List<T> list) {
         requireNonNull(list);
-        if (list instanceof ImmutableList) {
-            return list;
-        }
         if (list.isEmpty()) {
             return Lists.of();
         }
-        Object[] array = list.toArray();
-        return new ImmutableList<>(array);
+        List<T> newList = new ArrayList<>(list.size());
+        newList.addAll(list);
+        return unmodifiableList(newList);
     }
 
     /**
