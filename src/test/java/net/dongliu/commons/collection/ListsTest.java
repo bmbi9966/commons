@@ -120,8 +120,8 @@ public class ListsTest {
 
     @Test
     void sorted() {
-        assertEquals(Lists.of(), Lists.sorted(Lists.<Integer>of()));
-        assertEquals(Lists.of(1, 2), Lists.sorted(Lists.of(2, 1)));
+        assertEquals(Lists.of(), Lists.sort(Lists.<Integer>of()));
+        assertEquals(Lists.of(1, 2), Lists.sort(Lists.of(2, 1)));
     }
 
 }

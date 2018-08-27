@@ -184,7 +184,7 @@ public class Lists {
      * @param <T>      the element type
      * @return sorted List
      */
-    public static <T, R extends Comparable<R>> List<T> sorted(List<T> list, Function<? super T, R> function) {
+    public static <T, R extends Comparable<R>> List<T> sort(List<T> list, Function<? super T, R> function) {
         requireNonNull(list);
         List<T> newList = new ArrayList<>(list);
         newList.sort(Comparator.comparing(function));
@@ -199,8 +199,8 @@ public class Lists {
      * @param <T>  the element type
      * @return sorted List
      */
-    public static <T extends Comparable<T>> List<T> sorted(List<T> list) {
-        return sorted(list, s -> s);
+    public static <T extends Comparable<T>> List<T> sort(List<T> list) {
+        return sort(list, s -> s);
     }
 
     /**

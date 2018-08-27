@@ -18,6 +18,9 @@ public class Proxies {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newProxy(Class<T> cls, InvocationHandler handler) {
+        if (!Classes.isInterface(cls)) {
+            throw new IllegalArgumentException("not interface class");
+        }
         return (T) Proxy.newProxyInstance(cls.getClassLoader(), new Class<?>[]{cls}, handler);
     }
 }
