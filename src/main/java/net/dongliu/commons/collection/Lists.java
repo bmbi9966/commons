@@ -3,15 +3,14 @@ package net.dongliu.commons.collection;
 
 import net.dongliu.commons.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
+import static java.lang.Math.addExact;
 import static java.util.Collections.*;
+import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static net.dongliu.commons.collection.Collections2.convertToList;
 import static net.dongliu.commons.collection.Collections2.partitionToList;
@@ -172,9 +171,38 @@ public class Lists {
      * @return reversed List
      */
     public static <T> List<T> reverse(List<T> list) {
+        requireNonNull(list);
         List<T> newList = new ArrayList<>(list);
         Collections.reverse(newList);
         return unmodifiableList(newList);
+    }
+
+    /**
+     * Return a new sorted List, the element is compared by comparator.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     *
+     * @param list the list
+     * @param <T>  the element type
+     * @return sorted List
+     */
+    public static <T> List<T> sorted(List<T> list, Comparator<? super T> comparator) {
+        requireNonNull(list);
+        requireNonNull(comparator);
+        List<T> newList = new ArrayList<>(list);
+        newList.sort(comparator);
+        return unmodifiableList(newList);
+    }
+
+    /**
+     * Return a new sorted List.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     *
+     * @param list the list
+     * @param <T>  the element type
+     * @return sorted List
+     */
+    public static <T extends Comparable<T>> List<T> sorted(List<T> list) {
+        return sorted(list, comparing(s -> s));
     }
 
     /**
@@ -189,7 +217,7 @@ public class Lists {
     public static <T> List<T> concat(List<T> list1, List<T> list2) {
         requireNonNull(list1);
         requireNonNull(list2);
-        int totalSize = Math.addExact(list1.size(), list2.size());
+        int totalSize = addExact(list1.size(), list2.size());
         List<T> list = new ArrayList<>(totalSize);
         list.addAll(list1);
         list.addAll(list2);
@@ -211,10 +239,10 @@ public class Lists {
         requireNonNull(list1);
         requireNonNull(list2);
         requireNonNull(otherLists);
-        int totalSize = Math.addExact(list1.size(), list2.size());
+        int totalSize = addExact(list1.size(), list2.size());
         for (List<T> list : otherLists) {
             requireNonNull(list);
-            totalSize = Math.addExact(totalSize, list.size());
+            totalSize = addExact(totalSize, list.size());
         }
 
         List<T> list = new ArrayList<>(totalSize);

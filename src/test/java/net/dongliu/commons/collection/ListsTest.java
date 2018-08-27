@@ -111,4 +111,17 @@ public class ListsTest {
     void forEach() {
         Lists.forEach(Lists.of(1, 2, 3), (v, last) -> assertEquals(last, v == 3));
     }
+
+    @Test
+    void reverse() {
+        assertEquals(Lists.of(), Lists.reverse(Lists.of()));
+        assertEquals(Lists.of(1, 2), Lists.reverse(Lists.of(2, 1)));
+    }
+
+    @Test
+    void sorted() {
+        assertEquals(Lists.of(), Lists.sorted(Lists.<Integer>of()));
+        assertEquals(Lists.of(1, 2), Lists.sorted(Lists.of(2, 1)));
+    }
+
 }
