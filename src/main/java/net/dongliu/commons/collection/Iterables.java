@@ -1,5 +1,7 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -36,6 +38,7 @@ public class Iterables {
      * @param iterable can not be null
      * @return the first value, or null if not exists
      */
+    @Nullable
     public static <T> T firstOrNull(Iterable<T> iterable) {
         requireNonNull(iterable);
         Iterator<T> iterator = iterable.iterator();
@@ -68,6 +71,7 @@ public class Iterables {
      * @param list can not be null
      * @return The first accepted element. If list is empty, return null.
      */
+    @Nullable
     public static <T> T findOrNull(Iterable<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
         for (T e : list) {

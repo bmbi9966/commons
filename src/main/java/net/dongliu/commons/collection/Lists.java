@@ -1,16 +1,20 @@
 package net.dongliu.commons.collection;
 
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static java.util.Objects.requireNonNull;
+import static net.dongliu.commons.collection.Collections2.convertToList;
+import static net.dongliu.commons.collection.Collections2.partitionToList;
 
 /**
  * Utils method for List
@@ -26,7 +30,7 @@ public class Lists {
      * @param <T>  the element type
      * @return non-null list
      */
-    public static <T> List<T> nullToEmpty(List<T> list) {
+    public static <T> List<T> nullToEmpty(@Nullable List<T> list) {
         if (list == null) {
             return of();
         }
@@ -124,7 +128,7 @@ public class Lists {
      */
     public static <S, T> List<T> convert(List<S> list, Function<? super S, ? extends T> function) {
         requireNonNull(list);
-        return Collections2.convertToList(list, function);
+        return convertToList(list, function);
     }
 
     /**
@@ -138,7 +142,7 @@ public class Lists {
     @Deprecated
     public static <S, T> List<T> convertTo(List<S> list, Function<? super S, ? extends T> function) {
         requireNonNull(list);
-        return Collections2.convertToList(list, function);
+        return convertToList(list, function);
     }
 
     /**
@@ -155,7 +159,22 @@ public class Lists {
                 newList.add(e);
             }
         }
-        return newList;
+        return unmodifiableList(newList);
+    }
+
+
+    /**
+     * Return a new reversed List.
+     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     *
+     * @param list the list
+     * @param <T>  the element type
+     * @return reversed List
+     */
+    public static <T> List<T> reverse(List<T> list) {
+        List<T> newList = new ArrayList<>(list);
+        Collections.reverse(newList);
+        return unmodifiableList(newList);
     }
 
     /**
@@ -174,7 +193,7 @@ public class Lists {
         List<T> list = new ArrayList<>(totalSize);
         list.addAll(list1);
         list.addAll(list2);
-        return list;
+        return unmodifiableList(list);
     }
 
     /**
@@ -204,7 +223,7 @@ public class Lists {
         for (List<T> otherList : otherLists) {
             list.addAll(otherList);
         }
-        return list;
+        return unmodifiableList(list);
     }
 
     /**
@@ -225,7 +244,7 @@ public class Lists {
         for (int i = 0; i < count; i++) {
             result.add(list.subList(i * subSize, Math.min(size, (i + 1) * subSize)));
         }
-        return result;
+        return unmodifiableList(result);
     }
 
     /**
@@ -238,7 +257,7 @@ public class Lists {
      */
     public static <T> Pair<List<T>, List<T>> partition(List<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
-        return Collections2.partitionToList(list, predicate);
+        return partitionToList(list, predicate);
     }
 
     /**
@@ -262,6 +281,7 @@ public class Lists {
      * @param list can not be null
      * @return The first element. If list is empty, return null.
      */
+    @Nullable
     public static <T> T firstOrNull(List<T> list) {
         requireNonNull(list);
         if (list.isEmpty()) {
@@ -287,6 +307,7 @@ public class Lists {
      * @param list can not be null
      * @return The first accepted element. If list is empty, return null.
      */
+    @Nullable
     public static <T> T findOrNull(List<T> list, Predicate<? super T> predicate) {
         return Iterables.findOrNull(list, predicate);
     }

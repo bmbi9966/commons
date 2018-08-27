@@ -1,6 +1,8 @@
 package net.dongliu.commons;
 
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.util.Arrays;
 
 import static java.lang.Character.toLowerCase;
@@ -18,7 +20,7 @@ public class Strings {
      * @param str the string
      * @return nonNull string
      */
-    public static String nullToEmpty(String str) {
+    public static String nullToEmpty(@Nullable String str) {
         return str == null ? "" : str;
     }
 

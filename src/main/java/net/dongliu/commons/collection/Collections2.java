@@ -1,5 +1,7 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -47,7 +50,7 @@ public class Collections2 {
         for (S s : c) {
             list.add(function.apply(s));
         }
-        return list;
+        return unmodifiableList(list);
     }
 
     /**

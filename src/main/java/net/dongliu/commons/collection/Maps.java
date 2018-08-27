@@ -1,5 +1,7 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class Maps {
      * @param map the map
      * @return non-null map
      */
-    public static <K, V> Map<K, V> nullToEmpty(Map<K, V> map) {
+    public static <K, V> Map<K, V> nullToEmpty(@Nullable Map<K, V> map) {
         if (map == null) {
             return of();
         }

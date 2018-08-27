@@ -1,6 +1,7 @@
 package net.dongliu.commons;
 
 
+import net.dongliu.commons.annotation.Nullable;
 import net.dongliu.commons.collection.Lists;
 import net.dongliu.commons.reflection.Classes;
 
@@ -25,7 +26,7 @@ public class Objects2 {
      * @return non-null value
      * @throws NullPointerException if value2 is null
      */
-    public static <T> T elvis(T value1, T value2) {
+    public static <T> T elvis(@Nullable T value1, T value2) {
         if (value1 != null) {
             return value1;
         }
@@ -41,7 +42,7 @@ public class Objects2 {
      * @return non-null value
      * @throws NullPointerException if supplier is null or produce null value
      */
-    public static <T> T elvis(T value1, Supplier<T> supplier) {
+    public static <T> T elvis(@Nullable T value1, Supplier<T> supplier) {
         if (value1 != null) {
             return value1;
         }
