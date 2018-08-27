@@ -11,7 +11,6 @@ import java.util.function.Predicate;
 import static java.lang.Math.addExact;
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
-import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static net.dongliu.commons.collection.Collections2.convertToList;
 import static net.dongliu.commons.collection.Collections2.partitionToList;
@@ -180,15 +179,15 @@ public class Lists {
      * Return a new sorted List, the element is compared by comparator.
      * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
-     * @param list the list
-     * @param <T>  the element type
+     * @param list     the list
+     * @param function the function to get Comparable values from list elements.
+     * @param <T>      the element type
      * @return sorted List
      */
-    public static <T> List<T> sorted(List<T> list, Comparator<? super T> comparator) {
+    public static <T, R extends Comparable<R>> List<T> sorted(List<T> list, Function<? super T, R> function) {
         requireNonNull(list);
-        requireNonNull(comparator);
         List<T> newList = new ArrayList<>(list);
-        newList.sort(comparator);
+        newList.sort(Comparator.comparing(function));
         return unmodifiableList(newList);
     }
 
@@ -201,7 +200,7 @@ public class Lists {
      * @return sorted List
      */
     public static <T extends Comparable<T>> List<T> sorted(List<T> list) {
-        return sorted(list, comparing(s -> s));
+        return sorted(list, s -> s);
     }
 
     /**

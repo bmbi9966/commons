@@ -17,7 +17,7 @@ public class ReadersTest {
             "    <artifactId>commons</artifactId>";
 
     @Test
-    public void transferTo() throws IOException {
+    public void transferTo() {
         StringBuilder sb = new StringBuilder();
         Readers.transferTo(new StringReader(str), sb);
         assertEquals(str, sb.toString());
@@ -29,13 +29,13 @@ public class ReadersTest {
     }
 
     @Test
-    public void readAll() throws IOException {
+    public void readAll() {
         String s = Readers.readAll(new StringReader(str));
         assertEquals(str, s);
     }
 
     @Test
-    public void toLines() throws IOException {
+    public void toLines() {
         List<String> lines = Readers.toLines(new StringReader(str));
         assertEquals(Arrays.asList(str.split("\n")), lines);
     }

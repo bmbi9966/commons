@@ -1,6 +1,7 @@
 package net.dongliu.commons.io;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,8 +20,12 @@ public class Files2 {
      * @param charset the charset of file
      * @return the file data as string
      */
-    public static String readAllString(Path path, Charset charset) throws IOException {
-        return Readers.readAll(Files.newBufferedReader(path, charset));
+    public static String readAllString(Path path, Charset charset) {
+        try {
+            return Readers.readAll(Files.newBufferedReader(path, charset));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -29,7 +34,7 @@ public class Files2 {
      * @param path the file path
      * @return the file data as string
      */
-    public static String readdAllStringUTF8(Path path) throws IOException {
+    public static String readdAllString(Path path) {
         return readAllString(path, UTF_8);
     }
 }

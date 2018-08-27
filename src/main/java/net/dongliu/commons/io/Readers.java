@@ -16,28 +16,32 @@ public class Readers {
     /**
      * Copy all data in Reader to Writer.
      * Both Reader and Writer are leaved unclosed when copy finished, or Exception occurred.
-     *
-     * @throws IOException
      */
-    public static void transferTo(Reader reader, Writer writer) throws IOException {
+    public static void transferTo(Reader reader, Writer writer) {
         char[] buffer = new char[BUFFER_SIZE];
         int count;
-        while ((count = reader.read(buffer)) >= 0) {
-            writer.write(buffer, 0, count);
+        try {
+            while ((count = reader.read(buffer)) >= 0) {
+                writer.write(buffer, 0, count);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
     /**
      * Copy all data in Reader to Appendable.
      * Reader is leaved unclosed when copy finished, or Exception occurred.
-     *
-     * @throws IOException
      */
-    public static void transferTo(Reader reader, Appendable appendable) throws IOException {
+    public static void transferTo(Reader reader, Appendable appendable) {
         CharBuffer charBuffer = CharBuffer.allocate(BUFFER_SIZE);
-        while (reader.read(charBuffer) >= 0) {
-            charBuffer.flip();
-            appendable.append(charBuffer);
+        try {
+            while (reader.read(charBuffer) >= 0) {
+                charBuffer.flip();
+                appendable.append(charBuffer);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -46,12 +50,13 @@ public class Readers {
      * Read all data in Reader. The Reader is leaved unclosed when read finished, or Exception occurred.
      *
      * @return String read from the reader
-     * @throws IOException
      */
-    public static String readAll(Reader reader) throws IOException {
+    public static String readAll(Reader reader) {
         try (StringWriter writer = new StringWriter()) {
             transferTo(reader, writer);
             return writer.toString();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -76,7 +81,7 @@ public class Readers {
      * Read all from Reader to lines.
      * The Reader is leaved unclosed when copy finished, or Exception occurred.
      */
-    public static List<String> toLines(Reader reader) throws IOException {
+    public static List<String> toLines(Reader reader) {
         BufferedReader br;
         if (reader instanceof BufferedReader) {
             br = (BufferedReader) reader;
@@ -85,8 +90,12 @@ public class Readers {
         }
         List<String> list = new ArrayList<>();
         String line;
-        while ((line = br.readLine()) != null) {
-            list.add(line);
+        try {
+            while ((line = br.readLine()) != null) {
+                list.add(line);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
         return list;
     }
@@ -95,14 +104,17 @@ public class Readers {
      * Read and discard all data in reader till EOF. The Reader is left unclosed.
      *
      * @return the char count read from reader.
-     * @throws IOException
      */
-    public static long discardAll(Reader reader) throws IOException {
+    public static long discardAll(Reader reader) {
         char[] buffer = new char[BUFFER_SIZE];
         long total = 0;
         int count;
-        while ((count = reader.read(buffer)) >= 0) {
-            total += count;
+        try {
+            while ((count = reader.read(buffer)) >= 0) {
+                total += count;
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
         return total;
     }

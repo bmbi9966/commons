@@ -10,9 +10,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InputStreamsTest {
 
@@ -27,14 +25,14 @@ public class InputStreamsTest {
     }
 
     @Test
-    public void transferTo() throws IOException {
+    public void transferTo() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         InputStreams.transferTo(new ByteArrayInputStream(data), bos);
         assertArrayEquals(data, bos.toByteArray());
     }
 
     @Test
-    public void readAll() throws IOException {
+    public void readAll() {
         InputStream in = new ByteArrayInputStream(data);
         byte[] bytes = InputStreams.readAll(in);
         assertArrayEquals(data, bytes);
@@ -43,7 +41,7 @@ public class InputStreamsTest {
     }
 
     @Test
-    public void readExact() throws IOException {
+    public void readExact() {
         byte[] bytes = InputStreams.readExact(new ByteArrayInputStream(dataLarge), 1024);
         assertArrayEquals(Arrays.copyOf(dataLarge, 1024), bytes);
 
