@@ -10,14 +10,14 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 /**
  * Annotate the method parameter, method return value, class field, local var, and generic type can be null.
  * This annotation can be used on all locations a type can be used.
- * <p>
+ * <pre>
  * {@code
  *
  * @Nullable String method(@Nullable param); // parameter and return type.
  * @Nullable String s = null; // local var
  * List<@Nullable String> list = new ArrayList<>(); //generic type
  * }
- * <pre></pre>
+ * </pre>
  */
 @Documented
 @Retention(value = CLASS)
