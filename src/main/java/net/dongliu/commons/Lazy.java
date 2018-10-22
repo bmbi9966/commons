@@ -15,32 +15,12 @@ import static java.util.Objects.requireNonNull;
  */
 public class Lazy<T> implements Supplier<T> {
 
-    private boolean init;
+    private volatile boolean init;
     private Supplier<T> supplier;
+    private T value;
 
     private Lazy(Supplier<T> supplier) {
-        Supplier<T> originalSupplier = requireNonNull(supplier);
-        this.supplier = () -> {
-            synchronized (this) {
-                Supplier<T> directSupplier;
-                if (!init) {
-                    T value;
-                    try {
-                        value = originalSupplier.get();
-                        directSupplier = () -> value;
-                    } catch (Throwable t) {
-                        directSupplier = () -> {
-                            throw t;
-                        };
-                    }
-                    this.supplier = directSupplier;
-                    this.init = true;
-                } else {
-                    directSupplier = this.supplier;
-                }
-                return directSupplier.get();
-            }
-        };
+        this.supplier = requireNonNull(supplier);
     }
 
     /**
@@ -60,7 +40,15 @@ public class Lazy<T> implements Supplier<T> {
 
     @Override
     public T get() {
-        return supplier.get();
+        if (!init) {
+            synchronized (this) {
+                if (!init) {
+                    this.value = supplier.get();
+                    this.init = true;
+                }
+            }
+        }
+        return this.value;
     }
 
     /**
