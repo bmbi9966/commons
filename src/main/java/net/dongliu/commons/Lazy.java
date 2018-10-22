@@ -18,6 +18,7 @@ public class Lazy<T> implements Supplier<T> {
     private volatile boolean init;
     private Supplier<T> supplier;
     private T value;
+    private Throwable t;
 
     private Lazy(Supplier<T> supplier) {
         this.supplier = requireNonNull(supplier);
@@ -43,10 +44,19 @@ public class Lazy<T> implements Supplier<T> {
         if (!init) {
             synchronized (this) {
                 if (!init) {
-                    this.value = supplier.get();
-                    this.init = true;
+                    try {
+                        this.value = supplier.get();
+                    } catch (Throwable t) {
+                        this.t = t;
+                    } finally {
+                        this.init = true;
+                    }
+
                 }
             }
+        }
+        if (this.t != null) {
+            throw Throwables.sneakyThrow(t);
         }
         return this.value;
     }
