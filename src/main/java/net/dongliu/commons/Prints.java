@@ -1,10 +1,14 @@
 package net.dongliu.commons;
 
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UncheckedIOException;
 import java.io.Writer;
+import java.util.Iterator;
+import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
@@ -27,6 +31,20 @@ public class Prints {
      */
     public static void print(Object... values) {
         defaultPrinter.print(values);
+    }
+
+    /**
+     * @see Printer#printValues(Iterable)
+     */
+    public void printValues(Iterable<@Nullable ?> iterable) {
+        defaultPrinter.printValues(iterable);
+    }
+
+    /**
+     * @see Printer#printMap(Map)
+     */
+    public void printMap(Map<@Nullable ?, @Nullable ?> map) {
+        defaultPrinter.printMap(map);
     }
 
     /**
@@ -66,32 +84,32 @@ public class Prints {
      */
     public static class Printer {
         private final String sep;
-        private final String lineEnd;
+        private final String end;
         private final PrintStream printStream;
         private final Writer writer;
 
-        private Printer(String sep, String lineEnd, PrintStream printStream, Writer writer) {
+        private Printer(String sep, String end, PrintStream printStream, Writer writer) {
             this.sep = sep;
-            this.lineEnd = lineEnd;
+            this.end = end;
             this.printStream = printStream;
             this.writer = writer;
         }
 
-        private Printer(String sep, String lineEnd, PrintStream printStream) {
-            this(sep, lineEnd, printStream, null);
+        private Printer(String sep, String end, PrintStream printStream) {
+            this(sep, end, printStream, null);
         }
 
-        private Printer(String sep, String lineEnd, Writer writer) {
-            this(sep, lineEnd, null, writer);
+        private Printer(String sep, String end, Writer writer) {
+            this(sep, end, null, writer);
         }
 
         /**
          * Print one value
          */
-        public void print(Object value) {
+        public void print(@Nullable Object value) {
             synchronized (lock()) {
                 write(String.valueOf(value));
-                write(lineEnd);
+                write(end);
             }
         }
 
@@ -113,7 +131,49 @@ public class Prints {
                         write(sep);
                     }
                 }
-                write(lineEnd);
+                write(end);
+            }
+        }
+
+        /**
+         * Print iterable values, with sep and end.
+         *
+         * @param iterable cannot be null
+         */
+        public void printValues(Iterable<@Nullable ?> iterable) {
+            synchronized (lock()) {
+                Iterator<?> iterator = iterable.iterator();
+                boolean first = true;
+                while (iterator.hasNext()) {
+                    if (!first) {
+                        write(sep);
+                    }
+                    Object value = iterator.next();
+                    write(String.valueOf(value));
+                    first = false;
+                }
+                write(end);
+            }
+        }
+
+        /**
+         * Print a map, with sep between entries, and end with a end string.
+         *
+         * @param map cannot be null
+         */
+        public void printMap(Map<@Nullable ?, @Nullable ?> map) {
+            synchronized (lock()) {
+                int i = 0;
+                int size = map.size();
+                for (Map.Entry<?, ?> entry : map.entrySet()) {
+                    write(String.valueOf(entry.getKey()));
+                    write(" = ");
+                    write(String.valueOf(entry.getValue()));
+                    if (i++ < size - 1) {
+                        write(sep);
+                    }
+                }
+                write(end);
             }
         }
 
@@ -124,7 +184,7 @@ public class Prints {
          */
         public Printer sep(String sep) {
             requireNonNull(sep);
-            return new Printer(sep, lineEnd, printStream, writer);
+            return new Printer(sep, end, printStream, writer);
         }
 
         /**
@@ -144,7 +204,7 @@ public class Prints {
          */
         public Printer out(Writer writer) {
             requireNonNull(writer);
-            return new Printer(sep, lineEnd, null, writer);
+            return new Printer(sep, end, null, writer);
         }
 
         /**
@@ -154,7 +214,7 @@ public class Prints {
          */
         public Printer out(PrintStream printStream) {
             requireNonNull(printStream);
-            return new Printer(sep, lineEnd, printStream, null);
+            return new Printer(sep, end, printStream, null);
         }
 
         private void write(String str) {
