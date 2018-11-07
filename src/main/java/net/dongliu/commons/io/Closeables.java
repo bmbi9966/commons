@@ -28,7 +28,7 @@ public class Closeables {
      *
      * @param closeables the instances to be close.
      */
-    public static void closeQuietly(AutoCloseable... closeables) {
+    public static void closeQuietly(@Nullable AutoCloseable... closeables) {
         for (AutoCloseable closeable : closeables) {
             if (closeable != null) {
                 try {

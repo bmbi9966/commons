@@ -29,7 +29,7 @@ public class Prints {
     /**
      * @see Printer#print(Object...)
      */
-    public static void print(Object... values) {
+    public static void print(@Nullable Object... values) {
         defaultPrinter.print(values);
     }
 
@@ -118,7 +118,7 @@ public class Prints {
          *
          * @param values the values
          */
-        public void print(Object... values) {
+        public void print(@Nullable Object... values) {
             requireNonNull(values);
             if (values.length == 0) {
                 return;

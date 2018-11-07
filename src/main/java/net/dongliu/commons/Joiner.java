@@ -1,5 +1,7 @@
 package net.dongliu.commons;
 
+import net.dongliu.commons.annotation.Nullable;
+
 import java.util.StringJoiner;
 
 import static java.util.Objects.requireNonNull;
@@ -57,7 +59,7 @@ public class Joiner {
      * @param values the string items
      * @return new string
      */
-    public String join(Iterable<?> values) {
+    public String join(Iterable<@Nullable ?> values) {
         StringJoiner joiner = new StringJoiner(delimiter, prefix, suffix);
         for (Object o : values) {
             if (o == null) {
@@ -80,7 +82,7 @@ public class Joiner {
      * @param values the string items
      * @return new string
      */
-    public String join(Object... values) {
+    public String join(@Nullable Object... values) {
         StringJoiner joiner = new StringJoiner(delimiter, prefix, suffix);
         for (Object o : values) {
             if (o == null) {
