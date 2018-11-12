@@ -117,6 +117,22 @@ public class StringsTest {
     }
 
     @Test
+    public void removeSuffix2() {
+        assertEquals("test123", Strings.removeSuffix("test123", 0));
+        assertEquals("test1", Strings.removeSuffix("test123", 2));
+        assertEquals("", Strings.removeSuffix("test123", 7));
+        assertEquals("", Strings.removeSuffix("test123", 10));
+    }
+
+    @Test
+    public void removePrefix2() {
+        assertEquals("test123", Strings.removePrefix("test123", 0));
+        assertEquals("st123", Strings.removePrefix("test123", 2));
+        assertEquals("", Strings.removePrefix("test123", 7));
+        assertEquals("", Strings.removePrefix("test123", 10));
+    }
+
+    @Test
     public void capitalize() {
         assertEquals("", Strings.capitalize(""));
         assertEquals("1", Strings.capitalize("1"));

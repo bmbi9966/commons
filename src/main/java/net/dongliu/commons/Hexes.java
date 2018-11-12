@@ -76,9 +76,9 @@ public class Hexes {
 
         private String encode(byte[] data, char[] hexChars) {
             StringBuilder sb = new StringBuilder(data.length * 2);
-            for (int i = 0; i < data.length; i++) {
-                sb.append(hexChars[(0xF0 & data[i]) >> 4]);
-                sb.append(hexChars[0x0F & data[i]]);
+            for (byte b : data) {
+                sb.append(hexChars[(0xF0 & b) >> 4]);
+                sb.append(hexChars[0x0F & b]);
             }
             return sb.toString();
         }

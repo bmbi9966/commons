@@ -296,6 +296,38 @@ public class Strings {
     }
 
     /**
+     * Remove string prefix with len. if len larger than str size, return empty string.
+     *
+     * @param str the string
+     * @param len the prefix len to remove
+     * @return string without prefix
+     */
+    public static String removePrefix(String str, int len) {
+        requireNonNull(str);
+        Preconditions.assertArgument(len >= 0, () -> "invalid len: " + len);
+        if (len >= str.length()) {
+            return "";
+        }
+        return str.substring(len);
+    }
+
+    /**
+     * Remove string suffix with len. if len larger than str size, return empty string.
+     *
+     * @param str the string
+     * @param len the suffix len to remove
+     * @return string without suffix
+     */
+    public static String removeSuffix(String str, int len) {
+        requireNonNull(str);
+        Preconditions.assertArgument(len >= 0, () -> "invalid len: " + len);
+        if (len >= str.length()) {
+            return "";
+        }
+        return str.substring(0, str.length() - len);
+    }
+
+    /**
      * Return str, with first char is uppercase. If the first char of original str is already uppercase, or str is empty, return str self.
      * Note: this method do not handle surrogate correctly.
      *

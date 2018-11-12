@@ -1,5 +1,7 @@
 package net.dongliu.commons;
 
+import java.util.function.Supplier;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -62,5 +64,16 @@ public class Preconditions {
     public static <T> void checkArrayAndRange(T[] array, int offset, int size) throws IndexOutOfBoundsException {
         requireNonNull(array);
         checkSubRange(array.length, offset, size);
+    }
+
+    /**
+     * Check if argument meet condition. If failed, throw IllegalArgumentException with message.
+     *
+     * @throws IllegalArgumentException
+     */
+    public static void assertArgument(boolean result, Supplier<String> messageSupplier) throws IllegalArgumentException {
+        if (!result) {
+            throw new IllegalArgumentException(messageSupplier.get());
+        }
     }
 }
