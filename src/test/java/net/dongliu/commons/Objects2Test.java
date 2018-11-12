@@ -19,7 +19,7 @@ public class Objects2Test {
     @Test
     public void toStringHelper() {
         assertEquals("null", Objects2.toStringHelper(Object.class).toString(null));
-        assertEquals("1", Objects2.toStringHelper(Integer.class).toString(1));
+        assertEquals("Integer{value=1}", Objects2.toStringHelper(Integer.class).toString(1));
         assertEquals("[1]", Objects2.toStringHelper(int[].class).toString(new int[]{1}));
         assertEquals("[1]", Objects2.toStringHelper(char[].class).toString(new char[]{'1'}));
         assertEquals("[1]", Objects2.toStringHelper(String[].class).toString(new String[]{"1"}));
@@ -43,7 +43,7 @@ public class Objects2Test {
     @Test
     void testToString() {
         assertEquals("null", Objects2.toString(null));
-        assertEquals("1", Objects2.toString(1));
+        assertEquals("Integer{value=1}", Objects2.toString(1));
         assertEquals("[1]", Objects2.toString(new int[]{1}));
         assertEquals("ToStrTest{i=1, str=abcd, l=10, chars=[c, d]}", Objects2.toString(new ToStrTest()));
     }

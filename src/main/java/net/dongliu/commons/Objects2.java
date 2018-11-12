@@ -6,7 +6,6 @@ import net.dongliu.commons.collection.Lists;
 import net.dongliu.commons.reflection.Classes;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -69,7 +68,7 @@ public class Objects2 {
      * Convert object to string, by concat each filed name and value, using reflection.
      *
      * <p>
-     * Implementation Details: This method use a internal weak ToStringHelper cache to speed up.
+     * Implementation Details: This method use a internal weak ToStringHelper cache to boost performance.
      * </p>
      *
      * @param value the object to convert to string
@@ -89,13 +88,11 @@ public class Objects2 {
      */
     public static class ToStringHelper {
         private final Class<?> cls;
-        private final boolean hasToStringMethod;
         private final List<Field> memberFields;
         private final String className;
 
         protected ToStringHelper(Class<?> cls) {
             this.cls = cls;
-            this.hasToStringMethod = hasToStringMethod(cls);
             List<Field> memberFields = Classes.getAllMemberFields(cls);
             for (Field field : memberFields) {
                 field.setAccessible(true);
@@ -127,10 +124,6 @@ public class Objects2 {
             }
             if (!this.cls.equals(obj.getClass())) {
                 throw new IllegalArgumentException("value type " + obj.getClass().getName() + " not match with ToStringHelper");
-            }
-
-            if (hasToStringMethod) {
-                return obj.toString();
             }
 
             if (cls.isArray()) {
@@ -173,16 +166,6 @@ public class Objects2 {
                 } else {
                     sb.append(fieldValue.toString());
                 }
-            }
-        }
-
-        private boolean hasToStringMethod(Class<?> cls) {
-            try {
-                Method method = cls.getDeclaredMethod("toString");
-                // may have strange generated method return different type?
-                return method.getReturnType().equals(String.class);
-            } catch (NoSuchMethodException e) {
-                return false;
             }
         }
 
