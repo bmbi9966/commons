@@ -248,13 +248,29 @@ public class Strings {
     }
 
     /**
+     * @deprecated using {@link #removeSuffix(String, String)}
+     */
+    @Deprecated
+    public static String trimSuffix(String str, String suffix) {
+        return removeSuffix(str, suffix);
+    }
+
+    /**
+     * @deprecated using {@link #removePrefix(String, String)}
+     */
+    @Deprecated
+    public static String trimPrefix(String str, String prefix) {
+        return removePrefix(str, prefix);
+    }
+
+    /**
      * If str end with suffix, remove suffix
      *
      * @param str    string
      * @param suffix suffix
      * @return str without suffix
      */
-    public static String trimSuffix(String str, String suffix) {
+    public static String removeSuffix(String str, String suffix) {
         requireNonNull(str);
         requireNonNull(suffix);
         if (str.endsWith(suffix)) {
@@ -270,7 +286,7 @@ public class Strings {
      * @param prefix suffix
      * @return str without suffix
      */
-    public static String trimPrefix(String str, String prefix) {
+    public static String removePrefix(String str, String prefix) {
         requireNonNull(str);
         requireNonNull(prefix);
         if (str.startsWith(prefix)) {
@@ -352,6 +368,29 @@ public class Strings {
         char[] chars = new char[len];
         str.getChars(0, str.length(), chars, 0);
         Arrays.fill(chars, str.length(), len, padding);
+        return new String(chars);
+    }
+
+    /**
+     * Return a centered string of length width.Padding is done using the specified padding character.
+     *
+     * @param str     the str to be pad
+     * @param len     the desired len of padded str
+     * @param padding the padding char
+     * @return padded str
+     */
+    public static String padToCenter(String str, int len, char padding) {
+        requireNonNull(str);
+        if (str.length() >= len) {
+            return str;
+        }
+        int toBePad = len - str.length();
+        int left = toBePad / 2;
+        int right = toBePad - left;
+        char[] chars = new char[len];
+        Arrays.fill(chars, 0, left, padding);
+        str.getChars(0, str.length(), chars, left);
+        Arrays.fill(chars, len - right, len, padding);
         return new String(chars);
     }
 }

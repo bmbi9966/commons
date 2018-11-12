@@ -4,6 +4,7 @@ import net.dongliu.commons.Preconditions;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 import static java.lang.Byte.toUnsignedInt;
@@ -46,7 +47,7 @@ public class ByteBufferInputStream extends InputStream {
             return 0;
         }
         int toSkip = (int) Math.min(buffer.remaining(), n);
-        buffer.position(buffer.position() + toSkip);
+        ((Buffer) buffer).position(buffer.position() + toSkip);
         return toSkip;
     }
 
@@ -69,7 +70,7 @@ public class ByteBufferInputStream extends InputStream {
         if (this.mark == -1) {
             throw new IOException("stream not marked");
         }
-        buffer.position(this.mark);
+        ((Buffer) buffer).position(this.mark);
         this.mark = -1;
     }
 

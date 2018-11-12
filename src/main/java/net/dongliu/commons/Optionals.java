@@ -191,7 +191,7 @@ public class Optionals {
      * @param <T>      the value type
      * @return Optional Value
      */
-    public static <T> Optional mapTo(OptionalLong optional, LongFunction<? extends T> function) {
+    public static <T> Optional<T> mapTo(OptionalLong optional, LongFunction<? extends T> function) {
         if (optional.isPresent()) {
             return Optional.of(function.apply(optional.getAsLong()));
         }
@@ -206,7 +206,7 @@ public class Optionals {
      * @param <T>      the value type
      * @return Optional Value
      */
-    public static <T> Optional mapTo(OptionalInt optional, IntFunction<? extends T> function) {
+    public static <T> Optional<T> mapTo(OptionalInt optional, IntFunction<? extends T> function) {
         if (optional.isPresent()) {
             return Optional.of(function.apply(optional.getAsInt()));
         }
@@ -221,7 +221,7 @@ public class Optionals {
      * @param <T>      the value type
      * @return Optional Value
      */
-    public static <T> Optional mapTo(OptionalDouble optional, DoubleFunction<? extends T> function) {
+    public static <T> Optional<T> mapTo(OptionalDouble optional, DoubleFunction<? extends T> function) {
         if (optional.isPresent()) {
             return Optional.of(function.apply(optional.getAsDouble()));
         }

@@ -3,6 +3,7 @@ package net.dongliu.commons.io;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
@@ -14,7 +15,7 @@ public class BuffersTest {
     @Test
     public void advance() {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        buffer.position(200);
+        ((Buffer) buffer).position(200);
         Buffers.advance(buffer, 100);
         assertEquals(300, buffer.position());
         Buffers.advance(buffer, -200);
@@ -35,7 +36,7 @@ public class BuffersTest {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.put((byte) 1);
         buffer.put((byte) -1);
-        buffer.flip();
+        ((Buffer) buffer).flip();
         assertEquals(1, Buffers.getUByte(buffer));
         assertEquals(255, Buffers.getUByte(buffer));
     }
@@ -45,7 +46,7 @@ public class BuffersTest {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.putShort((short) 1);
         buffer.putShort((short) -1);
-        buffer.flip();
+        ((Buffer) buffer).flip();
         assertEquals(1, Buffers.getUShort(buffer));
         assertEquals(65535, Buffers.getUShort(buffer));
     }
@@ -55,7 +56,7 @@ public class BuffersTest {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.putInt(1);
         buffer.putInt(-1);
-        buffer.flip();
+        ((Buffer) buffer).flip();
         assertEquals(1L, Buffers.getUInt(buffer));
         assertEquals(0xffffffffL, Buffers.getUInt(buffer));
     }
@@ -65,7 +66,7 @@ public class BuffersTest {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.putLong(1);
         buffer.putLong(-1);
-        buffer.flip();
+        ((Buffer) buffer).flip();
         assertEquals(1L, Buffers.ensureGetULong(buffer));
         assertThrows(ArithmeticException.class, () -> Buffers.ensureGetULong(buffer));
     }
@@ -75,7 +76,7 @@ public class BuffersTest {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         buffer.putInt(1);
         buffer.putInt(-1);
-        buffer.flip();
+        ((Buffer) buffer).flip();
         assertEquals(1, Buffers.ensureGetUInt(buffer));
         assertThrows(ArithmeticException.class, () -> Buffers.ensureGetUInt(buffer));
     }

@@ -1,6 +1,7 @@
 package net.dongliu.commons.io;
 
 import java.io.*;
+import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class Readers {
         CharBuffer charBuffer = CharBuffer.allocate(BUFFER_SIZE);
         try {
             while (reader.read(charBuffer) >= 0) {
-                charBuffer.flip();
+                ((Buffer) charBuffer).flip();
                 appendable.append(charBuffer);
             }
         } catch (IOException e) {

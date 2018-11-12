@@ -102,18 +102,18 @@ public class StringsTest {
     }
 
     @Test
-    public void trimSuffix() {
-        assertEquals("test123", Strings.trimSuffix("test123tet", "tet"));
-        assertEquals("test123tet", Strings.trimSuffix("test123tet", ""));
-        assertEquals("test123tet", Strings.trimSuffix("test123tet", "x"));
+    public void removeSuffix() {
+        assertEquals("test123", Strings.removeSuffix("test123tet", "tet"));
+        assertEquals("test123tet", Strings.removeSuffix("test123tet", ""));
+        assertEquals("test123tet", Strings.removeSuffix("test123tet", "x"));
     }
 
     @Test
-    public void trimPrefix() {
-        assertEquals("st123", Strings.trimPrefix("test123", "te"));
-        assertEquals("test123", Strings.trimPrefix("test123", "tet"));
-        assertEquals("test123", Strings.trimPrefix("test123", "x"));
-        assertEquals("test123", Strings.trimPrefix("test123", ""));
+    public void removePrefix() {
+        assertEquals("st123", Strings.removePrefix("test123", "te"));
+        assertEquals("test123", Strings.removePrefix("test123", "tet"));
+        assertEquals("test123", Strings.removePrefix("test123", "x"));
+        assertEquals("test123", Strings.removePrefix("test123", ""));
     }
 
     @Test
@@ -150,5 +150,14 @@ public class StringsTest {
         assertEquals("test", Strings.padRight("test", 2, '1'));
         assertEquals("test", Strings.padRight("test", 4, '1'));
         assertEquals("test11", Strings.padRight("test", 6, '1'));
+    }
+
+    @Test
+    void padToCenter() {
+        assertEquals("", Strings.padToCenter("", 0, '1'));
+        assertEquals("test", Strings.padToCenter("test", 2, '1'));
+        assertEquals("test", Strings.padToCenter("test", 4, '1'));
+        assertEquals("test1", Strings.padToCenter("test", 5, '1'));
+        assertEquals("1test1", Strings.padToCenter("test", 6, '1'));
     }
 }

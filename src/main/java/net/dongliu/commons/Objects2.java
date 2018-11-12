@@ -74,7 +74,7 @@ public class Objects2 {
      * @param value the object to convert to string
      * @return string represent of value
      */
-    public static String toString(Object value) {
+    public static String toString(@Nullable Object value) {
         if (value == null) {
             return "null";
         }
@@ -118,7 +118,7 @@ public class Objects2 {
          * @param obj the value
          * @return the string representation of this object value. If object is null, return "null"
          */
-        public String toString(Object obj) {
+        public String toString(@Nullable Object obj) {
             if (obj == null) {
                 return "null";
             }
