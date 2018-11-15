@@ -25,14 +25,14 @@ public class InputStreamsTest {
     }
 
     @Test
-    public void transferTo() {
+    public void transferTo() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         InputStreams.transferTo(new ByteArrayInputStream(data), bos);
         assertArrayEquals(data, bos.toByteArray());
     }
 
     @Test
-    public void readAll() {
+    public void readAll() throws IOException {
         InputStream in = new ByteArrayInputStream(data);
         byte[] bytes = InputStreams.readAll(in);
         assertArrayEquals(data, bytes);
@@ -41,7 +41,7 @@ public class InputStreamsTest {
     }
 
     @Test
-    public void readExact() {
+    public void readExact() throws IOException {
         byte[] bytes = InputStreams.readExact(new ByteArrayInputStream(dataLarge), 1024);
         assertArrayEquals(Arrays.copyOf(dataLarge, 1024), bytes);
 

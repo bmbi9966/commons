@@ -191,9 +191,6 @@ public class Unchecked {
 
     private static RuntimeException toRuntimeException(Exception e) {
         Throwables.throwIfUnchecked(e);
-        if (e instanceof IOException) {
-            throw new UncheckedIOException((IOException) e);
-        }
         return new UndeclaredLambdaException(e);
     }
 

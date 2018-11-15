@@ -1,7 +1,6 @@
 package net.dongliu.commons.io;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
@@ -18,36 +17,28 @@ public class Files2 {
      * Copy source file to target file, make target dirs if need.
      * If target file already exits, override it.
      */
-    public static void copyFile(Path source, Path target, CopyOption... copyOptions) {
+    public static void copyFile(Path source, Path target, CopyOption... copyOptions) throws IOException {
         Path targetDir = target.getParent();
         if (!Files.exists(targetDir)) {
             if (!targetDir.toFile().mkdirs()) {
-                throw new UncheckedIOException(new IOException("make target file dirs failed"));
+                throw new IOException("make target file dirs failed");
             }
         }
-        try {
-            Files.copy(source, target, copyOptions);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        Files.copy(source, target, copyOptions);
     }
 
     /**
      * Copy source file to target file, make target dirs if need.
      * If target file already exits, override it.
      */
-    public static void moveFile(Path source, Path target, CopyOption... copyOptions) {
+    public static void moveFile(Path source, Path target, CopyOption... copyOptions) throws IOException {
         Path targetDir = target.getParent();
         if (!Files.exists(targetDir)) {
             if (!targetDir.toFile().mkdirs()) {
-                throw new UncheckedIOException(new IOException("make target file dirs failed"));
+                throw new IOException("make target file dirs failed");
             }
         }
-        try {
-            Files.move(source, target, copyOptions);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        Files.move(source, target, copyOptions);
     }
 
     /**
@@ -57,12 +48,8 @@ public class Files2 {
      * @param charset the charset of file
      * @return the file data as string
      */
-    public static String readAllString(Path path, Charset charset) {
-        try {
-            return Readers.readAll(Files.newBufferedReader(path, charset));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+    public static String readAllString(Path path, Charset charset) throws IOException {
+        return Readers.readAll(Files.newBufferedReader(path, charset));
     }
 
     /**
@@ -71,7 +58,7 @@ public class Files2 {
      * @param path the file path
      * @return the file data as string
      */
-    public static String readdAllString(Path path) {
+    public static String readdAllString(Path path) throws IOException {
         return readAllString(path, UTF_8);
     }
 }
