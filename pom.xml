@@ -7,7 +7,7 @@
     <artifactId>commons</artifactId>
     <name>Commons</name>
     <packaging>jar</packaging>
-    <version>6.10.4</version>
+    <version>6.10.5</version>
     <url>https://github.com/hsiafan/commons</url>
 
     <parent>
