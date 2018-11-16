@@ -1,7 +1,7 @@
 /**
  * Common utils for java
  */
-@ParametersAndReturnValuesDefaultNonNull
+@TypesDefaultNonNull
 package net.dongliu.commons;
 
-import net.dongliu.commons.annotation.ParametersAndReturnValuesDefaultNonNull;
+import net.dongliu.commons.annotation.TypesDefaultNonNull;

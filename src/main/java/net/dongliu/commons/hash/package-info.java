@@ -1,7 +1,7 @@
 /**
  * Utils for hash operations.
  */
-@ParametersAndReturnValuesDefaultNonNull
+@TypesDefaultNonNull
 package net.dongliu.commons.hash;
 
-import net.dongliu.commons.annotation.ParametersAndReturnValuesDefaultNonNull;
+import net.dongliu.commons.annotation.TypesDefaultNonNull;

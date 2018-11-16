@@ -1,7 +1,7 @@
 /**
  * Utils for java reflection operations.
  */
-@ParametersAndReturnValuesDefaultNonNull
+@TypesDefaultNonNull
 package net.dongliu.commons.reflection;
 
-import net.dongliu.commons.annotation.ParametersAndReturnValuesDefaultNonNull;
+import net.dongliu.commons.annotation.TypesDefaultNonNull;

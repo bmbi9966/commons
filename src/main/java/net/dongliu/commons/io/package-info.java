@@ -1,7 +1,7 @@
 /**
  * Common utils for IO
  */
-@ParametersAndReturnValuesDefaultNonNull
+@TypesDefaultNonNull
 package net.dongliu.commons.io;
 
-import net.dongliu.commons.annotation.ParametersAndReturnValuesDefaultNonNull;
+import net.dongliu.commons.annotation.TypesDefaultNonNull;

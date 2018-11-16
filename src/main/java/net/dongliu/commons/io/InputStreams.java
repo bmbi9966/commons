@@ -102,31 +102,7 @@ public class InputStreams {
      * Return a empty input stream with no data.
      */
     public static InputStream empty() {
-        return new InputStream() {
-            @Override
-            public int read(byte[] b) {
-                return -1;
-            }
-
-            @Override
-            public int read(byte[] b, int off, int len) {
-                return -1;
-            }
-
-            @Override
-            public long skip(long n) {
-                return 0;
-            }
-
-            @Override
-            public int available() {
-                return 0;
-            }
-
-            @Override
-            public int read() {
-                return -1;
-            }
-        };
+        return EmptyInputStream.instance;
     }
+
 }

@@ -1,7 +1,7 @@
 /**
  * Utils for concurrent
  */
-@ParametersAndReturnValuesDefaultNonNull
+@TypesDefaultNonNull
 package net.dongliu.commons.concurrent;
 
-import net.dongliu.commons.annotation.ParametersAndReturnValuesDefaultNonNull;
+import net.dongliu.commons.annotation.TypesDefaultNonNull;

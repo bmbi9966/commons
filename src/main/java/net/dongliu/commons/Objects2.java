@@ -34,7 +34,7 @@ public class Objects2 {
 
     /**
      * Elvis operator.
-     * If value1 is not null, use return value1; else use value calculate by supplie
+     * If value1 is not null, use return value1; else use value calculate by supplier
      *
      * @param supplier to calculate non-null value
      * @param <T>      the value type
