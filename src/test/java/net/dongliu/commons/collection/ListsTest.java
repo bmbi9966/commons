@@ -124,4 +124,18 @@ public class ListsTest {
         assertEquals(Lists.of(1, 2), Lists.sort(Lists.of(2, 1)));
     }
 
+    @Test
+    void sort() {
+    }
+
+    @Test
+    void sort1() {
+    }
+
+    @Test
+    void forEachIndexed() {
+        Lists.forEachIndexed(Lists.of(1, 2, 3), (idx, value) -> {
+            assertEquals(idx + 1, (int) value);
+        });
+    }
 }

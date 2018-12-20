@@ -1,13 +1,13 @@
 package net.dongliu.commons.collection;
 
 /**
- * A Consumer, sho knows if the value is the last one send to this consumer.
+ * A Consumer, which knows if the value is the last one send to this consumer.
  *
  * @param <T> the value type
  */
-public interface LastElementAwareConsumer<T> {
+public interface ElementConsumer<T> {
     /**
-     * Called for each element in collection
+     * Called when meet a new element
      *
      * @param value the element value
      * @param last  if is last element

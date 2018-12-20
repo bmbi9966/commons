@@ -150,6 +150,9 @@ public class Lists {
      */
     public static <T> List<T> filter(List<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
+        if (list.isEmpty()) {
+            return of();
+        }
         List<T> newList = new ArrayList<>(Math.min(INIT_SIZE, list.size()));
         for (T e : list) {
             if (predicate.test(e)) {
@@ -361,9 +364,22 @@ public class Lists {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEach(List<T> list, LastElementAwareConsumer<? super T> consumer) {
+    public static <T> void forEach(List<T> list, ElementConsumer<? super T> consumer) {
         requireNonNull(list);
         requireNonNull(consumer);
-        Collections2.forEach(list, consumer);
+        Iterables.forEach(list, consumer);
+    }
+
+    /**
+     * Traverse on a list, with index for each element.
+     *
+     * @param list     the list
+     * @param consumer the consumer
+     * @param <T>      the data type
+     */
+    public static <T> void forEachIndexed(List<T> list, IndexedElementConsumer<? super T> consumer) {
+        requireNonNull(list);
+        requireNonNull(consumer);
+        Iterables.forEachIndexed(list, consumer);
     }
 }

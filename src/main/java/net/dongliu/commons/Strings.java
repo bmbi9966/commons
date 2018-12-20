@@ -425,4 +425,15 @@ public class Strings {
         Arrays.fill(chars, len - right, len, padding);
         return new String(chars);
     }
+
+    /**
+     * Join string lines with '\n'
+     */
+    public static String joinLines(Iterable<? extends CharSequence> strings) {
+        StringBuilder sb = new StringBuilder();
+        for (CharSequence string : strings) {
+            sb.append(string).append("\n");
+        }
+        return sb.toString();
+    }
 }

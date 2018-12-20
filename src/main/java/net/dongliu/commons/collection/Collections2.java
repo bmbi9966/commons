@@ -1,7 +1,5 @@
 package net.dongliu.commons.collection;
 
-import net.dongliu.commons.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -82,15 +80,18 @@ public class Collections2 {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEach(Collection<T> c, LastElementAwareConsumer<? super T> consumer) {
-        requireNonNull(c);
-        requireNonNull(consumer);
-        int size = c.size();
-        int i = 0;
-        for (T value : c) {
-            ++i;
-            consumer.on(value, i == size);
-        }
+    public static <T> void forEach(Collection<T> c, ElementConsumer<? super T> consumer) {
+        Iterables.forEach(c, consumer);
     }
 
+    /**
+     * Traverse on a collection, with element index.
+     *
+     * @param c        the collection
+     * @param consumer the consumer
+     * @param <T>      the data type
+     */
+    public static <T> void forEachIndexed(Collection<T> c, IndexedElementConsumer<? super T> consumer) {
+        Iterables.forEachIndexed(c, consumer);
+    }
 }

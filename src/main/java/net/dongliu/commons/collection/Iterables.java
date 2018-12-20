@@ -91,4 +91,44 @@ public class Iterables {
         requireNonNull(iterable);
         return StreamSupport.stream(iterable.spliterator(), false);
     }
+
+    /**
+     * Traverse on a collection.
+     *
+     * @param iterable the collection
+     * @param consumer the consumer
+     * @param <T>      the data type
+     */
+    public static <T> void forEach(Iterable<T> iterable, ElementConsumer<? super T> consumer) {
+        requireNonNull(iterable);
+        requireNonNull(consumer);
+        Iterator<T> iterator = iterable.iterator();
+        boolean hasNext = iterator.hasNext();
+        if (!hasNext) {
+            return;
+        }
+        do {
+            T value = iterator.next();
+            hasNext = iterator.hasNext();
+            consumer.on(value, !hasNext);
+        } while (hasNext);
+    }
+
+    /**
+     * Traverse on a collection.
+     *
+     * @param iterable the collection
+     * @param consumer the consumer
+     * @param <T>      the data type
+     */
+    public static <T> void forEachIndexed(Iterable<T> iterable, IndexedElementConsumer<? super T> consumer) {
+        requireNonNull(iterable);
+        requireNonNull(consumer);
+        Iterator<T> iterator = iterable.iterator();
+        int index = 0;
+        while (iterator.hasNext()) {
+            T value = iterator.next();
+            consumer.on(index++, value);
+        }
+    }
 }
