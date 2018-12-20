@@ -176,4 +176,19 @@ public class StringsTest {
         assertEquals("test1", Strings.padToCenter("test", 5, '1'));
         assertEquals("1test1", Strings.padToCenter("test", 6, '1'));
     }
+
+    @Test
+    void trimSuffix() {
+    }
+
+    @Test
+    void trimPrefix() {
+    }
+
+    @Test
+    void joinLines() {
+        assertEquals("", Strings.joinLines(Lists.of()));
+        assertEquals("\n", Strings.joinLines(Lists.of("")));
+        assertEquals("1\n\n", Strings.joinLines(Lists.of("1", "")));
+    }
 }

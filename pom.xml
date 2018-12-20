@@ -115,7 +115,7 @@
                     <plugin>
                         <groupId>org.moditect</groupId>
                         <artifactId>moditect-maven-plugin</artifactId>
-                        <version>1.0.0.Alpha2</version>
+                        <version>1.0.0.Beta1</version>
                         <executions>
                             <execution>
                                 <id>add-module-info</id>
@@ -124,6 +124,7 @@
                                     <goal>add-module-info</goal>
                                 </goals>
                                 <configuration>
+                                    <!--<jvmVersion>9</jvmVersion>-->
                                     <module>
                                         <moduleInfo>
                                             <name>net.dongliu.commons</name>

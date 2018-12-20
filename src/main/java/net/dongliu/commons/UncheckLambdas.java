@@ -27,7 +27,7 @@ public class UncheckLambdas {
         try {
             runnable.run();
         } catch (Exception e) {
-            throw toRuntimeException(e);
+            throw wrapException(e);
         }
     }
 
@@ -40,7 +40,7 @@ public class UncheckLambdas {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw toRuntimeException(e);
+            throw wrapException(e);
         }
     }
 
@@ -59,7 +59,7 @@ public class UncheckLambdas {
             try {
                 runnable.run();
             } catch (Exception e) {
-                throw toRuntimeException(e);
+                throw wrapException(e);
             }
         };
     }
@@ -78,7 +78,7 @@ public class UncheckLambdas {
             try {
                 return supplier.get();
             } catch (Exception e) {
-                throw toRuntimeException(e);
+                throw wrapException(e);
             }
         };
     }
@@ -98,7 +98,7 @@ public class UncheckLambdas {
             try {
                 consumer.accept(v);
             } catch (Exception e) {
-                throw toRuntimeException(e);
+                throw wrapException(e);
             }
         };
     }
@@ -119,7 +119,7 @@ public class UncheckLambdas {
             try {
                 return predicate.test(v);
             } catch (Exception e) {
-                throw toRuntimeException(e);
+                throw wrapException(e);
             }
         };
     }
@@ -141,7 +141,7 @@ public class UncheckLambdas {
             try {
                 return function.apply(v);
             } catch (Exception e) {
-                throw toRuntimeException(e);
+                throw wrapException(e);
             }
         };
     }
@@ -161,7 +161,7 @@ public class UncheckLambdas {
             try {
                 consumer.accept(v1, v2);
             } catch (Exception e) {
-                throw toRuntimeException(e);
+                throw wrapException(e);
             }
         };
     }
@@ -184,13 +184,15 @@ public class UncheckLambdas {
             try {
                 return function.apply(v1, v2);
             } catch (Exception e) {
-                throw toRuntimeException(e);
+                throw wrapException(e);
             }
         };
     }
 
-    private static RuntimeException toRuntimeException(Exception e) {
-        Throwables.throwIfUnchecked(e);
+    private static RuntimeException wrapException(Exception e) {
+        if (e instanceof RuntimeException) {
+            return (RuntimeException) e;
+        }
         return new UndeclaredLambdaException(e);
     }
 
