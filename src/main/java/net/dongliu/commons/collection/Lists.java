@@ -320,6 +320,20 @@ public class Lists {
     }
 
     /**
+     * Fetch the last element of list.
+     * The element should not be null, or NullPointerException will be thrown.
+     *
+     * @param list can not be null
+     * @return Optional
+     */
+    public static <T> Optional<T> last(List<T> list) {
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(list.listIterator(list.size()).previous());
+    }
+
+    /**
      * Fetch the first element accepted by predicate in list.
      * The element should not be null, or NullPointerException will be thrown.
      *
@@ -339,6 +353,27 @@ public class Lists {
     @Nullable
     public static <T> T findOrNull(List<T> list, Predicate<? super T> predicate) {
         return Iterables.findOrNull(list, predicate);
+    }
+
+    /**
+     * Fetch the last element of list.
+     * The element should not be null, or NullPointerException will be thrown.
+     *
+     * @param list can not be null
+     * @return Optional
+     */
+    public static <T> Optional<T> reverseFind(List<T> list, Predicate<? super T> predicate) {
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+        ListIterator<T> iterator = list.listIterator(list.size());
+        while (iterator.hasPrevious()) {
+            T value = iterator.previous();
+            if (predicate.test(value)) {
+                return Optional.of(value);
+            }
+        }
+        return Optional.empty();
     }
 
     /**

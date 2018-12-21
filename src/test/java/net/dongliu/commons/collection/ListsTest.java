@@ -138,4 +138,20 @@ public class ListsTest {
             assertEquals(idx + 1, (int) value);
         });
     }
+
+    @Test
+    void last() {
+        assertEquals(Optional.of("1"), Lists.last(Lists.of("1")));
+        assertEquals(Optional.of("2"), Lists.last(Lists.of("1", "2")));
+        assertEquals(Optional.empty(), Lists.last(Lists.of()));
+    }
+
+    @Test
+    void reverseFind() {
+        assertEquals(Optional.of("1"), Lists.reverseFind(Lists.of("1"), s -> s.equals("1")));
+        assertEquals(Optional.empty(), Lists.reverseFind(Lists.of("1"), s -> s.equals("0")));
+        assertEquals(Optional.of("1"), Lists.reverseFind(Lists.of("1", "2"), s -> s.equals("1")));
+        assertEquals(Optional.of("2"), Lists.reverseFind(Lists.of("1", "2"), s -> s.equals("2")));
+        assertEquals(Optional.empty(), Lists.reverseFind(Lists.of(), s -> s.equals("1")));
+    }
 }
