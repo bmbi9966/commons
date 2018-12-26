@@ -22,7 +22,7 @@ public class Retry {
      * Create a retrier with times, and no interval between retries.
      *
      * @param times retry times
-     * @return new retrier
+     * @return new Retry instance
      */
     public static Retry of(int times) {
         return of(times, i -> Duration.ZERO);
@@ -33,7 +33,7 @@ public class Retry {
      *
      * @param times            retry times
      * @param intervalProvider provide interval between retries
-     * @return new retrier
+     * @return new Retry instance
      */
     public static Retry of(int times, IntFunction<Duration> intervalProvider) {
         requireNonNull(intervalProvider);

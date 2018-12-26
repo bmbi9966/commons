@@ -105,6 +105,7 @@ public class StringsTest {
     public void removeSuffix() {
         assertEquals("test123", Strings.removeSuffix("test123tet", "tet"));
         assertEquals("test123tet", Strings.removeSuffix("test123tet", ""));
+        assertEquals("test123tet", Strings.removeSuffix("test123tet", "123"));
         assertEquals("test123tet", Strings.removeSuffix("test123tet", "x"));
     }
 
@@ -112,6 +113,7 @@ public class StringsTest {
     public void removePrefix() {
         assertEquals("st123", Strings.removePrefix("test123", "te"));
         assertEquals("test123", Strings.removePrefix("test123", "tet"));
+        assertEquals("test123", Strings.removePrefix("test123", "123"));
         assertEquals("test123", Strings.removePrefix("test123", "x"));
         assertEquals("test123", Strings.removePrefix("test123", ""));
     }
@@ -130,6 +132,19 @@ public class StringsTest {
         assertEquals("st123", Strings.removePrefix("test123", 2));
         assertEquals("", Strings.removePrefix("test123", 7));
         assertEquals("", Strings.removePrefix("test123", 10));
+    }
+
+    @Test
+    void removePrefixAndSuffix() {
+        assertEquals("test123", Strings.removePrefixAndSuffix("test123", "", ""));
+        assertEquals("test123", Strings.removePrefixAndSuffix("test123", "xx", "xxx"));
+        assertEquals("test", Strings.removePrefixAndSuffix("test123", "", "123"));
+        assertEquals("123", Strings.removePrefixAndSuffix("test123", "test", ""));
+        assertEquals("test123", Strings.removePrefixAndSuffix("test123", "123", ""));
+        assertEquals("test123", Strings.removePrefixAndSuffix("test123", "", "tes"));
+        assertEquals("", Strings.removePrefixAndSuffix("test123", "test", "123"));
+        assertEquals("t", Strings.removePrefixAndSuffix("test123", "tes", "123"));
+        assertEquals("", Strings.removePrefixAndSuffix("test123", "test1", "123"));
     }
 
     @Test

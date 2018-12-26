@@ -284,7 +284,7 @@ public class Strings {
      *
      * @param str    string
      * @param prefix suffix
-     * @return str without suffix
+     * @return str without prefix
      */
     public static String removePrefix(String str, String prefix) {
         requireNonNull(str);
@@ -293,6 +293,36 @@ public class Strings {
             return str.substring(prefix.length());
         }
         return str;
+    }
+
+    /**
+     * If str start with prefix, remove prefix; If str end with suffix, remove suffix;
+     * If prefix and suffix overlapped, return empty str.
+     *
+     * @param str    string
+     * @param prefix suffix
+     * @param suffix suffix
+     * @return str without prefix and suffix
+     */
+    public static String removePrefixAndSuffix(String str, String prefix, String suffix) {
+        requireNonNull(str);
+        requireNonNull(prefix);
+        requireNonNull(suffix);
+        if (str.isEmpty()) {
+            return str;
+        }
+        int start = 0;
+        if (str.startsWith(prefix)) {
+            start = prefix.length();
+        }
+        int end = str.length();
+        if (str.endsWith(suffix)) {
+            end = str.length() - suffix.length();
+        }
+        if (start >= end) {
+            return "";
+        }
+        return str.substring(start, end);
     }
 
     /**
