@@ -62,8 +62,7 @@ public class Sets {
     }
 
     /**
-     * Convert origin set to new set.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Set returned.
+     * Convert origin set to new immutable set.
      *
      * @return set contains the result.
      */
@@ -73,12 +72,11 @@ public class Sets {
         for (S e : set) {
             newSet.add(function.apply(e));
         }
-        return newSet;
+        return unmodifiableSet(newSet);
     }
 
     /**
-     * Convert origin set to new set.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Set returned.
+     * Convert origin set to new immutable set.
      *
      * @return set contains the result.
      * @deprecated use {@link #convert(Set, Function)}
@@ -89,8 +87,7 @@ public class Sets {
     }
 
     /**
-     * Filter set, to new set.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Set returned.
+     * Filter set, to new immutable set.
      *
      * @return set which contains the elements in origin set, and accepted by predicate
      */
@@ -102,7 +99,7 @@ public class Sets {
                 newSet.add(e);
             }
         }
-        return newSet;
+        return unmodifiableSet(newSet);
     }
 
     private static int calculateCapacity(int size) {

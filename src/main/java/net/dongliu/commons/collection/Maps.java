@@ -113,8 +113,7 @@ public class Maps {
     }
 
     /**
-     * Convert map to new map, with key converted by keyMapper, and value converted by valueMapper.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     * Convert map to new immutable map, with key converted by keyMapper, and value converted by valueMapper.
      *
      * @param map         the original map
      * @param valueMapper the function to convert map value
@@ -134,12 +133,11 @@ public class Maps {
         }
         Map<R, U> result = new HashMap<>();
         map.forEach((k, v) -> result.put(keyMapper.apply(k), valueMapper.apply(v)));
-        return result;
+        return unmodifiableMap(result);
     }
 
     /**
-     * Convert map to new map, with key not modified, and value converted by function.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     * Convert map to new immutable map, with key not modified, and value converted by function.
      *
      * @param map         the original map
      * @param valueMapper the function to convert map value
@@ -155,8 +153,7 @@ public class Maps {
     }
 
     /**
-     * Filter map to new map, contains the entries accepted by predicate.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     * Filter map to new immutable map, contains the entries accepted by predicate.
      *
      * @param map       the origin map
      * @param predicate the predicate to filter map entries
@@ -176,13 +173,12 @@ public class Maps {
                 result.put(entry.getKey(), entry.getValue());
             }
         }
-        return result;
+        return unmodifiableMap(result);
     }
 
     /**
-     * Merge tow maps, to a new map, contains key-value in both map. If map1 and map2 contains the same key,
+     * Merge tow maps, to a new immutable map, contains key-value in both map. If map1 and map2 contains the same key,
      * the value from map2 will be used.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
      *
      * @param map1 map1
      * @param map2 map2
@@ -196,12 +192,11 @@ public class Maps {
         Map<K, V> map = new HashMap<>();
         map.putAll(map1);
         map.putAll(map2);
-        return map;
+        return unmodifiableMap(map);
     }
 
     /**
-     * Create new map from a collection of keys, the values are constructed by valueMaker.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     * Create new immutable map from a collection of keys, the values are constructed by valueMaker.
      *
      * @param keys       the key collections
      * @param valueMaker to make value from key
@@ -219,12 +214,11 @@ public class Maps {
         for (K key : keys) {
             map.put(key, valueMaker.apply(key));
         }
-        return map;
+        return unmodifiableMap(map);
     }
 
     /**
-     * Create new map from a collection of values, the values are constructed by keyMaker.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the Map returned.
+     * Create new immutable map from a collection of values, the values are constructed by keyMaker.
      *
      * @param values   the value collections
      * @param keyMaker to get key from value
@@ -243,6 +237,6 @@ public class Maps {
         for (V value : values) {
             map.put(keyMaker.apply(value), value);
         }
-        return map;
+        return unmodifiableMap(map);
     }
 }

@@ -33,12 +33,11 @@ public class Collections2 {
     }
 
     /**
-     * Convert origin collection to new List.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Convert origin collection to new immutable List, with elements mapped by mapper.
      *
      * @return list contains the result.
      */
-    public static <S, T> List<T> convertToList(Collection<S> c, Function<? super S, ? extends T> function) {
+    public static <S, T> List<T> convertToList(Collection<S> c, Function<? super S, ? extends T> mapper) {
         requireNonNull(c);
         if (c.isEmpty()) {
             return Lists.of();
@@ -46,15 +45,14 @@ public class Collections2 {
         List<T> list = new ArrayList<>(c.size());
         int i = 0;
         for (S s : c) {
-            list.add(function.apply(s));
+            list.add(mapper.apply(s));
         }
         return unmodifiableList(list);
     }
 
     /**
-     * Divide collection to two list, the first list contains elements accepted by predicate,
+     * Divide collection to two immutable list, the first list contains elements accepted by predicate,
      * the other contains other elements.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @param list can not be null
      * @return two list
@@ -70,7 +68,7 @@ public class Collections2 {
                 list2.add(e);
             }
         }
-        return Pair.of(list1, list2);
+        return Pair.of(unmodifiableList(list1), unmodifiableList(list2));
     }
 
     /**

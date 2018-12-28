@@ -117,34 +117,31 @@ public class Lists {
     }
 
     /**
-     * Convert origin list to new List, the elements are converted by specific function.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Convert origin list to new immutable List, the elements are converted by mapper.
      *
-     * @param function function to convert elements
+     * @param mapper function to convert elements
      * @return list contains the result.
      */
-    public static <S, T> List<T> convert(List<S> list, Function<? super S, ? extends T> function) {
+    public static <S, T> List<T> convert(List<S> list, Function<? super S, ? extends T> mapper) {
         requireNonNull(list);
-        return convertToList(list, function);
+        return convertToList(list, mapper);
     }
 
     /**
-     * Convert origin list to new List, the elements are converted by specific function.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Convert origin list to new immutable List, the elements are converted by specific function.
      *
-     * @param function function to convert elements
+     * @param mapper function to convert elements
      * @return list contains the result.
      * @deprecated use {@link #convert(List, Function)}
      */
     @Deprecated
-    public static <S, T> List<T> convertTo(List<S> list, Function<? super S, ? extends T> function) {
+    public static <S, T> List<T> convertTo(List<S> list, Function<? super S, ? extends T> mapper) {
         requireNonNull(list);
-        return convertToList(list, function);
+        return convertToList(list, mapper);
     }
 
     /**
      * Filter list, return a new list which contains the elements in origin list which accepted by predicate.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @return new list
      */
@@ -164,8 +161,7 @@ public class Lists {
 
 
     /**
-     * Return a new reversed List.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Return a new reversed immutable List.
      *
      * @param list the list
      * @param <T>  the element type
@@ -179,24 +175,22 @@ public class Lists {
     }
 
     /**
-     * Return a new sorted List, the element is compared by comparator.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Return a new sorted immutable List, the element is compared by comparator.
      *
      * @param list     the list
-     * @param function the function to get Comparable values from list elements.
+     * @param comparator the function to get Comparable values from list elements.
      * @param <T>      the element type
      * @return sorted List
      */
-    public static <T, R extends Comparable<R>> List<T> sort(List<T> list, Function<? super T, R> function) {
+    public static <T, R extends Comparable<R>> List<T> sort(List<T> list, Function<? super T, R> comparator) {
         requireNonNull(list);
         List<T> newList = new ArrayList<>(list);
-        newList.sort(Comparator.comparing(function));
+        newList.sort(Comparator.comparing(comparator));
         return unmodifiableList(newList);
     }
 
     /**
-     * Return a new sorted List.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Return a new sorted immutable List.
      *
      * @param list the list
      * @param <T>  the element type
@@ -207,8 +201,7 @@ public class Lists {
     }
 
     /**
-     * Concat two lists, to one new list.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Concat two lists, to one new immutable list.
      *
      * @param list1 list1
      * @param list2 list2
@@ -226,11 +219,10 @@ public class Lists {
     }
 
     /**
-     * Concat multi lists, to one new list.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
+     * Concat multi lists, to one new immutable List.
      *
-     * @param list1      list1
-     * @param list2      list2
+     * @param list1      list1 first List to concat
+     * @param list2      list2 second List to concat
      * @param otherLists other lists to concat
      * @param <T>        element type
      * @return new List
@@ -257,7 +249,6 @@ public class Lists {
 
     /**
      * Split list, into multi subLists, each subList has the specified subSize, except the last one.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @return List of SubLists
      */
@@ -277,9 +268,8 @@ public class Lists {
     }
 
     /**
-     * Divide list to two list, the first list contains elements accepted by predicate,
+     * Divide list to two immutable Lists, the first list contains elements accepted by predicate,
      * the other contains other elements.
-     * There are no guarantees on the type, mutability, serializability, or thread-safety of the List returned.
      *
      * @param list can not be null
      * @return two list
