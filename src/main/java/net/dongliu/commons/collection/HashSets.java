@@ -79,7 +79,7 @@ public class HashSets {
      */
     @SafeVarargs
     public static <T> HashSet<T> create(T... values) {
-        HashSet<T> set = new HashSet<>(Math.min(DEFAULT_INIT_CAPACITY, (int) (values.length / DEFAULT_LOAD_FACTOR)));
+        HashSet<T> set = new HashSet<>(Math.max(DEFAULT_INIT_CAPACITY, (int) (values.length / DEFAULT_LOAD_FACTOR)));
         Collections.addAll(set, values);
         return set;
     }

@@ -76,7 +76,7 @@ public class ArrayLists {
      */
     @SafeVarargs
     public static <T> ArrayList<T> create(T... values) {
-        ArrayList<T> list = new ArrayList<>(Math.min(16, values.length));
+        ArrayList<T> list = new ArrayList<>(Math.max(16, values.length));
         Collections.addAll(list, values);
         return list;
     }
