@@ -16,6 +16,21 @@ import static java.util.Objects.requireNonNull;
  * Utils method for Class reflection.
  */
 public class Classes {
+
+    /**
+     * Method for suppress generic class type cast warning. Usage:
+     * <pre>
+     * Class&lg;List&lg;String&gt;&gt; cls = Classes.cast(List.class);
+     * </pre>
+     *
+     * @param cls the class
+     * @param <T> the class type
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> cast(Class<? super T> cls) {
+        return (Class<T>) cls;
+    }
+
     /**
      * Get all non-static, non-Synthetic fields, declared in this class and all it's parent classes.
      * If sub class override parent class's filed, will only return sub class's field.

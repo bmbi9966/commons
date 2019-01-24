@@ -5,11 +5,14 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClassesTest {
+
+    @Test
+    void cast() {
+        Class<List<String>> cls = Classes.cast(List.class);
+    }
 
     @Test
     public void getAllMemberFields() {
