@@ -6,19 +6,22 @@ import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Supplier that only compute value once, despite succeed or fail(thrown Exceptions).
- * The Lazy supplier also cache the Exception thrown at the initial compute phase, and throw it when meet following calls.
- * This class is ThreadSafe.
- * This class is not serializable.
+ * Supplier that only compute value only once.
+ * <p>
+ * The passed in supplier should not return null value, or throw exception.
+ * If error occurred when compute value, the exception would be thrown, and the next call will run the code again.
+ * If computed value is null, a NPE would be thrown.
+ * </p>
+ * <p>
+ * This class is thread safe.
+ * </p>
  *
  * @param <T> the value type
  */
 public class Lazy<T> implements Supplier<T> {
 
-    private volatile boolean init;
     private Supplier<T> supplier;
-    private T value;
-    private Throwable t;
+    private volatile T value;
 
     private Lazy(Supplier<T> supplier) {
         this.supplier = requireNonNull(supplier);
@@ -41,22 +44,12 @@ public class Lazy<T> implements Supplier<T> {
 
     @Override
     public T get() {
-        if (!init) {
+        if (value == null) {
             synchronized (this) {
-                if (!init) {
-                    try {
-                        this.value = supplier.get();
-                    } catch (Throwable t) {
-                        this.t = t;
-                    } finally {
-                        this.init = true;
-                    }
-
+                if (value == null) {
+                    this.value = requireNonNull(supplier.get());
                 }
             }
-        }
-        if (this.t != null) {
-            throw Throwables.sneakyThrow(t);
         }
         return this.value;
     }

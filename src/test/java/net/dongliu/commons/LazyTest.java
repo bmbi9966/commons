@@ -1,6 +1,8 @@
 package net.dongliu.commons;
 
+import net.dongliu.commons.reflection.Classes;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -8,13 +10,20 @@ import java.util.function.Supplier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 public class LazyTest {
 
     @Test
     public void of() {
-        Lazy lazy = Lazy.of(Object::new);
-        assertSame(lazy.get(), lazy.get());
+        Supplier<String> supplier = mock(Classes.cast(Supplier.class));
+        String s = new String("1234");
+        when(supplier.get()).thenReturn(s);
+        Lazy lazy = Lazy.of(supplier);
+        assertSame(s, lazy.get());
+        verify(supplier).get();
+        assertSame(s, lazy.get());
+        verify(supplier).get();
     }
 
     @Test
@@ -27,8 +36,9 @@ public class LazyTest {
 
     @Test
     public void multiThread() throws InterruptedException {
-        MockSupplier supplier = new MockSupplier();
+        Supplier<String> supplier = mock(Classes.cast(Supplier.class));
         Lazy<String> lazy = Lazy.of(supplier);
+        when(supplier.get()).thenReturn("");
         Thread[] threads = new Thread[100];
         for (int i = 0; i < 100; i++) {
             threads[i] = new Thread(lazy::get);
@@ -39,17 +49,7 @@ public class LazyTest {
         for (Thread thread : threads) {
             thread.join();
         }
-        assertEquals("supplier0", lazy.get());
-        assertEquals(1, supplier.count.get());
-    }
-
-    private static class MockSupplier implements Supplier<String> {
-        public final AtomicInteger count = new AtomicInteger(0);
-
-        @Override
-        public String get() {
-            return "supplier" + count.getAndIncrement();
-        }
+        verify(supplier).get();
     }
 
     @Test
