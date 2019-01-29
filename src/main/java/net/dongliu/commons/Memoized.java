@@ -83,7 +83,14 @@ public class Memoized {
 
         @Override
         public R apply(T t) {
-            R value = map.computeIfAbsent(t, function);
+            requireNonNull(t);
+            // this map would not remove elements, so we can eliminate lock cost when element exists by getting the element
+            // before call computeIfAbsent
+            R value = map.get(t);
+            if (value != null) {
+                return value;
+            }
+            value = map.computeIfAbsent(t, function);
             requireNonNull(value);
             return value;
         }
