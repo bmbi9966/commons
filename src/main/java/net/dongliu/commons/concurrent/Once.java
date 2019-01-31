@@ -5,7 +5,7 @@ package net.dongliu.commons.concurrent;
  * The following call to this will block until the first call finished, normally or exception thrown.
  * This class is thread-safe.
  *
- * @deprecated using {@link net.dongliu.commons.Memoized#runnable(Runnable)}
+ * @deprecated using {@link net.dongliu.commons.function.Runnables#runOnce(Runnable)}
  */
 @Deprecated
 public class Once {

@@ -1,4 +1,4 @@
-package net.dongliu.commons;
+package net.dongliu.commons.function;
 
 import net.dongliu.commons.exception.UndeclaredLambdaException;
 
@@ -14,8 +14,8 @@ import java.util.function.*;
  * other checked exceptions will be wrapped in {@link UndeclaredLambdaException}
  * </p>
  */
-public class UncheckLambdas {
-    UncheckLambdas() {
+public class UncheckedFunctions {
+    UncheckedFunctions() {
     }
 
     /**
