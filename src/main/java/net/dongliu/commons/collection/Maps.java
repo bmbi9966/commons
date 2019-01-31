@@ -1,6 +1,6 @@
 package net.dongliu.commons.collection;
 
-import net.dongliu.commons.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package net.dongliu.commons.io;
 
 
-import net.dongliu.commons.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Utils for deal with Closeables and AutoCloseables
