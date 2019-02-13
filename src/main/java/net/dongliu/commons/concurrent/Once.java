@@ -4,10 +4,10 @@ package net.dongliu.commons.concurrent;
  * Run block of code only once, even if runnable code throw exception.
  * The following call to this will block until the first call finished, normally or exception thrown.
  * This class is thread-safe.
- *
- * @deprecated using {@link net.dongliu.commons.function.Runnables#runOnce(Runnable)}
+ * <p>
+ * using {@link net.dongliu.commons.function.Runnables#runOnce(Runnable)}
+ * </p>
  */
-@Deprecated
 public class Once {
 
     private volatile boolean run;

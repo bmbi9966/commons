@@ -1,6 +1,7 @@
 package net.dongliu.commons;
 
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
@@ -20,6 +21,7 @@ public class Strings {
      * @param str the string
      * @return nonNull string
      */
+    @NonNull
     public static String nullToEmpty(@Nullable String str) {
         return str == null ? "" : str;
     }
