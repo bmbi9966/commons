@@ -1,7 +1,11 @@
 package net.dongliu.commons;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
 
@@ -9,6 +13,52 @@ import static java.util.Objects.requireNonNull;
  * Utils for Array.
  */
 public class Arrays2 {
+
+    /**
+     * Used to create a new array, with values. If a array is passed in, will return itself
+     *
+     * @param values the values.
+     * @param <T>    the element type
+     * @return array
+     */
+    @SafeVarargs
+    public static <T> T[] of(T... values) {
+        return values;
+    }
+
+    /**
+     * Find the first element accepted by predicate in array.
+     * The element should not be null, or NullPointerException will be thrown.
+     *
+     * @param array array and it's elements can not be null
+     * @return Optional
+     */
+    public static <T> Optional<T> find(@NonNull T @NonNull [] array, Predicate<? super T> predicate) {
+        for (T value : array) {
+            if (predicate.test(value)) {
+                return Optional.of(value);
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    /**
+     * Find the last element accepted by predicate in array.
+     * The element should not be null, or NullPointerException will be thrown.
+     *
+     * @param array array and it's elements can not be null
+     * @return Optional
+     */
+    public static <T> Optional<T> reverseFind(@NonNull T @NonNull [] array, Predicate<? super T> predicate) {
+        for (int i = array.length - 1; i >= 0; i--) {
+            T value = array[i];
+            if (predicate.test(value)) {
+                return Optional.of(value);
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * Convert source array to target array. This method is used as:
