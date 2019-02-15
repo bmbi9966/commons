@@ -1,9 +1,7 @@
 package net.dongliu.commons.collection;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import net.dongliu.commons.annotation.Nullable;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -30,35 +28,40 @@ public class Sets {
      */
     public static <T> Set<T> nullToEmpty(@Nullable Set<T> set) {
         if (set == null) {
-            return of();
+            return Set.of();
         }
         return set;
     }
 
     /**
      * Create new immutable empty Set
+     *
+     * @deprecated using {@link Set#of()}
      */
+    @Deprecated
     public static <T> Set<T> of() {
-        return Collections.emptySet();
+        return Set.of();
     }
 
     /**
      * Create new immutable empty Set. Values cannot be null.
+     *
+     * @deprecated using {@link Set#of(Object)}
      */
+    @Deprecated
     public static <T> Set<T> of(T value) {
-        return Collections.singleton(value);
+        return Set.of(value);
     }
 
     /**
      * Create new immutable Set. Values cannot be null.
+     *
+     * @deprecated using {@link Set#of(Object[])}
      */
+    @Deprecated
     @SafeVarargs
     public static <T> Set<T> of(T... values) {
-        for (T value : values) {
-            requireNonNull(value);
-        }
-        Set<T> set = new HashSet<>(Arrays.asList(values));
-        return unmodifiableSet(set);
+        return Set.of(values);
     }
 
     /**

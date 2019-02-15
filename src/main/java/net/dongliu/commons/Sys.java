@@ -37,7 +37,7 @@ public class Sys {
      */
     public enum SpecificationVersion {
         v2("1.2"), v3("1.3"), v4("1.4"), v5("1.5"), v6("1.6"), v7("1.7"), v8("1.8"),
-        v9("9"), v10("10"), v11("v11"), v12("12"), v13("13"), v14("14"), v15("14"), v16("14"), v17("14");
+        v9("9"), v10("10"), v11("11"), v12("12"), v13("13"), v14("14"), v15("14"), v16("14"), v17("14");
         private final String versionName;
 
         SpecificationVersion(String versionName) {

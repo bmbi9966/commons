@@ -1,8 +1,7 @@
 package net.dongliu.commons;
 
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import net.dongliu.commons.annotation.Nullable;
 
 import java.util.Arrays;
 
@@ -21,7 +20,6 @@ public class Strings {
      * @param str the string
      * @return nonNull string
      */
-    @NonNull
     public static String nullToEmpty(@Nullable String str) {
         return str == null ? "" : str;
     }
@@ -112,7 +110,10 @@ public class Strings {
 
     /**
      * Return a new string, which content is repeat times of origin str.
+     *
+     * @deprecated using {@link String#repeat(int)}
      */
+    @Deprecated
     public static String repeat(String str, int times) {
         requireNonNull(str);
         if (times < 0) {

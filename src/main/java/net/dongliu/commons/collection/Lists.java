@@ -1,7 +1,7 @@
 package net.dongliu.commons.collection;
 
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import net.dongliu.commons.annotation.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -9,8 +9,7 @@ import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
 import static java.lang.Math.addExact;
-import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 import static net.dongliu.commons.collection.Collections2.convertToList;
 import static net.dongliu.commons.collection.Collections2.partitionToList;
@@ -38,63 +37,83 @@ public class Lists {
 
     /**
      * Create new immutable empty List
+     *
+     * @deprecated using {@link List#of()}
      */
+    @Deprecated
     public static <T> List<T> of() {
-        return emptyList();
+        return List.of();
     }
 
     /**
      * Create new immutable List. Values cannot be null.
+     *
+     * @deprecated using {@link List#of(Object)}
      */
+    @Deprecated
     public static <T> List<T> of(T v) {
-        return singletonList(requireNonNull(v));
+        return List.of(v);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
+     *
+     * @deprecated using {@link List#of(Object, Object)}
      */
+    @Deprecated
     public static <T> List<T> of(T v1, T v2) {
-        return unmodifiableList(asList(v1, v2));
+        return List.of(v1, v2);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
+     *
+     * @deprecated using {@link List#of(Object, Object, Object)}
      */
+    @Deprecated
     public static <T> List<T> of(T v1, T v2, T v3) {
-        return unmodifiableList(asList(v1, v2, v3));
+        return List.of(v1, v2, v3);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
+     *
+     * @deprecated using {@link List#of(Object, Object, Object, Object)}
      */
+    @Deprecated
     public static <T> List<T> of(T v1, T v2, T v3, T v4) {
-        return unmodifiableList(asList(v1, v2, v3, v4));
+        return List.of(v1, v2, v3, v4);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
+     *
+     * @deprecated using {@link List#of(Object, Object, Object, Object, Object)}
      */
+    @Deprecated
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5) {
-        return unmodifiableList(asList(v1, v2, v3, v4, v5));
+        return List.of(v1, v2, v3, v4, v5);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
+     *
+     * @deprecated using {@link List#of(Object, Object, Object, Object, Object, Object)}
      */
+    @Deprecated
     public static <T> List<T> of(T v1, T v2, T v3, T v4, T v5, T v6) {
-        return unmodifiableList(asList(v1, v2, v3, v4, v5, v6));
+        return List.of(v1, v2, v3, v4, v5, v6);
     }
 
     /**
      * Create new immutable List. Values cannot be null.
-     * This method will do defensive copy for the param values.
+     *
+     * @deprecated using {@link List#of(Object[])}
      */
+    @Deprecated
     @SafeVarargs
     public static <T> List<T> of(T... values) {
-        for (T value : values) {
-            requireNonNull(value);
-        }
-        return unmodifiableList(asList((T[]) values.clone()));
+        return List.of(values);
     }
 
 
@@ -106,14 +125,9 @@ public class Lists {
      * @param <T>  the element type
      * @return the immutable list
      */
+    @Deprecated
     public static <T> List<T> copy(List<T> list) {
-        requireNonNull(list);
-        if (list.isEmpty()) {
-            return Lists.of();
-        }
-        List<T> newList = new ArrayList<>(list.size());
-        newList.addAll(list);
-        return unmodifiableList(newList);
+        return List.copyOf(list);
     }
 
     /**
@@ -177,9 +191,9 @@ public class Lists {
     /**
      * Return a new sorted immutable List, the element is compared by comparator.
      *
-     * @param list     the list
+     * @param list       the list
      * @param comparator the function to get Comparable values from list elements.
-     * @param <T>      the element type
+     * @param <T>        the element type
      * @return sorted List
      */
     public static <T, R extends Comparable<R>> List<T> sort(List<T> list, Function<? super T, R> comparator) {
@@ -377,7 +391,9 @@ public class Lists {
      * @param maker create the target array
      * @param <T>   element type
      * @return the target array containing elements in collection
+     * @deprecated using {@link Collection#toArray(IntFunction)}
      */
+    @Deprecated
     public static <T> T[] toArray(List<? extends T> list, IntFunction<T[]> maker) {
         return Collections2.toArray(list, maker);
     }

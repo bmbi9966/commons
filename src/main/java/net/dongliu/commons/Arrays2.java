@@ -1,6 +1,6 @@
 package net.dongliu.commons;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import net.dongliu.commons.annotation.NonNull;
 
 import java.util.Optional;
 import java.util.function.Function;

@@ -1,14 +1,16 @@
 package net.dongliu.commons.collection;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import net.dongliu.commons.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singletonMap;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -31,85 +33,84 @@ public class Maps {
 
     /**
      * Create new immutable empty Map
+     *
+     * @deprecated using {@link Map#of()}
      */
+    @Deprecated
     public static <K, V> Map<K, V> of() {
-        return emptyMap();
+        return Map.of();
     }
 
     /**
      * Create new immutable Map. Values cannot be null.
+     *
+     * @deprecated using {@link Map#of(Object, Object)}
      */
+    @Deprecated
     public static <K, V> Map<K, V> of(K key, V value) {
         return singletonMap(requireNonNull(key), requireNonNull(value));
     }
 
     /**
      * Create new immutable Map. Values cannot be null.
+     *
+     * @deprecated using {@link Map#of(Object, Object, Object, Object)}
      */
+    @Deprecated
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2) {
-        HashMap<K, V> map = new HashMap<>();
-        map.put(requireNonNull(key1), requireNonNull(value1));
-        map.put(requireNonNull(key2), requireNonNull(value2));
-        return unmodifiableMap(map);
+        return Map.of(key1, value1, key2, value2);
     }
 
     /**
      * Create new immutable Map. Values cannot be null.
+     *
+     * @deprecated using {@link Map#of(Object, Object, Object, Object, Object, Object)}
      */
+    @Deprecated
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2,
                                       K key3, V value3) {
-        HashMap<K, V> map = new HashMap<>();
-        map.put(requireNonNull(key1), requireNonNull(value1));
-        map.put(requireNonNull(key2), requireNonNull(value2));
-        map.put(requireNonNull(key3), requireNonNull(value3));
-        return unmodifiableMap(map);
+        return Map.of(key1, value1, key2, value2, key3, value3);
     }
 
     /**
      * Create new immutable Map. Values cannot be null.
+     *
+     * @deprecated using {@link Map#of(Object, Object, Object, Object, Object, Object, Object, Object)}
      */
+    @Deprecated
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2,
                                       K key3, V value3,
                                       K key4, V value4) {
 
-        HashMap<K, V> map = new HashMap<>();
-        map.put(requireNonNull(key1), requireNonNull(value1));
-        map.put(requireNonNull(key2), requireNonNull(value2));
-        map.put(requireNonNull(key3), requireNonNull(value3));
-        map.put(requireNonNull(key4), requireNonNull(value4));
-        return unmodifiableMap(map);
+        return Map.of(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     /**
      * Create new immutable Map. Values cannot be null.
+     *
+     * @deprecated using {@link Map#of(Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object)}
      */
+    @Deprecated
     public static <K, V> Map<K, V> of(K key1, V value1,
                                       K key2, V value2,
                                       K key3, V value3,
                                       K key4, V value4,
                                       K key5, V value5) {
-        HashMap<K, V> map = new HashMap<>();
-        map.put(requireNonNull(key1), requireNonNull(value1));
-        map.put(requireNonNull(key2), requireNonNull(value2));
-        map.put(requireNonNull(key3), requireNonNull(value3));
-        map.put(requireNonNull(key4), requireNonNull(value4));
-        map.put(requireNonNull(key5), requireNonNull(value5));
-        return unmodifiableMap(map);
+        return Map.of(key1, value1, key2, value2, key3, value3, key4, value4, key5, value5);
     }
 
     /**
      * Create new immutable Map. Values cannot be null.
+     *
+     * @deprecated using {@link Map#ofEntries(Entry[])}
      */
+    @Deprecated
     @SafeVarargs
     public static <K, V> Map<K, V> ofEntries(Map.Entry<K, V>... entries) {
-        HashMap<K, V> map = new HashMap<>();
-        for (Map.Entry<K, V> entry : entries) {
-            map.put(requireNonNull(entry.getKey()), requireNonNull(entry.getValue()));
-        }
-        return unmodifiableMap(map);
+        return Map.ofEntries(entries);
     }
 
     /**

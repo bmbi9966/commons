@@ -1,7 +1,7 @@
 package net.dongliu.commons;
 
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import net.dongliu.commons.annotation.Nullable;
 import net.dongliu.commons.collection.Lists;
 import net.dongliu.commons.reflection.Classes;
 

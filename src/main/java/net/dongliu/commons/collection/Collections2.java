@@ -26,7 +26,9 @@ public class Collections2 {
      * @param maker create the target array
      * @param <T>   element type
      * @return the target array containing elements in collection
+     * @deprecated using {@link Collection#toArray(IntFunction)}
      */
+    @Deprecated
     public static <T> T[] toArray(Collection<? extends T> c, IntFunction<T[]> maker) {
         requireNonNull(c);
         return c.toArray(maker.apply(c.size()));

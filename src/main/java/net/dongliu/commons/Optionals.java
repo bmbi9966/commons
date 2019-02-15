@@ -46,7 +46,9 @@ public class Optionals {
      * @param supplier supply backup optional
      * @param <T>      value type
      * @return optional
+     * @deprecated using {@link Optional#or(Supplier)}
      */
+    @Deprecated
     public static <T> Optional<T> or(Optional<T> optional, Supplier<Optional<T>> supplier) {
         if (optional.isPresent()) {
             return optional;

@@ -1,6 +1,6 @@
 package net.dongliu.commons.collection;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import net.dongliu.commons.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.Optional;
