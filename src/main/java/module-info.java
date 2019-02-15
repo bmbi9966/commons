@@ -1,5 +1,6 @@
 module net.dongliu.commons {
     exports net.dongliu.commons;
+    exports net.dongliu.commons.annotation;
     exports net.dongliu.commons.collection;
     exports net.dongliu.commons.concurrent;
     exports net.dongliu.commons.exception;
