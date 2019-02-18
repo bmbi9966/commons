@@ -1,6 +1,5 @@
 package net.dongliu.commons.io;
 
-import net.dongliu.commons.Strings;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class ReadersTest {
         Readers.transferTo(new StringReader(str), sb);
         assertEquals(str, sb.toString());
 
-        String s = Strings.repeat(str, 100);
+        String s = str.repeat(100);
         sb = new StringBuilder();
         Readers.transferTo(new StringReader(s), sb);
         assertEquals(s, sb.toString());

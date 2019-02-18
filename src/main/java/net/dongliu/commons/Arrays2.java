@@ -62,9 +62,7 @@ public class Arrays2 {
      * @return Optional
      */
     public static <T> OptionalInt findIndex(T[] array, int from, Predicate<? super T> predicate) {
-        if (from < 0 || from >= array.length) {
-            throw new ArrayIndexOutOfBoundsException(from);
-        }
+        from = Math.max(0, from);
         for (int i = from; i < array.length; i++) {
             if (predicate.test(array[i])) {
                 return OptionalInt.of(i);
@@ -109,9 +107,7 @@ public class Arrays2 {
      * @return Optional
      */
     public static <T> OptionalInt reverseFindIndex(T[] array, int from, Predicate<? super T> predicate) {
-        if (from < 0 || from >= array.length) {
-            throw new ArrayIndexOutOfBoundsException(from);
-        }
+        from = Math.min(array.length - 1, from);
         for (int i = from; i >= 0; i--) {
             if (predicate.test(array[i])) {
                 return OptionalInt.of(i);

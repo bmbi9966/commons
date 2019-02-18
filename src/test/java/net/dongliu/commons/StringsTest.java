@@ -3,6 +3,8 @@ package net.dongliu.commons;
 import net.dongliu.commons.collection.Lists;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StringsTest {
@@ -14,6 +16,7 @@ public class StringsTest {
         assertEquals("1", Strings.nullToEmpty("1"));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void repeat() {
         assertEquals("sasa", Strings.repeat("sa", 2));
@@ -202,8 +205,8 @@ public class StringsTest {
 
     @Test
     void joinLines() {
-        assertEquals("", Strings.joinLines(Lists.of()));
-        assertEquals("\n", Strings.joinLines(Lists.of("")));
-        assertEquals("1\n\n", Strings.joinLines(Lists.of("1", "")));
+        assertEquals("", Strings.joinLines(List.of()));
+        assertEquals("\n", Strings.joinLines(List.of("")));
+        assertEquals("1\n\n", Strings.joinLines(List.of("1", "")));
     }
 }

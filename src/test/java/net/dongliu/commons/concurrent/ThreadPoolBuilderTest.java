@@ -1,6 +1,5 @@
 package net.dongliu.commons.concurrent;
 
-import net.dongliu.commons.collection.Lists;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +28,6 @@ public class ThreadPoolBuilderTest {
         });
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.SECONDS);
-        assertEquals(Lists.of("exception1", "exception2"), messages);
+        assertEquals(List.of("exception1", "exception2"), messages);
     }
 }

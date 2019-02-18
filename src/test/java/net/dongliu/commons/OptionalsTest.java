@@ -14,6 +14,7 @@ public class OptionalsTest {
         assertEquals(0, Optionals.stream(Optional.empty()).count());
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void or() {
         assertEquals(Optional.of(1), Optionals.or(Optional.of(1), Optional.empty()));

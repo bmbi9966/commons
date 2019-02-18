@@ -1,6 +1,5 @@
 package net.dongliu.commons.concurrent;
 
-import net.dongliu.commons.collection.Lists;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -9,9 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 import static java.lang.System.currentTimeMillis;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FuturesTest {
 
@@ -53,7 +50,7 @@ public class FuturesTest {
                 Futures.delay(10, Duration.ofMillis(10)),
                 Futures.value(1)
         );
-        assertEquals(Lists.of(10, 1), future.join());
+        assertEquals(List.of(10, 1), future.join());
     }
 
     @Test

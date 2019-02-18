@@ -1,10 +1,10 @@
 package net.dongliu.commons;
 
-import net.dongliu.commons.collection.Lists;
-import net.dongliu.commons.collection.Maps;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,11 +30,11 @@ class PrintsTest {
 
 
         writer = new StringWriter();
-        Prints.out(writer).sep(", ").end("").printValues(Lists.of(1, 2, 3));
+        Prints.out(writer).sep(", ").end("").printValues(List.of(1, 2, 3));
         assertEquals("1, 2, 3", writer.toString());
 
         writer = new StringWriter();
-        Prints.out(writer).sep(", ").end("").printMap(Maps.of("1", 1, "2", 2));
+        Prints.out(writer).sep(", ").end("").printMap(Map.of("1", 1, "2", 2));
         assertEquals("1 = 1, 2 = 2", writer.toString());
     }
 }

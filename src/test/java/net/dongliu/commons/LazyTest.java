@@ -2,14 +2,10 @@ package net.dongliu.commons;
 
 import net.dongliu.commons.reflection.Classes;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class LazyTest {

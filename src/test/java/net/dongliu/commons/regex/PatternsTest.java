@@ -1,8 +1,8 @@
 package net.dongliu.commons.regex;
 
-import net.dongliu.commons.collection.Lists;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toList;
@@ -15,8 +15,8 @@ class PatternsTest {
     void matched() {
         Pattern pattern = Pattern.compile("([\\d.]+)元");
         String text = "人民币1234.56元";
-        assertEquals(Lists.of("1234.56元"), Patterns.matched(pattern, text).collect(toList()));
-        assertEquals(Lists.of("1234.56"), Patterns.matched(pattern, text, 1).collect(toList()));
+        assertEquals(List.of("1234.56元"), Patterns.matched(pattern, text).collect(toList()));
+        assertEquals(List.of("1234.56"), Patterns.matched(pattern, text, 1).collect(toList()));
 
         String text2 = "人民币1234.56";
         assertEquals(0, Patterns.matched(pattern, text2).count());
@@ -27,8 +27,8 @@ class PatternsTest {
     void getAllMatched() {
         Pattern pattern = Pattern.compile("([\\d.]+)元");
         String text = "人民币1234.56元";
-        assertEquals(Lists.of("1234.56元"), Patterns.getAllMatched(pattern, text));
-        assertEquals(Lists.of("1234.56"), Patterns.getAllMatched(pattern, text, 1));
+        assertEquals(List.of("1234.56元"), Patterns.getAllMatched(pattern, text));
+        assertEquals(List.of("1234.56"), Patterns.getAllMatched(pattern, text, 1));
 
         String text2 = "人民币1234.56";
         assertTrue(Patterns.getAllMatched(pattern, text2).isEmpty());

@@ -42,7 +42,7 @@ public class Collections2 {
     public static <S, T> List<T> convertToList(Collection<S> c, Function<? super S, ? extends T> mapper) {
         requireNonNull(c);
         if (c.isEmpty()) {
-            return Lists.of();
+            return List.of();
         }
         List<T> list = new ArrayList<>(c.size());
         int i = 0;

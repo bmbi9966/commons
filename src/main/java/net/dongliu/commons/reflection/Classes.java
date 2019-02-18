@@ -1,7 +1,5 @@
 package net.dongliu.commons.reflection;
 
-import net.dongliu.commons.collection.Sets;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -113,7 +111,7 @@ public class Classes {
     }
 
     private static class ClassSetHolder {
-        private static final Set<Class<?>> wrapperClasses = Sets.of(
+        private static final Set<Class<?>> wrapperClasses = Set.of(
                 Byte.class, Short.class, Integer.class, Long.class,
                 Float.class, Double.class, Boolean.class, Character.class
         );

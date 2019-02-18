@@ -3,6 +3,7 @@ package net.dongliu.commons;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,4 +38,24 @@ public class Arrays2Test {
         assertEquals(Optional.empty(), Arrays2.reverseFind(Arrays2.of("1", "2"), s -> false));
         assertEquals(Optional.of("2"), Arrays2.reverseFind(Arrays2.of("1", "2"), s -> s.length() == 1));
     }
+
+    @Test
+    void of() {
+    }
+
+    @Test
+    void findIndex() {
+        assertEquals(OptionalInt.empty(), Arrays2.findIndex(Arrays2.of(), s -> true));
+        assertEquals(OptionalInt.of(1), Arrays2.findIndex(Arrays2.of(1, 2), s -> s % 2 == 0));
+        assertEquals(OptionalInt.empty(), Arrays2.findIndex(Arrays2.of(1, 2), 2, s -> s % 2 == 0));
+    }
+
+    @Test
+    void reverseFindIndex() {
+        assertEquals(OptionalInt.empty(), Arrays2.reverseFindIndex(Arrays2.of(), s -> true));
+        assertEquals(OptionalInt.of(1), Arrays2.reverseFindIndex(Arrays2.of(1, 2), s -> s % 2 == 0));
+        assertEquals(OptionalInt.of(1), Arrays2.reverseFindIndex(Arrays2.of(1, 2), 2, s -> s % 2 == 0));
+        assertEquals(OptionalInt.empty(), Arrays2.reverseFindIndex(Arrays2.of(1, 2), 0, s -> s % 2 == 0));
+    }
+
 }
