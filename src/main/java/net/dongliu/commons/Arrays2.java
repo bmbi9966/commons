@@ -3,6 +3,7 @@ package net.dongliu.commons;
 import net.dongliu.commons.annotation.NonNull;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -42,6 +43,36 @@ public class Arrays2 {
         return Optional.empty();
     }
 
+    /**
+     * Find the first element index accepted by predicate in array.
+     *
+     * @param array the array
+     * @return Optional
+     */
+    public static <T> OptionalInt findIndex(T[] array, Predicate<? super T> predicate) {
+        return findIndex(array, 0, predicate);
+    }
+
+
+    /**
+     * Find the first element index accepted by predicate in array.
+     *
+     * @param from  the index from which to find, included.
+     * @param array the array
+     * @return Optional
+     */
+    public static <T> OptionalInt findIndex(T[] array, int from, Predicate<? super T> predicate) {
+        if (from < 0 || from >= array.length) {
+            throw new ArrayIndexOutOfBoundsException(from);
+        }
+        for (int i = from; i < array.length; i++) {
+            if (predicate.test(array[i])) {
+                return OptionalInt.of(i);
+            }
+        }
+        return OptionalInt.empty();
+    }
+
 
     /**
      * Find the last element accepted by predicate in array.
@@ -58,6 +89,35 @@ public class Arrays2 {
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * Find the last element index accepted by predicate in array.
+     *
+     * @param array the array
+     * @return Optional
+     */
+    public static <T> OptionalInt reverseFindIndex(T[] array, Predicate<? super T> predicate) {
+        return reverseFindIndex(array, array.length - 1, predicate);
+    }
+
+    /**
+     * Find the last element index accepted by predicate in array.
+     *
+     * @param from  the index from which to find, included.
+     * @param array the array
+     * @return Optional
+     */
+    public static <T> OptionalInt reverseFindIndex(T[] array, int from, Predicate<? super T> predicate) {
+        if (from < 0 || from >= array.length) {
+            throw new ArrayIndexOutOfBoundsException(from);
+        }
+        for (int i = from; i >= 0; i--) {
+            if (predicate.test(array[i])) {
+                return OptionalInt.of(i);
+            }
+        }
+        return OptionalInt.empty();
     }
 
     /**
