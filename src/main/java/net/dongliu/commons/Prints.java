@@ -1,12 +1,11 @@
 package net.dongliu.commons;
 
 
+import net.dongliu.commons.annotation.NonNull;
 import net.dongliu.commons.annotation.Nullable;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.UncheckedIOException;
-import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -22,28 +21,58 @@ public class Prints {
     /**
      * @see Printer#print(Object)
      */
-    public static void print(Object value) {
+    public static void print(@Nullable Object value) {
         defaultPrinter.print(value);
+    }
+
+    /**
+     * @see Printer#print(Object, Object)
+     */
+    public static void print(@Nullable Object value1, @Nullable Object value2) {
+        defaultPrinter.print(value1, value2);
+    }
+
+    /**
+     * @see Printer#print(Object, Object, Object)
+     */
+    public static void print(@Nullable Object value1, @Nullable Object value2, @Nullable Object value3) {
+        defaultPrinter.print(value1, value2, value3);
+    }
+
+    /**
+     * @see Printer#print(Object, Object, Object, Object)
+     */
+    public static void print(@Nullable Object value1, @Nullable Object value2, @Nullable Object value3,
+                             @Nullable Object value4) {
+        defaultPrinter.print(value1, value2, value3, value4);
+    }
+
+    /**
+     * @see Printer#print(Object, Object, Object, Object, Object)
+     */
+    public static void print(@Nullable Object value1, @Nullable Object value2, @Nullable Object value3,
+                             @Nullable Object value4, @Nullable Object value5) {
+        defaultPrinter.print(value1, value2, value3, value4, value5);
     }
 
     /**
      * @see Printer#print(Object...)
      */
-    public static void print(@Nullable Object... values) {
+    public static void print(@Nullable Object @NonNull ... values) {
         defaultPrinter.print(values);
     }
 
     /**
      * @see Printer#printValues(Iterable)
      */
-    public void printValues(Iterable<@Nullable ?> iterable) {
+    public void printValues(@NonNull Iterable<@Nullable ?> iterable) {
         defaultPrinter.printValues(iterable);
     }
 
     /**
      * @see Printer#printMap(Map)
      */
-    public void printMap(Map<@Nullable ?, @Nullable ?> map) {
+    public void printMap(@NonNull Map<@Nullable ?, @Nullable ?> map) {
         defaultPrinter.printMap(map);
     }
 
@@ -64,19 +93,11 @@ public class Prints {
     }
 
     /**
-     * @see Printer#out(Writer)
+     * @see Printer#out(Appendable)
      */
-    public static Printer out(Writer writer) {
-        requireNonNull(writer);
-        return defaultPrinter.out(writer);
-    }
-
-    /**
-     * @see Printer#out(PrintStream)
-     */
-    public static Printer out(PrintStream printStream) {
-        requireNonNull(printStream);
-        return defaultPrinter.out(printStream);
+    public static Printer out(Appendable appendable) {
+        requireNonNull(appendable);
+        return defaultPrinter.out(appendable);
     }
 
     /**
@@ -85,30 +106,82 @@ public class Prints {
     public static class Printer {
         private final String sep;
         private final String end;
-        private final PrintStream printStream;
-        private final Writer writer;
+        private final Appendable out;
 
-        private Printer(String sep, String end, PrintStream printStream, Writer writer) {
+        private Printer(String sep, String end, Appendable out) {
             this.sep = sep;
             this.end = end;
-            this.printStream = printStream;
-            this.writer = writer;
-        }
-
-        private Printer(String sep, String end, PrintStream printStream) {
-            this(sep, end, printStream, null);
-        }
-
-        private Printer(String sep, String end, Writer writer) {
-            this(sep, end, null, writer);
+            this.out = out;
         }
 
         /**
          * Print one value
          */
         public void print(@Nullable Object value) {
-            synchronized (lock()) {
+            synchronized (out) {
                 write(String.valueOf(value));
+                write(end);
+            }
+        }
+
+        /**
+         * Print values
+         */
+        public void print(@Nullable Object value1, @Nullable Object value2) {
+            synchronized (out) {
+                write(String.valueOf(value1));
+                write(sep);
+                write(String.valueOf(value2));
+                write(end);
+            }
+        }
+
+        /**
+         * Print values
+         */
+        public void print(@Nullable Object value1, @Nullable Object value2, @Nullable Object value3) {
+            synchronized (out) {
+                write(String.valueOf(value1));
+                write(sep);
+                write(String.valueOf(value2));
+                write(sep);
+                write(String.valueOf(value3));
+                write(end);
+            }
+        }
+
+        /**
+         * Print values
+         */
+        public void print(@Nullable Object value1, @Nullable Object value2, @Nullable Object value3,
+                          @Nullable Object value4) {
+            synchronized (out) {
+                write(String.valueOf(value1));
+                write(sep);
+                write(String.valueOf(value2));
+                write(sep);
+                write(String.valueOf(value3));
+                write(sep);
+                write(String.valueOf(value4));
+                write(end);
+            }
+        }
+
+        /**
+         * Print values
+         */
+        public void print(@Nullable Object value1, @Nullable Object value2, @Nullable Object value3,
+                          @Nullable Object value4, @Nullable Object value5) {
+            synchronized (out) {
+                write(String.valueOf(value1));
+                write(sep);
+                write(String.valueOf(value2));
+                write(sep);
+                write(String.valueOf(value3));
+                write(sep);
+                write(String.valueOf(value4));
+                write(sep);
+                write(String.valueOf(value5));
                 write(end);
             }
         }
@@ -118,13 +191,13 @@ public class Prints {
          *
          * @param values the values
          */
-        public void print(@Nullable Object... values) {
+        public void print(@Nullable Object @NonNull ... values) {
             requireNonNull(values);
             if (values.length == 0) {
                 return;
             }
 
-            synchronized (lock()) {
+            synchronized (out) {
                 for (int i = 0; i < values.length; i++) {
                     write(String.valueOf(values[i]));
                     if (i < values.length - 1) {
@@ -140,8 +213,9 @@ public class Prints {
          *
          * @param iterable cannot be null
          */
-        public void printValues(Iterable<@Nullable ?> iterable) {
-            synchronized (lock()) {
+        public void printValues(@NonNull Iterable<@Nullable ?> iterable) {
+            requireNonNull(iterable);
+            synchronized (out) {
                 Iterator<?> iterator = iterable.iterator();
                 boolean first = true;
                 while (iterator.hasNext()) {
@@ -161,8 +235,9 @@ public class Prints {
          *
          * @param map cannot be null
          */
-        public void printMap(Map<@Nullable ?, @Nullable ?> map) {
-            synchronized (lock()) {
+        public void printMap(@NonNull Map<@Nullable ?, @Nullable ?> map) {
+            requireNonNull(map);
+            synchronized (out) {
                 int i = 0;
                 int size = map.size();
                 for (Map.Entry<?, ?> entry : map.entrySet()) {
@@ -184,7 +259,7 @@ public class Prints {
          */
         public Printer sep(String sep) {
             requireNonNull(sep);
-            return new Printer(sep, end, printStream, writer);
+            return new Printer(sep, end, out);
         }
 
         /**
@@ -194,51 +269,29 @@ public class Prints {
          */
         public Printer end(String end) {
             requireNonNull(end);
-            return new Printer(sep, end, printStream, writer);
+            return new Printer(sep, end, out);
         }
 
         /**
          * The writer to print to, instead of default System.out.
          *
-         * @param writer the writer
+         * @param appendable the writer
          */
-        public Printer out(Writer writer) {
-            requireNonNull(writer);
-            return new Printer(sep, end, null, writer);
-        }
-
-        /**
-         * The printStream to print to, instead of default System.out.
-         *
-         * @param printStream the printStream
-         */
-        public Printer out(PrintStream printStream) {
-            requireNonNull(printStream);
-            return new Printer(sep, end, printStream, null);
+        public Printer out(Appendable appendable) {
+            requireNonNull(appendable);
+            return new Printer(sep, end, appendable);
         }
 
         private void write(String str) {
             if (str.isEmpty()) {
                 return;
             }
-            if (printStream != null) {
-                printStream.print(str);
-            } else if (writer != null) {
-                try {
-                    writer.write(str);
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-            } else {
-                throw new RuntimeException();
-            }
-        }
 
-        private Object lock() {
-            if (printStream != null) {
-                return printStream;
+            try {
+                out.append(str);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
             }
-            return writer;
         }
 
     }
