@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,7 +41,6 @@ public class ThrowablesTest {
         assertEquals(Optional.of(e), Throwables.getCauseOf(e, Throwable.class));
         assertEquals(Optional.of(re), Throwables.getCauseOf(e, RuntimeException.class));
         assertEquals(Optional.of(ioe), Throwables.getCauseOf(e, IOException.class));
-        assertEquals(Optional.empty(), Throwables.getCauseOf(e, SQLException.class));
     }
 
     @Test
