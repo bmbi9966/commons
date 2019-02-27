@@ -1,6 +1,6 @@
 package net.dongliu.commons;
 
-import net.dongliu.commons.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.StringJoiner;
 

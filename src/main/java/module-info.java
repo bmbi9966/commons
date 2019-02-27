@@ -1,6 +1,8 @@
 module net.dongliu.commons {
+    requires jdk.charsets;
+    requires static org.checkerframework.checker.qual;
+
     exports net.dongliu.commons;
-    exports net.dongliu.commons.annotation;
     exports net.dongliu.commons.collection;
     exports net.dongliu.commons.concurrent;
     exports net.dongliu.commons.exception;

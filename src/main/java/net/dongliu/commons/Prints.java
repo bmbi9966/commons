@@ -1,8 +1,8 @@
 package net.dongliu.commons;
 
 
-import net.dongliu.commons.annotation.NonNull;
-import net.dongliu.commons.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
