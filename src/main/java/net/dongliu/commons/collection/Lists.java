@@ -30,7 +30,7 @@ public class Lists {
      */
     public static <T> List<T> nullToEmpty(@Nullable List<T> list) {
         if (list == null) {
-            return of();
+            return List.of();
         }
         return list;
     }
@@ -422,5 +422,22 @@ public class Lists {
         requireNonNull(list);
         requireNonNull(consumer);
         Iterables.forEachIndexed(list, consumer);
+    }
+
+    /**
+     * If collection is random access list, return it self;
+     * else return a new random access list contains the element from collection.
+     * There is not guaranty whether returned list is immutable or not.
+     *
+     * @param c   the list
+     * @param <T> the element type
+     * @return a random accessed list
+     */
+    public static <T> List<T> randomAccessed(Collection<T> c) {
+        requireNonNull(c);
+        if (c instanceof List && c instanceof RandomAccess) {
+            return (List<T>) c;
+        }
+        return new ArrayList<>(c);
     }
 }

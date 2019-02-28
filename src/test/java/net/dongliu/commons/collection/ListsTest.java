@@ -2,9 +2,7 @@ package net.dongliu.commons.collection;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -154,5 +152,11 @@ public class ListsTest {
         assertEquals(Optional.of("1"), Lists.reverseFind(Lists.of("1", "2"), s -> s.equals("1")));
         assertEquals(Optional.of("2"), Lists.reverseFind(Lists.of("1", "2"), s -> s.equals("2")));
         assertEquals(Optional.empty(), Lists.reverseFind(Lists.of(), s -> s.equals("1")));
+    }
+
+    @Test
+    void randomAccessed() {
+        assertTrue(Lists.randomAccessed(List.of()) instanceof RandomAccess);
+        assertTrue(Lists.randomAccessed(Set.of()) instanceof RandomAccess);
     }
 }
