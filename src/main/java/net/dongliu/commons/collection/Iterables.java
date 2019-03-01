@@ -1,5 +1,7 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.function.IndexedConsumer;
+import net.dongliu.commons.function.LastAwareConsumer;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Iterator;
@@ -99,7 +101,7 @@ public class Iterables {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEach(Iterable<T> iterable, ElementConsumer<? super T> consumer) {
+    public static <T> void forEach(Iterable<T> iterable, LastAwareConsumer<? super T> consumer) {
         requireNonNull(iterable);
         requireNonNull(consumer);
         Iterator<T> iterator = iterable.iterator();
@@ -121,14 +123,14 @@ public class Iterables {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEachIndexed(Iterable<T> iterable, IndexedElementConsumer<? super T> consumer) {
+    public static <T> void forEachIndexed(Iterable<T> iterable, IndexedConsumer<? super T> consumer) {
         requireNonNull(iterable);
         requireNonNull(consumer);
         Iterator<T> iterator = iterable.iterator();
         int index = 0;
         while (iterator.hasNext()) {
             T value = iterator.next();
-            consumer.on(index++, value);
+            consumer.accept(index++, value);
         }
     }
 }

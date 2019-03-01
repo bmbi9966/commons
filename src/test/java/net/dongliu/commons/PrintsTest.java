@@ -34,7 +34,7 @@ class PrintsTest {
         assertEquals("1, 2, 3", writer.toString());
 
         writer = new StringWriter();
-        Prints.out(writer).sep(", ").end("").printMap(Map.of("1", 1, "2", 2));
-        assertEquals("1 = 1, 2 = 2", writer.toString());
+        Prints.out(writer).sep(", ").end("").printMap(Map.of("1", 1));
+        assertEquals("1 = 1", writer.toString());
     }
 }

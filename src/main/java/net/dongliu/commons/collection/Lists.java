@@ -1,6 +1,8 @@
 package net.dongliu.commons.collection;
 
 
+import net.dongliu.commons.function.IndexedConsumer;
+import net.dongliu.commons.function.LastAwareConsumer;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.*;
@@ -288,7 +290,7 @@ public class Lists {
      * @param list can not be null
      * @return two list
      */
-    public static <T> Pair<List<T>, List<T>> partition(List<T> list, Predicate<? super T> predicate) {
+    public static <T> PartitionResult<List<T>> partition(List<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
         return partitionToList(list, predicate);
     }
@@ -405,7 +407,7 @@ public class Lists {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEach(List<T> list, ElementConsumer<? super T> consumer) {
+    public static <T> void forEach(List<T> list, LastAwareConsumer<? super T> consumer) {
         requireNonNull(list);
         requireNonNull(consumer);
         Iterables.forEach(list, consumer);
@@ -418,7 +420,7 @@ public class Lists {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEachIndexed(List<T> list, IndexedElementConsumer<? super T> consumer) {
+    public static <T> void forEachIndexed(List<T> list, IndexedConsumer<? super T> consumer) {
         requireNonNull(list);
         requireNonNull(consumer);
         Iterables.forEachIndexed(list, consumer);

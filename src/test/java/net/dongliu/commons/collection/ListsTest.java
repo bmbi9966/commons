@@ -31,9 +31,9 @@ public class ListsTest {
 
     @Test
     public void partition() {
-        assertEquals(Pair.of(Lists.of(1), Lists.of(2, 3, 4)), Lists.partition(Lists.of(1, 2, 3, 4), i -> i < 2));
-        assertEquals(Pair.of(Lists.of(), Lists.of(1, 2, 3, 4)), Lists.partition(Lists.of(1, 2, 3, 4), i -> i < 1));
-        assertEquals(Pair.of(Lists.of(), Lists.of()), Lists.partition(Lists.<Integer>of(), i -> i < 1));
+        assertEquals(new PartitionResult<>(Lists.of(1), Lists.of(2, 3, 4)), Lists.partition(Lists.of(1, 2, 3, 4), i -> i < 2));
+        assertEquals(new PartitionResult<>(Lists.of(), Lists.of(1, 2, 3, 4)), Lists.partition(Lists.of(1, 2, 3, 4), i -> i < 1));
+        assertEquals(new PartitionResult<>(Lists.of(), Lists.of()), Lists.partition(Lists.<Integer>of(), i -> i < 1));
     }
 
     @Test

@@ -1,5 +1,8 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.function.IndexedConsumer;
+import net.dongliu.commons.function.LastAwareConsumer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -59,7 +62,7 @@ public class Collections2 {
      * @param list can not be null
      * @return two list
      */
-    public static <T> Pair<List<T>, List<T>> partitionToList(Collection<T> list, Predicate<? super T> predicate) {
+    public static <T> PartitionResult<List<T>> partitionToList(Collection<T> list, Predicate<? super T> predicate) {
         requireNonNull(list);
         List<T> list1 = new ArrayList<>(Math.min(16, list.size()));
         List<T> list2 = new ArrayList<>(Math.min(16, list.size()));
@@ -70,7 +73,7 @@ public class Collections2 {
                 list2.add(e);
             }
         }
-        return Pair.of(unmodifiableList(list1), unmodifiableList(list2));
+        return new PartitionResult<>(unmodifiableList(list1), unmodifiableList(list2));
     }
 
     /**
@@ -80,7 +83,7 @@ public class Collections2 {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEach(Collection<T> c, ElementConsumer<? super T> consumer) {
+    public static <T> void forEach(Collection<T> c, LastAwareConsumer<? super T> consumer) {
         Iterables.forEach(c, consumer);
     }
 
@@ -91,7 +94,7 @@ public class Collections2 {
      * @param consumer the consumer
      * @param <T>      the data type
      */
-    public static <T> void forEachIndexed(Collection<T> c, IndexedElementConsumer<? super T> consumer) {
+    public static <T> void forEachIndexed(Collection<T> c, IndexedConsumer<? super T> consumer) {
         Iterables.forEachIndexed(c, consumer);
     }
 }
