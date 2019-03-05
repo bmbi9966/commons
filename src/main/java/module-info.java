@@ -1,5 +1,4 @@
 module net.dongliu.commons {
-    requires jdk.charsets;
     requires static org.checkerframework.checker.qual;
 
     exports net.dongliu.commons;
