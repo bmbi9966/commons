@@ -70,8 +70,8 @@ public class ThreadPoolBuilder {
      * @return self
      */
     public ThreadPoolBuilder poolSize(int corePoolSize, int maxPoolSize) {
-        if (corePoolSize < 0 || maxPoolSize < corePoolSize) {
-            throw new IllegalArgumentException();
+        if (corePoolSize < 0 || maxPoolSize < corePoolSize || maxPoolSize < 1) {
+            throw new IllegalArgumentException("core pool size: " + corePoolSize + ", max pool size: " + maxPoolSize);
         }
         this.corePoolSize = corePoolSize;
         this.maxPoolSize = maxPoolSize;
