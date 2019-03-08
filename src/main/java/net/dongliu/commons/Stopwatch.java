@@ -76,6 +76,6 @@ public class Stopwatch {
      * Return clasped duration as milli seconds.
      */
     public long elaspedMillis() {
-        return elapsedNanos() / 1000_1000;
+        return elapsedNanos() / 1000_000;
     }
 }

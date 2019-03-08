@@ -12,33 +12,33 @@ public abstract class Sampler {
     /**
      * Return a sampler sample by random
      *
-     * @param rate the rate to do really operation.
-     *             A rate less then 0 never run the code, while a rate larger than or equal 1 always run.
+     * @param rate the rate to do really operation, should be [0,1]
+     * @throws IllegalArgumentException if rate value is illegal
      */
     public static Sampler random(double rate) {
-        return random(new Random(), rate);
+        return random(new Random(), checkRate(rate));
     }
 
     /**
      * Return a random sampler, with specific random instance, and rate
      *
      * @param random the random instance
-     * @param rate   the rate to do really operation.
-     *               A rate less then 0 never run the code, while a rate larger than or equal 1 always run.
+     * @param rate   the rate to do really operation, should be [0,1]
+     * @throws IllegalArgumentException if rate value is illegal
      */
     public static Sampler random(Random random, double rate) {
         requireNonNull(random);
-        return new RandomSampler(random, rate);
+        return new RandomSampler(random, checkRate(rate));
     }
 
     /**
      * Return a sampler sample by round robin
      *
-     * @param rate the rate to do really operation.
-     *             A rate less then 0 never run the code, while a rate larger than or equal 1 always run.
+     * @param rate the rate to do really operation, should be [0,1]
+     * @throws IllegalArgumentException if rate value is illegal
      */
     public static Sampler roundRobin(double rate) {
-        return new RoundRobinSampler(rate);
+        return new RoundRobinSampler(checkRate(rate));
     }
 
     /**
@@ -55,6 +55,12 @@ public abstract class Sampler {
      */
     public abstract boolean shouldRun();
 
+    private static double checkRate(double rate) {
+        if (rate < 0 || rate > 1.0) {
+            throw new IllegalArgumentException("illegal rate value: " + rate);
+        }
+        return rate;
+    }
 
     private static class RandomSampler extends Sampler {
         private final Random random;
