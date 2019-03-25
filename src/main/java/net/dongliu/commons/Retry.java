@@ -7,15 +7,17 @@ import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
 /**
- * For retry execute code.
+ * For retry execute code. This Class is immutable, and the instance should be reused.
  */
 public class Retry {
     private final int times;
     private final IntFunction<Duration> intervalProvider;
+    private final Class<? extends Throwable> exceptionType;
 
-    private Retry(int times, IntFunction<Duration> intervalProvider) {
+    private Retry(int times, IntFunction<Duration> intervalProvider, Class<? extends Throwable> exceptionType) {
         this.times = times;
         this.intervalProvider = intervalProvider;
+        this.exceptionType = exceptionType;
     }
 
     /**
@@ -40,7 +42,16 @@ public class Retry {
         if (times <= 0) {
             throw new IllegalArgumentException("illegal times: " + times);
         }
-        return new Retry(times, intervalProvider);
+        return new Retry(times, intervalProvider, Exception.class);
+    }
+
+    /**
+     * Retry only when thrown exception is specific type.
+     * Default is {@link Exception}, which means will not retry when {@link Error} is thrown.
+     */
+    public Retry onException(Class<? extends Throwable> exceptionType) {
+        requireNonNull(exceptionType);
+        return new Retry(times, intervalProvider, exceptionType);
     }
 
     /**
@@ -53,13 +64,17 @@ public class Retry {
             try {
                 runnable.run();
                 return;
-            } catch (Exception e) {
-                try {
-                    Thread.sleep(intervalProvider.apply(i).toMillis());
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    throw e;
+            } catch (Throwable e) {
+                if (exceptionType.isInstance(e)) {
+                    try {
+                        Thread.sleep(intervalProvider.apply(i).toMillis());
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        throw e;
+                    }
+                    continue;
                 }
+                throw e;
             }
         }
         // the last time run
