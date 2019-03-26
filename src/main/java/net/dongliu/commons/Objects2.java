@@ -56,7 +56,7 @@ public class Objects2 {
     }
 
     private static class ToStringCacheHolder {
-        private static final ClassValue<ToStringHelper> cache = new ClassValue<ToStringHelper>() {
+        private static final ClassValue<ToStringHelper> cache = new ClassValue<>() {
             @Override
             protected ToStringHelper computeValue(Class<?> type) {
                 return new ToStringHelper(requireNonNull(type));
