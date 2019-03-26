@@ -44,7 +44,7 @@ public abstract class RateLimiter {
     }
 
     /**
-     * Acquire one permits, block if needed
+     * Acquire one permit, block if needed
      */
     public void acquire() {
         acquire(1);
@@ -82,14 +82,18 @@ public abstract class RateLimiter {
     }
 
     /**
-     * Acquire one permits, block if needed
+     * Try to acquire one permit, not block.
+     *
+     * @return true if acquire permits succeed, false if do not have enough available permits.
      */
     public boolean tryAcquire() {
         return tryAcquire(1);
     }
 
     /**
-     * Acquire n permits, block if needed
+     * Try to acquire n permits, not block.
+     *
+     * @return true if acquire permits succeed, false if do not have enough available permits.
      */
     public boolean tryAcquire(int n) {
         checkCount(n);

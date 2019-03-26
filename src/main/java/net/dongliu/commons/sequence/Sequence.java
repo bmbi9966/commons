@@ -16,11 +16,19 @@ import static java.util.Objects.requireNonNull;
 /**
  * Sequence, like {@link java.util.stream.Stream}
  */
-public interface Sequence<T> {
+public interface Sequence<T> extends Iterator<T> {
 
+    @Override
     boolean hasNext();
 
+    @Override
     T next();
+
+    @Deprecated
+    @Override
+    default void remove() {
+        throw new UnsupportedOperationException("remove");
+    }
 
     /**
      * Create sequence from iterator
@@ -68,7 +76,7 @@ public interface Sequence<T> {
      */
     @SafeVarargs
     static <T> Sequence<T> of(T... values) {
-        return of(Arrays.asList(values));
+        return new ArraySequence<>(values);
     }
 
     /**
@@ -130,12 +138,12 @@ public interface Sequence<T> {
             return this;
         }
         if (!this.hasNext()) {
-            return new AggregatedSequence<>(Sequence.of(sequences));
+            return new AggregatedSequence<>(sequences.iterator());
         }
         var list = new ArrayList<Sequence<T>>(sequences.size() + 1);
         list.add(this);
         list.addAll(sequences);
-        return new AggregatedSequence<>(Sequence.of(list));
+        return new AggregatedSequence<>(list.iterator());
     }
 
     /**
@@ -268,7 +276,18 @@ public interface Sequence<T> {
         return new BufferedSequence<>(this, size);
     }
 
-
+    /**
+     * Return a sorted Sequence. A comparator is needed for sort.
+     * If T is sub type of Comparable and want to use it's compare impl for sorting, {@link Comparator#naturalOrder()} can be passed in.
+     *
+     * @param comparator the comparator to sort sequence
+     */
+    default Sequence<T> sortedBy(Comparator<? super T> comparator) {
+        requireNonNull(comparator);
+        List<T> list = toArrayList();
+        list.sort(comparator);
+        return of(list);
+    }
 
     /**
      * Consumer the remained element in this Sequence.
@@ -340,7 +359,7 @@ public interface Sequence<T> {
      * @param collectionSupplier to create a Collection instance
      * @param <R>      the returned Collection type
      */
-    default <R extends Collection<T>> R collectToCollection(Supplier<R> collectionSupplier) {
+    default <R extends Collection<T>> R toCollection(Supplier<R> collectionSupplier) {
         requireNonNull(collectionSupplier);
         var list = collectionSupplier.get();
         while (hasNext()) {
@@ -353,7 +372,7 @@ public interface Sequence<T> {
      * reduce to array list.
      */
     default ArrayList<T> toArrayList() {
-        return collectToCollection(ArrayList::new);
+        return toCollection(ArrayList::new);
     }
 
     /**
@@ -370,7 +389,7 @@ public interface Sequence<T> {
      * reduce to hash set
      */
     default HashSet<T> toHashSet() {
-        return collectToCollection(HashSet::new);
+        return toCollection(HashSet::new);
     }
 
     /**
@@ -394,7 +413,7 @@ public interface Sequence<T> {
      */
     default <K, V> HashMap<K, V> toHashMap(Function<? super T, ? extends K> keyMapper,
                                            Function<? super T, ? extends V> valueMapper) {
-        return collectToMap(HashMap::new, keyMapper, valueMapper);
+        return toMap(HashMap::new, keyMapper, valueMapper);
     }
 
     /**
@@ -407,9 +426,9 @@ public interface Sequence<T> {
      * @param <V>         map value type
      * @return a new map
      */
-    default <K, V, R extends Map<K, V>> R collectToMap(Supplier<R> mapSupplier,
-                                                       Function<? super T, ? extends K> keyMapper,
-                                                       Function<? super T, ? extends V> valueMapper) {
+    default <K, V, R extends Map<K, V>> R toMap(Supplier<R> mapSupplier,
+                                                Function<? super T, ? extends K> keyMapper,
+                                                Function<? super T, ? extends V> valueMapper) {
         requireNonNull(mapSupplier);
         requireNonNull(keyMapper);
         requireNonNull(valueMapper);
@@ -653,10 +672,11 @@ public interface Sequence<T> {
     /**
      * Get the max value by comparator. If Sequence has no element, return empty Optional.
      * Elements in this Sequence should not be null.
+     * If T is sub type of Comparable and want to use it's compare impl for comparing, {@link Comparator#naturalOrder()} can be passed in.
      *
      * @param comparator the comparator
      */
-    default Optional<T> maxBy(Comparator<T> comparator) {
+    default Optional<T> maxBy(Comparator<? super T> comparator) {
         if (!hasNext()) {
             return Optional.empty();
         }
@@ -673,10 +693,11 @@ public interface Sequence<T> {
     /**
      * Get the min value by comparator. If Sequence has no element, return empty Optional.
      * Elements in this Sequence should not be null.
+     * If T is sub type of Comparable and want to use it's compare impl for comparing, {@link Comparator#naturalOrder()} can be passed in.
      *
      * @param comparator the comparator
      */
-    default Optional<T> minBy(Comparator<T> comparator) {
+    default Optional<T> minBy(Comparator<? super T> comparator) {
         if (!hasNext()) {
             return Optional.empty();
         }
@@ -773,23 +794,18 @@ public interface Sequence<T> {
         }
         return true;
     }
-
-    default Iterator<T> asIterator() {
-        return new SequenceIterator<>(this);
-    }
-
     /**
      * Return a iterable that wrap this sequence, and can iterate only once.
      */
     default Iterable<T> asIterable() {
-        return this::asIterator;
+        return () -> this;
     }
 
     /**
      * Return a Stream that wrap this sequence.
      */
     default Stream<T> asStream() {
-        return Iterators.stream(this.asIterator());
+        return Iterators.stream(this);
     }
 
 }

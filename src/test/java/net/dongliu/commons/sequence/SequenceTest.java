@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.naturalOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -177,9 +178,9 @@ class SequenceTest {
 
     @Test
     void collectToCollection() {
-        assertEquals(List.of(1, 1, 2), Sequence.of(1, 1, 2).collectToCollection(ArrayList::new));
-        assertEquals(List.of(), Sequence.of().collectToCollection(ArrayList::new));
-        assertEquals(Set.of(1, 2), Sequence.of(1, 1, 2).collectToCollection(HashSet::new));
+        assertEquals(List.of(1, 1, 2), Sequence.of(1, 1, 2).toCollection(ArrayList::new));
+        assertEquals(List.of(), Sequence.of().toCollection(ArrayList::new));
+        assertEquals(Set.of(1, 2), Sequence.of(1, 1, 2).toCollection(HashSet::new));
     }
 
     @Test
@@ -206,8 +207,8 @@ class SequenceTest {
 
     @Test
     void collectToMap() {
-        assertEquals(Map.of("1", 1, "2", 2), Sequence.of(1, 1, 2).collectToMap(HashMap::new, String::valueOf, i -> i));
-        assertEquals(Map.of(), Sequence.of().collectToMap(HashMap::new, String::valueOf, i -> i));
+        assertEquals(Map.of("1", 1, "2", 2), Sequence.of(1, 1, 2).toMap(HashMap::new, String::valueOf, i -> i));
+        assertEquals(Map.of(), Sequence.of().toMap(HashMap::new, String::valueOf, i -> i));
     }
 
     @Test
@@ -288,14 +289,14 @@ class SequenceTest {
 
     @Test
     void maxBy() {
-        assertEquals(Optional.of(4), Sequence.of(1, 2, 3, 4).maxBy(Comparator.comparingInt(i -> i)));
-        assertEquals(Optional.empty(), Sequence.<Integer>of().maxBy(Comparator.comparingInt(i -> i)));
+        assertEquals(Optional.of(4), Sequence.of(1, 2, 3, 4).maxBy(naturalOrder()));
+        assertEquals(Optional.empty(), Sequence.<Integer>of().maxBy(naturalOrder()));
     }
 
     @Test
     void minBy() {
-        assertEquals(Optional.of(1), Sequence.of(1, 2, 3, 4).minBy(Comparator.comparingInt(i -> i)));
-        assertEquals(Optional.empty(), Sequence.<Integer>of().minBy(Comparator.comparingInt(i -> i)));
+        assertEquals(Optional.of(1), Sequence.of(1, 2, 3, 4).minBy(naturalOrder()));
+        assertEquals(Optional.empty(), Sequence.<Integer>of().minBy(naturalOrder()));
     }
 
     @Test
@@ -337,11 +338,6 @@ class SequenceTest {
     }
 
     @Test
-    void asIterator() {
-
-    }
-
-    @Test
     void asIterable() {
     }
 
@@ -349,5 +345,10 @@ class SequenceTest {
     void asStream() {
         assertEquals(List.of(1, 2, 3), Sequence.of(1, 2, 3).asStream().collect(Collectors.toList()));
 
+    }
+
+    @Test
+    void sortedBy() {
+        assertEquals(List.of(1, 2, 3), Sequence.of(2, 3, 1).sortedBy(naturalOrder()).toList());
     }
 }

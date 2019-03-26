@@ -23,4 +23,6 @@ class IteratorSequence<T> implements Sequence<T> {
     public T next() {
         return iterator.next();
     }
+
+
 }

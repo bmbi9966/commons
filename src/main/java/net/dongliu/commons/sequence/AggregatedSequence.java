@@ -1,5 +1,6 @@
 package net.dongliu.commons.sequence;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static java.util.Objects.requireNonNull;
@@ -10,10 +11,10 @@ import static java.util.Objects.requireNonNull;
  * @param <T>
  */
 class AggregatedSequence<T> implements Sequence<T> {
-    private final Sequence<? extends Sequence<T>> sequences;
+    private final Iterator<? extends Sequence<T>> sequences;
     private Sequence<T> current = Sequence.of();
 
-    AggregatedSequence(Sequence<? extends Sequence<T>> sequences) {
+    AggregatedSequence(Iterator<? extends Sequence<T>> sequences) {
         this.sequences = sequences;
     }
 
