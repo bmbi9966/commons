@@ -1,9 +1,9 @@
 package net.dongliu.commons;
 
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import net.dongliu.commons.collection.Lists;
 import net.dongliu.commons.reflection.Classes;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -51,6 +51,7 @@ public class Objects2 {
     /**
      * Get a ToStringHelper to convert specific type object to string.
      */
+    @Deprecated
     public static ToStringHelper toStringHelper(Class<?> cls) {
         return new ToStringHelper(requireNonNull(cls));
     }
@@ -74,6 +75,7 @@ public class Objects2 {
      * @param value the object to convert to string
      * @return string represent of value
      */
+    @Deprecated
     public static String toString(@Nullable Object value) {
         if (value == null) {
             return "null";
@@ -86,6 +88,7 @@ public class Objects2 {
      * A class to convert object to string, by concat each filed name and value, using reflection.
      * This class is immutable, use should reuse ToStringHelper for all instances of one type.
      */
+    @Deprecated
     public static class ToStringHelper {
         private final Class<?> cls;
         private final List<Field> memberFields;

@@ -30,7 +30,7 @@ public class Maps {
      */
     public static <K, V> Map<K, V> nullToEmpty(@Nullable Map<K, V> map) {
         if (map == null) {
-            return of();
+            return Map.of();
         }
         return map;
     }
@@ -46,7 +46,7 @@ public class Maps {
      * Create new HashMap.
      */
     @SafeVarargs
-    public static <K, V> HashMap<K, V> newHashMap(Map.Entry<K, V>... entries) {
+    public static <K, V> HashMap<K, V> newHashMap(Map.Entry<? extends K, ? extends V>... entries) {
         int initSize = Math.max(DEFAULT_INIT_CAPACITY, (int) (entries.length / DEFAULT_LOAD_FACTOR));
         HashMap<K, V> map = new HashMap<>(initSize, DEFAULT_LOAD_FACTOR);
         for (var entry : entries) {
@@ -66,7 +66,7 @@ public class Maps {
      * Create a mutable, case insensitive map.
      */
     @SafeVarargs
-    public static <V> Map<String, V> newCaseInsensitiveMap(Map.Entry<String, V>... entries) {
+    public static <V> Map<String, V> newCaseInsensitiveMap(Map.Entry<String, ? extends V>... entries) {
         var map = new TreeMap<String, V>(String.CASE_INSENSITIVE_ORDER);
         for (var entry : entries) {
             map.put(requireNonNull(entry.getKey()), requireNonNull(entry.getValue()));
@@ -152,7 +152,7 @@ public class Maps {
      */
     @Deprecated
     @SafeVarargs
-    public static <K, V> Map<K, V> ofEntries(Map.Entry<K, V>... entries) {
+    public static <K, V> Map<K, V> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
         return Map.ofEntries(entries);
     }
 
@@ -167,13 +167,14 @@ public class Maps {
      * @param <U>         the target value type
      * @return new map
      */
-    public static <K, R, V, U> Map<R, U> convert(Map<K, V> map, Function<? super K, ? extends R> keyMapper,
+    public static <K, R, V, U> Map<R, U> convert(Map<? extends K, ? extends V> map,
+                                                 Function<? super K, ? extends R> keyMapper,
                                                  Function<? super V, ? extends U> valueMapper) {
         requireNonNull(map);
         requireNonNull(keyMapper);
         requireNonNull(valueMapper);
         if (map.isEmpty()) {
-            return Maps.of();
+            return Map.of();
         }
         Map<R, U> result = new HashMap<>();
         map.forEach((k, v) -> result.put(keyMapper.apply(k), valueMapper.apply(v)));
@@ -190,7 +191,8 @@ public class Maps {
      * @param <U>         the target value type
      * @return new map
      */
-    public static <K, V, U> Map<K, U> convert(Map<K, V> map, Function<? super V, ? extends U> valueMapper) {
+    public static <K, V, U> Map<K, U> convert(Map<? extends K, ? extends V> map,
+                                              Function<? super V, ? extends U> valueMapper) {
         requireNonNull(map);
         requireNonNull(valueMapper);
         return convert(map, k -> k, valueMapper);
@@ -205,14 +207,15 @@ public class Maps {
      * @param <V>       the value type
      * @return the new map
      */
-    public static <K, V> Map<K, V> filter(Map<K, V> map, BiPredicate<? super K, ? super V> predicate) {
+    public static <K, V> Map<K, V> filter(Map<? extends K, ? extends V> map,
+                                          BiPredicate<? super K, ? super V> predicate) {
         requireNonNull(map);
         requireNonNull(predicate);
         if (map.isEmpty()) {
-            return Maps.of();
+            return Map.of();
         }
         Map<K, V> result = new HashMap<>();
-        for (Map.Entry<K, V> entry : map.entrySet()) {
+        for (var entry : map.entrySet()) {
             if (predicate.test(entry.getKey(), entry.getValue())) {
                 result.put(entry.getKey(), entry.getValue());
             }
@@ -230,7 +233,7 @@ public class Maps {
      * @param <V>  map value type
      * @return new map
      */
-    public static <K, V> Map<K, V> merge(Map<K, V> map1, Map<K, V> map2) {
+    public static <K, V> Map<K, V> merge(Map<? extends K, ? extends V> map1, Map<? extends K, ? extends V> map2) {
         requireNonNull(map1);
         requireNonNull(map2);
         Map<K, V> map = new HashMap<>();
@@ -252,7 +255,7 @@ public class Maps {
         requireNonNull(keys);
         requireNonNull(valueMaker);
         if (keys.isEmpty()) {
-            return Maps.of();
+            return Map.of();
         }
         Map<K, V> map = new HashMap<>();
         for (K key : keys) {
@@ -275,7 +278,7 @@ public class Maps {
         requireNonNull(values);
         requireNonNull(keyMaker);
         if (values.isEmpty()) {
-            return Maps.of();
+            return Map.of();
         }
         Map<K, V> map = new HashMap<>();
         for (V value : values) {

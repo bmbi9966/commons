@@ -271,7 +271,7 @@ public class Lists {
      * @param <T>        the element type
      * @return sorted List
      */
-    public static <T, R extends Comparable<R>> List<T> sort(List<T> list, Function<? super T, R> comparator) {
+    public static <T, R extends Comparable<R>> List<T> sort(List<? extends T> list, Function<? super T, R> comparator) {
         requireNonNull(list);
         List<T> newList = new ArrayList<>(list);
         newList.sort(Comparator.comparing(comparator));
@@ -317,12 +317,12 @@ public class Lists {
      * @return new List
      */
     @SafeVarargs
-    public static <T> List<T> concat(List<T> list1, List<T> list2, List<T>... otherLists) {
+    public static <T> List<T> concat(List<? extends T> list1, List<? extends T> list2, List<? extends T>... otherLists) {
         requireNonNull(list1);
         requireNonNull(list2);
         requireNonNull(otherLists);
         int totalSize = addExact(list1.size(), list2.size());
-        for (List<T> list : otherLists) {
+        for (var list : otherLists) {
             requireNonNull(list);
             totalSize = addExact(totalSize, list.size());
         }
@@ -330,7 +330,7 @@ public class Lists {
         List<T> list = new ArrayList<>(totalSize);
         list.addAll(list1);
         list.addAll(list2);
-        for (List<T> otherList : otherLists) {
+        for (var otherList : otherLists) {
             list.addAll(otherList);
         }
         return unmodifiableList(list);
