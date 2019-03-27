@@ -20,8 +20,9 @@ public class Sys {
         return System.getProperty("java.specification.version");
     }
 
-    private static final Lazy<SpecificationVersion> specVersion = Lazy.of(() ->
-            SpecificationVersion.parse(javaSpecVersionName()));
+    private static class SpecVersionHolder {
+        private static final SpecificationVersion specVersion = SpecificationVersion.parse(javaSpecVersionName());
+    }
 
     /**
      * Get Java Runtime Environment specification version
@@ -29,7 +30,7 @@ public class Sys {
      * @throws UnknownSpecificationVersionException if version name is unknown
      */
     public static SpecificationVersion javaSpecVersion() {
-        return specVersion.get();
+        return SpecVersionHolder.specVersion;
     }
 
     /**
@@ -96,26 +97,31 @@ public class Sys {
         return System.getProperty("os.name");
     }
 
-    private static final Lazy<OSType> osType = Lazy.of(() -> {
-        String OS = osName().toLowerCase(Locale.ENGLISH);
-        OSType type;
-        if ((OS.contains("mac")) || (OS.contains("darwin"))) {
-            type = OSType.macOS;
-        } else if (OS.contains("win")) {
-            type = OSType.windows;
-        } else if (OS.contains("nux")) {
-            type = OSType.unix;
-        } else {
-            type = OSType.other;
+    private static class OSTypeHolder {
+        private static final OSType osType;
+
+        static {
+            String OS = osName().toLowerCase(Locale.ENGLISH);
+            OSType type;
+            if ((OS.contains("mac")) || (OS.contains("darwin"))) {
+                type = OSType.macOS;
+            } else if (OS.contains("win")) {
+                type = OSType.windows;
+            } else if (OS.contains("nux")) {
+                type = OSType.unix;
+            } else {
+                type = OSType.other;
+            }
+            osType = type;
         }
-        return type;
-    });
+    }
+
 
     /**
      * Get operator system type
      */
     public static OSType osType() {
-        return osType.get();
+        return OSTypeHolder.osType;
     }
 
     /**

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("deprecation")
@@ -64,4 +65,15 @@ public class MapsTest {
     void fromValues() {
         assertEquals(Maps.of("1", 1, "2", 2, "3", 3), Maps.fromValues(Lists.of(1, 2, 3), String::valueOf));
     }
+
+    @Test
+    void newHashMap() {
+    }
+
+    @Test
+    void newCaseInsensitiveMap() {
+        var map = Maps.newCaseInsensitiveMap(entry("test", 1), entry("TEST", 2));
+        assertEquals(Maps.of("test", 2), map);
+    }
+
 }

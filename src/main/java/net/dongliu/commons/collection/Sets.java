@@ -2,6 +2,7 @@ package net.dongliu.commons.collection;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -30,6 +31,79 @@ public class Sets {
         if (set == null) {
             return Set.of();
         }
+        return set;
+    }
+
+    /**
+     * Create new empty HashSet
+     */
+    public static <T> HashSet<T> newHashSet() {
+        return new HashSet<>();
+    }
+
+    /**
+     * Create new HashSet.
+     */
+    public static <T> HashSet<T> newHashSet(T v) {
+        HashSet<T> set = new HashSet<>();
+        set.add(v);
+        return set;
+    }
+
+    /**
+     * Create new HashSet.
+     */
+    public static <T> HashSet<T> newHashSet(T v1, T v2) {
+        HashSet<T> set = new HashSet<>();
+        set.add(v1);
+        set.add(v2);
+        return set;
+    }
+
+    /**
+     * Create new HashSet.
+     */
+    public static <T> HashSet<T> newHashSet(T v1, T v2, T v3) {
+        HashSet<T> set = new HashSet<>();
+        set.add(v1);
+        set.add(v2);
+        set.add(v3);
+        return set;
+    }
+
+    /**
+     * Create new HashSet.
+     */
+    public static <T> HashSet<T> newHashSet(T v1, T v2, T v3, T v4) {
+        HashSet<T> set = new HashSet<>();
+        set.add(v1);
+        set.add(v2);
+        set.add(v3);
+        set.add(v4);
+        return set;
+    }
+
+    /**
+     * Create new HashSet.
+     */
+    public static <T> HashSet<T> newHashSet(T v1, T v2, T v3, T v4, T v5) {
+        HashSet<T> set = new HashSet<>();
+        set.add(v1);
+        set.add(v2);
+        set.add(v3);
+        set.add(v4);
+        set.add(v5);
+        return set;
+    }
+
+    /**
+     * Create new immutable List. Values cannot be null.
+     * This method will do defensive copy for the param values.
+     */
+    @SafeVarargs
+    public static <T> HashSet<T> newHashSet(T... values) {
+        HashSet<T> set = new HashSet<>(Math.max(INIT_CAPACITY, (int) (values.length / LOAD_FACTOR)));
+        Collections.addAll(set, values);
         return set;
     }
 

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
@@ -18,6 +19,9 @@ import static java.util.Objects.requireNonNull;
  */
 public class Maps {
 
+    private static final int DEFAULT_INIT_CAPACITY = 16;
+    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
     /**
      * If map is null, return immutable empty map; else return map self.
      *
@@ -27,6 +31,45 @@ public class Maps {
     public static <K, V> Map<K, V> nullToEmpty(@Nullable Map<K, V> map) {
         if (map == null) {
             return of();
+        }
+        return map;
+    }
+
+    /**
+     * Create new HashMap.
+     */
+    public static <K, V> HashMap<K, V> newHashMap() {
+        return new HashMap<>();
+    }
+
+    /**
+     * Create new HashMap.
+     */
+    @SafeVarargs
+    public static <K, V> HashMap<K, V> newHashMap(Map.Entry<K, V>... entries) {
+        int initSize = Math.max(DEFAULT_INIT_CAPACITY, (int) (entries.length / DEFAULT_LOAD_FACTOR));
+        HashMap<K, V> map = new HashMap<>(initSize, DEFAULT_LOAD_FACTOR);
+        for (var entry : entries) {
+            map.put(requireNonNull(entry.getKey()), requireNonNull(entry.getValue()));
+        }
+        return map;
+    }
+
+    /**
+     * Create a mutable, case insensitive map.
+     */
+    public static <V> Map<String, V> newCaseInsensitiveMap() {
+        return new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    }
+
+    /**
+     * Create a mutable, case insensitive map.
+     */
+    @SafeVarargs
+    public static <V> Map<String, V> newCaseInsensitiveMap(Map.Entry<String, V>... entries) {
+        var map = new TreeMap<String, V>(String.CASE_INSENSITIVE_ORDER);
+        for (var entry : entries) {
+            map.put(requireNonNull(entry.getKey()), requireNonNull(entry.getValue()));
         }
         return map;
     }
