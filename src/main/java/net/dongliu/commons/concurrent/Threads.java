@@ -66,14 +66,19 @@ public class Threads {
         }
         var untilNanos = System.nanoTime() + nanos;
         long toSleepNanos = nanos;
+        boolean interrupted = false;
         do {
             try {
                 sleepNanos0(toSleepNanos);
-            } catch (InterruptedException ignore) {
+            } catch (InterruptedException e) {
+                interrupted = true;
             }
             toSleepNanos = untilNanos - System.nanoTime();
 
-        } while (toSleepNanos > 10);
+        } while (toSleepNanos > 0);
+        if (interrupted) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
