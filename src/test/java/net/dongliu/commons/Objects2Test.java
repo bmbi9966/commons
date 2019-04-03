@@ -17,6 +17,7 @@ public class Objects2Test {
     }
 
     @Test
+    @Deprecated
     public void toStringHelper() {
         assertEquals("null", Objects2.toStringHelper(Object.class).toString(null));
         assertEquals("Integer{value=1}", Objects2.toStringHelper(Integer.class).toString(1));
@@ -41,6 +42,7 @@ public class Objects2Test {
     }
 
     @Test
+    @Deprecated
     void testToString() {
         assertEquals("null", Objects2.toString(null));
         assertEquals("Integer{value=1}", Objects2.toString(1));

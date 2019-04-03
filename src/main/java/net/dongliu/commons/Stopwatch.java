@@ -1,6 +1,7 @@
 package net.dongliu.commons;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A tool for measuring elapsed time. This class is not thread-safe.
@@ -12,7 +13,11 @@ public class Stopwatch {
     // 0 init; 1 started; 2 stopped
     private int status;
     // elapsed nanos when stop method is called
-    private long stopElapesdNanos;
+    private long stopElapsedNanos;
+
+    private static final int STATUS_UNSTARTED = 0;
+    private static final int STATUS_STARTED = 1;
+    private static final int STATUS_STOPPED = 2;
 
     private Stopwatch() {
     }
@@ -29,11 +34,11 @@ public class Stopwatch {
      * Start the watch
      */
     public Stopwatch start() {
-        if (this.status == 1) {
+        if (this.status == STATUS_STARTED) {
             throw new IllegalStateException("Stopwatch already started.");
         }
         this.startNanos = System.nanoTime();
-        this.status = 1;
+        this.status = STATUS_STARTED;
         return this;
     }
 
@@ -41,41 +46,49 @@ public class Stopwatch {
      * Stop the stopwatch, the following calls to elapsed will return elapsed time as this time.
      */
     public Stopwatch stop() {
-        if (this.status != 1) {
-            throw new IllegalStateException("Stop watch not started");
+        if (this.status != STATUS_STARTED) {
+            throw new IllegalStateException("Stop watch not started, status: " + status);
         }
-        this.stopElapesdNanos = System.nanoTime() - startNanos;
-        this.status = 2;
+        this.stopElapsedNanos = System.nanoTime() - startNanos;
+        this.status = STATUS_STOPPED;
         return this;
     }
 
     /**
-     * Return clasped duration.
+     * Return elapsed duration.
      */
-    public Duration elasped() {
+    public Duration elapsed() {
         return Duration.ofNanos(elapsedNanos());
+    }
+
+    /**
+     * Return elapsed duration as specific time unit value.
+     */
+    public long elapsed(TimeUnit timeUnit) {
+        return timeUnit.convert(elapsedNanos(), TimeUnit.NANOSECONDS);
     }
 
     /**
      * Return clasped duration as nano seconds.
      */
     public long elapsedNanos() {
-        if (status == 0) {
-            throw new IllegalStateException("Stopwatch not started");
-        }
-        if (status == 1) {
-            return System.nanoTime() - startNanos;
-        } else if (status == 2) {
-            return stopElapesdNanos;
+        switch (status) {
+            case STATUS_UNSTARTED:
+                throw new IllegalStateException("Stopwatch not started");
+            case STATUS_STARTED:
+                return System.nanoTime() - startNanos;
+            case STATUS_STOPPED:
+                return stopElapsedNanos;
+            default:
+                throw new IllegalStateException("should not happen, status: " + status);
         }
 
-        throw new RuntimeException("should not happen, status: " + status);
     }
 
     /**
      * Return clasped duration as milli seconds.
      */
-    public long elaspedMillis() {
-        return elapsedNanos() / 1000_000;
+    public long elapsedMillis() {
+        return elapsed(TimeUnit.MILLISECONDS);
     }
 }

@@ -1,6 +1,7 @@
 package net.dongliu.commons.concurrent;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.concurrent.*;
 
 import static java.util.Objects.requireNonNull;
@@ -90,5 +91,32 @@ public class Executors2 {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
         }
+    }
+
+    /**
+     * Schedule task at specific time. If the task's run time is already passed, schedule it right now.
+     */
+    public static ScheduledFuture<?> scheduleAt(ScheduledExecutorService executor, Runnable runnable, Instant instant) {
+        var now = Instant.now();
+        long nanos = (instant.getEpochSecond() - now.getEpochSecond()) * 1000_000_000
+                + (instant.getNano() - now.getNano());
+        if (nanos < 0) {
+            nanos = 0;
+        }
+        return executor.schedule(runnable, nanos, TimeUnit.NANOSECONDS);
+    }
+
+    /**
+     * Schedule task at specific time. If the task's run time is already passed, schedule it right now.
+     */
+    public static <T> ScheduledFuture<T> scheduleAt(ScheduledExecutorService executor,
+                                                    Callable<T> callable, Instant instant) {
+        var now = Instant.now();
+        long nanos = (instant.getEpochSecond() - now.getEpochSecond()) * 1000_000_000
+                + (instant.getNano() - now.getNano());
+        if (nanos < 0) {
+            nanos = 0;
+        }
+        return executor.schedule(callable, nanos, TimeUnit.NANOSECONDS);
     }
 }

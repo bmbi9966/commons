@@ -1,5 +1,7 @@
 package net.dongliu.commons.function;
 
+import java.util.concurrent.Callable;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -23,6 +25,17 @@ public class Runnables {
             return runnable;
         }
         return new OnceRunnable(runnable);
+    }
+
+    /**
+     * Wrap runnable to a Callable, that always return null as result
+     */
+    public static <T> Callable<T> asCallable(Runnable runnable) {
+        requireNonNull(runnable);
+        return () -> {
+            runnable.run();
+            return null;
+        };
     }
 
     private static class OnceRunnable implements Runnable {

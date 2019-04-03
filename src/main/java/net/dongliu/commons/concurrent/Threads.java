@@ -1,6 +1,9 @@
 package net.dongliu.commons.concurrent;
 
 import java.time.Duration;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Utils for thread
@@ -17,6 +20,40 @@ public class Threads {
         Thread thread = new Thread(runnable);
         thread.start();
         return thread;
+    }
+
+    /**
+     * Start a thread, run task async, and return a future. When task finished, the thread exits.
+     */
+    public static CompletableFuture<Void> runAsync(Runnable runnable) {
+        var future = new CompletableFuture<Void>();
+        Thread thread = new Thread(() -> {
+            try {
+                runnable.run();
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+        thread.start();
+        return future;
+    }
+
+    /**
+     * Start a thread, run task async, and return future contains the result. When task finished, the thread exits.
+     */
+    public static <T> CompletableFuture<T> callAsync(Callable<T> callable) {
+        var future = new CompletableFuture<T>();
+        Thread thread = new Thread(() -> {
+            try {
+                T result = callable.call();
+                future.complete(result);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+        thread.start();
+        return future;
     }
 
     /**
@@ -52,7 +89,7 @@ public class Threads {
         if (millis < 0) {
             throw new IllegalArgumentException("timeout value is negative: " + millis);
         }
-        sleepNanos(millis * 1000_000);
+        sleepNanos(TimeUnit.MILLISECONDS.toNanos(millis));
     }
 
     /**
@@ -64,12 +101,15 @@ public class Threads {
         if (nanos < 0) {
             throw new IllegalArgumentException("timeout value is negative: " + nanos);
         }
+        if (nanos == 0) {
+            return;
+        }
         var untilNanos = System.nanoTime() + nanos;
         long toSleepNanos = nanos;
         boolean interrupted = false;
         do {
             try {
-                sleepNanos0(toSleepNanos);
+                TimeUnit.NANOSECONDS.sleep(toSleepNanos);
             } catch (InterruptedException e) {
                 interrupted = true;
             }
@@ -79,15 +119,6 @@ public class Threads {
         if (interrupted) {
             Thread.currentThread().interrupt();
         }
-    }
-
-    /**
-     * Sleep with nanos uniterruptablly
-     *
-     * @param nanos the time to sleep
-     */
-    public static void sleepNanos0(long nanos) throws InterruptedException {
-        Thread.sleep(nanos / 1000_000, (int) (nanos % 1000_000));
     }
 
 }

@@ -16,7 +16,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  */
 public class Futures {
 
-    private static final Lazy<ScheduledExecutorService> executorService = Lazy.of(
+    private static final Lazy<ScheduledExecutorService> futureScheduleExecutor = Lazy.of(
             () -> new ScheduledThreadPoolExecutor(1, ThreadFactories.newDaemonThreadFactory("delay-executor")));
 
     /**
@@ -90,7 +90,7 @@ public class Futures {
     public static <T> CompletableFuture<T> delay(T value, Duration duration) {
         requireNonNull(duration);
         CompletableFuture<T> f = new CompletableFuture<>();
-        executorService.get().schedule(() -> f.complete(value), duration.toMillis(), MILLISECONDS);
+        futureScheduleExecutor.get().schedule(() -> f.complete(value), duration.toMillis(), MILLISECONDS);
         return f;
     }
 
@@ -107,7 +107,7 @@ public class Futures {
         requireNonNull(future);
         requireNonNull(duration);
         CompletableFuture<T> f = new CompletableFuture<>();
-        ScheduledFuture<?> sf = executorService.get().schedule(() -> {
+        ScheduledFuture<?> sf = futureScheduleExecutor.get().schedule(() -> {
             if (!future.isDone()) {
                 future.cancel(true);
                 f.completeExceptionally(new TimeoutException());

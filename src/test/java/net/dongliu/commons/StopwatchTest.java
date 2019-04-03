@@ -26,20 +26,20 @@ class StopwatchTest {
         assertThrows(IllegalStateException.class, stopwatch::stop);
         stopwatch.start();
         stopwatch.stop();
-        var elasped = stopwatch.elasped();
+        var elapsed = stopwatch.elapsed();
         Thread.sleep(10);
-        assertEquals(elasped, stopwatch.elasped());
+        assertEquals(elapsed, stopwatch.elapsed());
 
     }
 
     @Test
-    void elasped() throws InterruptedException {
+    void elapsed() throws InterruptedException {
         var stopwatch = Stopwatch.create().start();
         Thread.sleep(20);
-        assertTrue(stopwatch.elasped().compareTo(Duration.ZERO) > 0);
+        assertTrue(stopwatch.elapsed().compareTo(Duration.ZERO) > 0);
         stopwatch.stop();
         stopwatch.start();
-        assertTrue(stopwatch.elasped().compareTo(Duration.ofMillis(10)) < 0);
+        assertTrue(stopwatch.elapsed().compareTo(Duration.ofMillis(10)) < 0);
 
     }
 
@@ -48,6 +48,12 @@ class StopwatchTest {
     }
 
     @Test
-    void elaspedMillis() {
+    void elapsedMillis() throws InterruptedException {
+        var stopwatch = Stopwatch.create().start();
+        Thread.sleep(20);
+        assertTrue(Math.abs(stopwatch.elapsedMillis() - 20) < 5);
+        stopwatch.stop();
+        stopwatch.start();
+        assertTrue(stopwatch.elapsedMillis() < 5);
     }
 }

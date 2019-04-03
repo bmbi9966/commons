@@ -10,4 +10,7 @@ module net.dongliu.commons {
     exports net.dongliu.commons.io;
     exports net.dongliu.commons.reflection;
     exports net.dongliu.commons.regex;
+    exports net.dongliu.commons.net;
+    exports net.dongliu.commons.sequence;
+    exports net.dongliu.commons.time;
 }

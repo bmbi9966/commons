@@ -56,6 +56,7 @@ public class Objects2 {
         return new ToStringHelper(requireNonNull(cls));
     }
 
+    @Deprecated
     private static class ToStringCacheHolder {
         private static final ClassValue<ToStringHelper> cache = new ClassValue<>() {
             @Override
