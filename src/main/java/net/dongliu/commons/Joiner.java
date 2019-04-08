@@ -1,5 +1,6 @@
 package net.dongliu.commons;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.StringJoiner;
@@ -82,7 +83,7 @@ public class Joiner {
      * @param values the string items
      * @return new string
      */
-    public String join(@Nullable Object... values) {
+    public String join(@Nullable Object @NonNull ... values) {
         StringJoiner joiner = new StringJoiner(delimiter, prefix, suffix);
         for (Object o : values) {
             if (o == null) {

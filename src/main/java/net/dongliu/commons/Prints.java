@@ -283,10 +283,6 @@ public class Prints {
         }
 
         private void write(String str) {
-            if (str.isEmpty()) {
-                return;
-            }
-
             try {
                 out.append(str);
             } catch (IOException e) {

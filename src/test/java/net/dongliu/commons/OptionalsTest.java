@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OptionalsTest {
 
+    @Deprecated
     @Test
     public void stream() {
         assertEquals(1, Optionals.stream(Optional.of(1)).count());

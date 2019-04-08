@@ -14,13 +14,11 @@ public class Optionals {
 
     /**
      * Convert Optional to Stream.
-     * Note: Java9 has stream method in Optional already.
+     * @deprecated using {@link Optional#stream()}
      */
+    @Deprecated
     public static <T> Stream<T> stream(Optional<T> optional) {
-        if (optional.isPresent()) {
-            return Stream.of(optional.get());
-        }
-        return Stream.empty();
+        return optional.stream();
     }
 
     /**
@@ -50,10 +48,7 @@ public class Optionals {
      */
     @Deprecated
     public static <T> Optional<T> or(Optional<T> optional, Supplier<Optional<T>> supplier) {
-        if (optional.isPresent()) {
-            return optional;
-        }
-        return supplier.get();
+        return optional.or(supplier);
     }
 
     /**

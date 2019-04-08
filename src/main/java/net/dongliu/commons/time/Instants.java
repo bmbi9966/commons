@@ -1,7 +1,8 @@
 package net.dongliu.commons.time;
 
 import java.time.*;
-import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Utils for instant
@@ -12,8 +13,8 @@ public class Instants {
      * subtract two instant
      */
     public static Duration subtract(Instant minuend, Instant subtrahend) {
-        Objects.requireNonNull(minuend);
-        Objects.requireNonNull(subtrahend);
+        requireNonNull(minuend);
+        requireNonNull(subtrahend);
         if (minuend.equals(subtrahend)) {
             return Duration.ZERO;
         }
@@ -25,7 +26,8 @@ public class Instants {
      * Instant to LocalDateTime with specified zone
      */
     public static LocalDateTime toLocalDateTime(Instant instant, ZoneId zoneId) {
-        Objects.requireNonNull(instant);
+        requireNonNull(instant);
+        requireNonNull(zoneId);
         return ZonedDateTime.ofInstant(instant, zoneId).toLocalDateTime();
     }
 
