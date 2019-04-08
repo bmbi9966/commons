@@ -26,7 +26,7 @@ public abstract class ReferenceCounted<T extends ReferenceCounted<T>> {
      * Return current reference count
      */
     public int refCount() {
-        return count;
+        return (int) COUNT.getOpaque(this);
     }
 
     /**

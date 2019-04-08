@@ -1,5 +1,7 @@
 package net.dongliu.commons;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -21,7 +23,19 @@ import static java.util.Objects.requireNonNull;
 public class Lazy<T> implements Supplier<T> {
 
     private Supplier<T> supplier;
-    private volatile T value;
+    private T value;
+
+    private static final VarHandle valueHandle;
+
+    static {
+        try {
+            valueHandle = MethodHandles.lookup()
+                    .findVarHandle(Lazy.class, "value", Object.class);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            // should not happen
+            throw new RuntimeException(e);
+        }
+    }
 
     private Lazy(Supplier<T> supplier) {
         this.supplier = requireNonNull(supplier);
@@ -47,7 +61,8 @@ public class Lazy<T> implements Supplier<T> {
         if (value == null) {
             synchronized (this) {
                 if (value == null) {
-                    this.value = requireNonNull(supplier.get());
+                    T value = requireNonNull(supplier.get());
+                    valueHandle.setVolatile(this, value);
                 }
             }
         }
