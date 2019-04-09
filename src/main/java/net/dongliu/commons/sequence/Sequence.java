@@ -58,6 +58,9 @@ public interface Sequence<T> extends Iterator<T> {
         if (collection.isEmpty()) {
             return of();
         }
+        if (collection instanceof List && collection instanceof RandomAccess) {
+            return new RandomAccessSequence<>((List<T>) collection);
+        }
         return of(collection.iterator());
     }
 
