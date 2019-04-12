@@ -65,6 +65,13 @@ public interface Sequence<T> extends Iterator<T> {
     }
 
     /**
+     * Create a new Sequence from stream. The stream is then terminated.
+     */
+    static <T> Sequence<T> of(Stream<T> stream) {
+        return Sequence.of(stream.iterator());
+    }
+
+    /**
      * Return a empty sequence
      *
      * @param <T> the element type
