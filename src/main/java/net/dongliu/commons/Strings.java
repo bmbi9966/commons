@@ -119,16 +119,7 @@ public class Strings {
         if (times < 0) {
             throw new IllegalArgumentException("repeat count less then zero");
         }
-
-        if (str.isEmpty() || times == 0) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder(str.length() * times);
-        for (int i = 0; i < times; i++) {
-            sb.append(str);
-        }
-        return sb.toString();
+        return str.repeat(times);
     }
 
     /**

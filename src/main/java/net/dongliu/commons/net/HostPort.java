@@ -7,6 +7,8 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Host and Port for a net address
+ *
+ * TODO: ipv6 address handle
  */
 public class HostPort {
     private final String host;
@@ -41,7 +43,7 @@ public class HostPort {
      *
      * @throws IllegalArgumentException if address is not illegal
      */
-    public static HostPort of(String address) {
+    public static HostPort parse(String address) {
         requireNonNull(address);
         var index = address.indexOf(':');
         if (index < 0) {
@@ -79,6 +81,25 @@ public class HostPort {
      */
     public String host() {
         return host;
+    }
+
+    /**
+     * If has port part
+     */
+    public boolean hasPort() {
+        return port != -1;
+    }
+
+    /**
+     * If has port, return port; else throw IllegalStateException
+     *
+     * @throws IllegalStateException if port is not set
+     */
+    public int portOrThrow() {
+        if (port == -1) {
+            throw new IllegalStateException("do not set a port");
+        }
+        return port;
     }
 
     /**
