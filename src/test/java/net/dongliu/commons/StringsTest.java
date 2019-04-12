@@ -209,4 +209,20 @@ public class StringsTest {
         assertEquals("\n", Strings.joinLines(List.of("")));
         assertEquals("1\n\n", Strings.joinLines(List.of("1", "")));
     }
+
+    @Test
+    void prependIfMissing() {
+        assertEquals("tt", Strings.prependIfMissing("", "tt"));
+        assertEquals("tta", Strings.prependIfMissing("a", "tt"));
+        assertEquals("ttt", Strings.prependIfMissing("ttt", "tt"));
+        assertEquals("a", Strings.prependIfMissing("a", ""));
+    }
+
+    @Test
+    void appendIfMissing() {
+        assertEquals("tt", Strings.appendIfMissing("", "tt"));
+        assertEquals("att", Strings.appendIfMissing("a", "tt"));
+        assertEquals("ttt", Strings.appendIfMissing("ttt", "tt"));
+        assertEquals("a", Strings.appendIfMissing("a", ""));
+    }
 }

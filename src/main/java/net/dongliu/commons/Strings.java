@@ -469,4 +469,34 @@ public class Strings {
         }
         return sb.toString();
     }
+
+    /**
+     * If str do not has specific prefix, return a new String prepending the prefix; return str its self otherwise.
+     */
+    public static String prependIfMissing(String str, String prefix) {
+        requireNonNull(str);
+        requireNonNull(prefix);
+        if (str.isEmpty()) {
+            return prefix;
+        }
+        if (!str.startsWith(prefix)) {
+            return prefix + str;
+        }
+        return str;
+    }
+
+    /**
+     * If str do not has specific suffix, return a new String appending the suffix; return str its self otherwise.
+     */
+    public static String appendIfMissing(String str, String suffix) {
+        requireNonNull(str);
+        requireNonNull(suffix);
+        if (str.isEmpty()) {
+            return suffix;
+        }
+        if (!str.endsWith(suffix)) {
+            return str + suffix;
+        }
+        return str;
+    }
 }
