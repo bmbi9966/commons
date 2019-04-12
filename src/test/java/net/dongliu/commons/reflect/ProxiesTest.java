@@ -1,4 +1,4 @@
-package net.dongliu.commons.reflection;
+package net.dongliu.commons.reflect;
 
 import org.junit.jupiter.api.Test;
 

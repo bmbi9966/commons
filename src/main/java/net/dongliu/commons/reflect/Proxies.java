@@ -1,4 +1,4 @@
-package net.dongliu.commons.reflection;
+package net.dongliu.commons.reflect;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;

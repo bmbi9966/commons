@@ -95,7 +95,7 @@ public class HostPort {
      *
      * @throws IllegalStateException if port is not set
      */
-    public int portOrThrow() {
+    public int ensurePort() {
         if (port == -1) {
             throw new IllegalStateException("do not set a port");
         }

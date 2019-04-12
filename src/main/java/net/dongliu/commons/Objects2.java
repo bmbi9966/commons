@@ -2,7 +2,7 @@ package net.dongliu.commons;
 
 
 import net.dongliu.commons.collection.Lists;
-import net.dongliu.commons.reflection.Classes;
+import net.dongliu.commons.reflect.Classes;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.reflect.Field;
@@ -16,6 +16,20 @@ import static java.util.Objects.requireNonNull;
  * Jdk already has one Objects class, So named as Objects2
  */
 public class Objects2 {
+
+    /**
+     * Method for suppress generic class type cast warning. Usage:
+     * <pre>
+     * var list = Objects2.<List<String>>cast(value);
+     * </pre>
+     *
+     * @param <T> the class type
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T cast(Object value) {
+        return (T) value;
+    }
+
 
     /**
      * Elvis operator.

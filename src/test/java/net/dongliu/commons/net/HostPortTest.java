@@ -48,11 +48,11 @@ class HostPortTest {
 
 
     @Test
-    void portOrThrow() {
+    void ensurePort() {
         var hostPort = new HostPort("local");
-        assertThrows(IllegalStateException.class, hostPort::portOrThrow);
+        assertThrows(IllegalStateException.class, hostPort::ensurePort);
 
         hostPort = new HostPort("local", 8080);
-        assertEquals(8080, hostPort.portOrThrow());
+        assertEquals(8080, hostPort.ensurePort());
     }
 }

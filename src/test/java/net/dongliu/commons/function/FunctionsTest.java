@@ -1,6 +1,6 @@
 package net.dongliu.commons.function;
 
-import net.dongliu.commons.reflection.Classes;
+import net.dongliu.commons.reflect.Classes;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;

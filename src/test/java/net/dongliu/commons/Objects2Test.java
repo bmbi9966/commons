@@ -2,6 +2,8 @@ package net.dongliu.commons;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Objects2Test {
@@ -48,6 +50,11 @@ public class Objects2Test {
         assertEquals("Integer{value=1}", Objects2.toString(1));
         assertEquals("[1]", Objects2.toString(new int[]{1}));
         assertEquals("ToStrTest{i=1, str=abcd, l=10, chars=[c, d]}", Objects2.toString(new ToStrTest()));
+    }
+
+    @Test
+    void cast() {
+        Class<List<String>> cls = Objects2.cast(List.class);
     }
 
     private static class ToStrTest {

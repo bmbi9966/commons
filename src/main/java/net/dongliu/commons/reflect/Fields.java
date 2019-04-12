@@ -1,4 +1,4 @@
-package net.dongliu.commons.reflection;
+package net.dongliu.commons.reflect;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
