@@ -117,7 +117,7 @@ public class HostPort {
                 int v;
                 try {
                     v = Integer.parseInt(item, 16);
-                    if (v < 0 || v >= 0xffff) {
+                    if (v < 0 || v > 0xffff) {
                         return false;
                     }
                 } catch (NumberFormatException e) {
