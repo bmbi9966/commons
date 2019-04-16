@@ -2,7 +2,9 @@ package net.dongliu.commons.sequence;
 
 import net.dongliu.commons.collection.Iterators;
 import net.dongliu.commons.collection.Maps;
+import net.dongliu.commons.collection.Pair;
 import net.dongliu.commons.collection.PartitionResult;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -28,6 +30,15 @@ public interface Sequence<T> extends Iterator<T> {
     @Override
     default void remove() {
         throw new UnsupportedOperationException("remove");
+    }
+
+    /**
+     * Returns a sequence of values built from the elements of this sequence and the other sequence with the same index.
+     * The resulting sequence ends as soon as the shortest input sequence ends.
+     * The elements in sequence should not be null, or NPE would be thrown.
+     */
+    static <S, T> Sequence<Pair<S, T>> zip(Sequence<@NonNull S> s1, Sequence<@NonNull T> s2) {
+        return new ZippedSequence<>(s1, s2);
     }
 
     /**

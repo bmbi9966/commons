@@ -1,5 +1,6 @@
 package net.dongliu.commons.sequence;
 
+import net.dongliu.commons.collection.Pair;
 import net.dongliu.commons.collection.PartitionResult;
 import org.junit.jupiter.api.Test;
 
@@ -350,5 +351,20 @@ class SequenceTest {
     @Test
     void sortedBy() {
         assertEquals(List.of(1, 2, 3), Sequence.of(2, 3, 1).sortedBy(naturalOrder()).toList());
+    }
+
+    @Test
+    void remove() {
+    }
+
+    @Test
+    void zip() {
+        assertFalse(Sequence.zip(Sequence.of(), Sequence.of(1)).hasNext());
+        assertEquals(List.of(Pair.of(1, "1"), Pair.of(2, "2")),
+                Sequence.zip(Sequence.of(1, 2), Sequence.of("1", "2", "3")).toList());
+    }
+
+    @Test
+    void toCollection() {
     }
 }
