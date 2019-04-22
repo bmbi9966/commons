@@ -35,7 +35,6 @@ public interface Sequence<T> extends Iterator<T> {
     /**
      * Returns a sequence of values built from the elements of this sequence and the other sequence with the same index.
      * The resulting sequence ends as soon as the shortest input sequence ends.
-     * The elements in sequence should not be null, or NPE would be thrown.
      */
     static <S, T> Sequence<Pair<S, T>> zip(Sequence<@NonNull S> s1, Sequence<@NonNull T> s2) {
         return new ZippedSequence<>(s1, s2);

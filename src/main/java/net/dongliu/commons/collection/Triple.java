@@ -3,21 +3,19 @@ package net.dongliu.commons.collection;
 import java.io.Serializable;
 import java.util.Objects;
 
-import static java.util.Objects.requireNonNull;
-
 /**
- * Immutable Tuple3. The values stored in this tuple cannot be null.
- * This is the max tuple we provide. Usually, you should not use this class, define a Data Class for you need.
+ * Immutable Tuple3.
  */
 public class Triple<A, B, C> implements Serializable {
+    private static final long serialVersionUID = -6791546755492843197L;
     private final A first;
     private final B second;
     private final C third;
 
     private Triple(A first, B second, C third) {
-        this.first = requireNonNull(first);
-        this.second = requireNonNull(second);
-        this.third = requireNonNull(third);
+        this.first = first;
+        this.second = second;
+        this.third = third;
     }
 
     /**

@@ -2,6 +2,8 @@ package net.dongliu.commons.concurrent;
 
 import net.dongliu.commons.Lazy;
 import net.dongliu.commons.collection.Lists;
+import net.dongliu.commons.collection.Pair;
+import net.dongliu.commons.collection.Triple;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -160,5 +162,30 @@ public class Futures {
                 .thenCompose(none -> Arrays.stream(futures).filter(CompletableFuture::isDone)
                         .findAny()
                         .orElseThrow(() -> new RuntimeException("should not happen")));
+    }
+
+    /**
+     * Combine two futures to one future return a Pair Future.
+     * If either future failed with a exception, the return future failed.
+     */
+    public static <S, T> CompletableFuture<Pair<S, T>> combine(CompletableFuture<S> future1,
+                                                               CompletableFuture<T> future2) {
+        requireNonNull(future1);
+        requireNonNull(future2);
+        return future1.thenCombine(future2, Pair::of);
+    }
+
+    /**
+     * Combine three futures to one future return a Triple Future.
+     * If either future failed with a exception, the return future failed.
+     */
+    public static <A, B, C> CompletableFuture<Triple<A, B, C>> combine(CompletableFuture<A> future1,
+                                                                       CompletableFuture<B> future2,
+                                                                       CompletableFuture<C> future3) {
+        requireNonNull(future1);
+        requireNonNull(future2);
+        requireNonNull(future3);
+        return CompletableFuture.allOf(future1, future2, future3)
+                .thenApply(ignore -> Triple.of(future1.join(), future2.join(), future3.join()));
     }
 }
