@@ -2,6 +2,7 @@ package net.dongliu.commons;
 
 import java.time.Duration;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
@@ -12,46 +13,53 @@ import static java.util.Objects.requireNonNull;
 public class Retry {
     private final int times;
     private final IntFunction<Duration> intervalProvider;
-    private final Class<? extends Throwable> exceptionType;
+    // decode if retry by the exception thrown
+    private final Predicate<Throwable> predicate;
 
-    private Retry(int times, IntFunction<Duration> intervalProvider, Class<? extends Throwable> exceptionType) {
+    private Retry(int times, IntFunction<Duration> intervalProvider, Predicate<Throwable> predicate) {
         this.times = times;
         this.intervalProvider = intervalProvider;
-        this.exceptionType = exceptionType;
+        this.predicate = predicate;
+    }
+
+    private Retry(Builder builder) {
+        times = builder.times;
+        intervalProvider = builder.intervalProvider;
+        predicate = builder.predicate;
     }
 
     /**
-     * Create a retrier with times, and no interval between retries.
+     * Create a retry instance with times, and no interval between retries.
      *
-     * @param times retry times
+     * @param times the total times may run the code. If pass a value less than 1, will run the code one and only one time.
      * @return new Retry instance
      */
     public static Retry of(int times) {
-        return of(times, i -> Duration.ZERO);
+        return of(times, Duration.ZERO);
     }
 
     /**
-     * Create a retrier with times, and interval provided by intervalProvider.
+     * Create a retry instance with times, and interval provided by intervalProvider.
      *
-     * @param times            retry times
-     * @param intervalProvider provide interval between retries
+     * @param times    the total times may run the code. If pass a value less than 1, will run the code one and only one time.
+     * @param interval interval between retries
      * @return new Retry instance
      */
-    public static Retry of(int times, IntFunction<Duration> intervalProvider) {
-        requireNonNull(intervalProvider);
-        if (times <= 0) {
-            throw new IllegalArgumentException("illegal times: " + times);
-        }
-        return new Retry(times, intervalProvider, Exception.class);
+    public static Retry of(int times, Duration interval) {
+        requireNonNull(interval);
+        return new Retry(times, i -> interval, e -> true);
     }
 
-    /**
-     * Retry only when thrown exception is specific type.
-     * Default is {@link Exception}, which means will not retry when {@link Error} is thrown.
-     */
-    public Retry onException(Class<? extends Throwable> exceptionType) {
-        requireNonNull(exceptionType);
-        return new Retry(times, intervalProvider, exceptionType);
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    public Builder toBuilder() {
+        Builder builder = new Builder();
+        builder.times = times;
+        builder.intervalProvider = intervalProvider;
+        builder.predicate = predicate;
+        return builder;
     }
 
     /**
@@ -65,7 +73,7 @@ public class Retry {
                 runnable.run();
                 return;
             } catch (Throwable e) {
-                if (exceptionType.isInstance(e)) {
+                if (predicate.test(e)) {
                     try {
                         Thread.sleep(intervalProvider.apply(i).toMillis());
                     } catch (InterruptedException ie) {
@@ -105,4 +113,61 @@ public class Retry {
         // the last time run
         return supplier.get();
     }
+
+
+    /**
+     * 用于自定义Builder实例
+     */
+    public static final class Builder {
+        private int times = 1;
+        private IntFunction<Duration> intervalProvider = i -> Duration.ZERO;
+        private Predicate<Throwable> predicate = e -> true;
+
+        private Builder() {
+        }
+
+        /**
+         * Set the total times may run the code. Default is 1.
+         * If pass a value less than 1, will run the code one and only one time.
+         */
+        public Builder times(int times) {
+            this.times = times;
+            return this;
+        }
+
+        /**
+         * Provide interval between retries
+         */
+        public Builder intervalProvider(IntFunction<Duration> intervalProvider) {
+            this.intervalProvider = requireNonNull(intervalProvider);
+            return this;
+        }
+
+        /**
+         * Set interval between retries
+         */
+        public Builder interval(Duration interval) {
+            return intervalProvider(i -> interval);
+        }
+
+        /**
+         * Retry when exception thrown pass the test of predicate.
+         */
+        public Builder retryIf(Predicate<Throwable> predicate) {
+            this.predicate = requireNonNull(predicate);
+            return this;
+        }
+
+        /**
+         * Retry when thrown exception is or sub of given exception type.
+         */
+        public Builder retryIfThrown(Class<? extends Throwable> cls) {
+            return retryIf(cls::isInstance);
+        }
+
+        public Retry build() {
+            return new Retry(this);
+        }
+    }
+
 }

@@ -51,9 +51,9 @@ class StopwatchTest {
     void elapsedMillis() throws InterruptedException {
         var stopwatch = Stopwatch.create().start();
         Thread.sleep(20);
-        assertTrue(Math.abs(stopwatch.elapsedMillis() - 20) < 5);
+        assertTrue(Math.abs(stopwatch.elapsedMillis() - 20) < 10);
         stopwatch.stop();
         stopwatch.start();
-        assertTrue(stopwatch.elapsedMillis() < 5);
+        assertTrue(stopwatch.elapsedMillis() < 10);
     }
 }
