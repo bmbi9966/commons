@@ -1,11 +1,12 @@
 package net.dongliu.commons.reflect;
 
+import net.dongliu.commons.Lazy;
+
+import java.lang.StackWalker.Option;
+import java.lang.StackWalker.StackFrame;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
@@ -14,6 +15,22 @@ import static java.util.Objects.requireNonNull;
  * Utils method for Class reflection.
  */
 public class Classes {
+
+    private static final Lazy<StackWalker> walker = Lazy.of(() -> StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE));
+
+    /**
+     * Get the current class this method is run in. The returned class may be standard alone or inner class,
+     * anonymous class will be skipped and return it's first non-anonymous parent class.
+     *
+     * @throws NoSuchElementException if no such class found
+     */
+    public static Class<?> currentClass() {
+        var callerClass = walker.get().walk(s -> s.map(StackFrame::getDeclaringClass)
+                .filter(c -> !c.equals(Classes.class))
+                .filter(c -> !c.isAnonymousClass())
+                .findFirst());
+        return callerClass.orElseThrow();
+    }
 
     /**
      * Method for suppress generic class type cast warning. Usage:
@@ -70,7 +87,8 @@ public class Classes {
      * @return true if class exists.
      */
     public static boolean exists(String className) {
-        return exists(className, Thread.currentThread().getContextClassLoader());
+        var classLoader = walker.get().getCallerClass().getClassLoader();
+        return exists(className, classLoader);
     }
 
     /**
@@ -110,12 +128,10 @@ public class Classes {
         }
     }
 
-    private static class ClassSetHolder {
-        private static final Set<Class<?>> wrapperClasses = Set.of(
+    private static final Lazy<Set<Class<?>>> wrapperClasses = Lazy.of(() -> Set.of(
                 Byte.class, Short.class, Integer.class, Long.class,
                 Float.class, Double.class, Boolean.class, Character.class
-        );
-    }
+    ));
 
     /**
      * If class is primitive wrapper class(Integer, Boolean, etc).
@@ -124,7 +140,7 @@ public class Classes {
      * @return true if is primitive wrapper class
      */
     public static boolean isPrimitiveWrapper(Class<?> cls) {
-        return ClassSetHolder.wrapperClasses.contains(requireNonNull(cls));
+        return wrapperClasses.get().contains(requireNonNull(cls));
     }
 
     /**
