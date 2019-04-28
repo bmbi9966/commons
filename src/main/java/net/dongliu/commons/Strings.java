@@ -328,7 +328,9 @@ public class Strings {
      */
     public static String removePrefix(String str, int len) {
         requireNonNull(str);
-        Preconditions.assertArgument(len >= 0, () -> "invalid len: " + len);
+        if (len < 0) {
+            throw new IllegalArgumentException("invalid len: " + len);
+        }
         if (len >= str.length()) {
             return "";
         }
@@ -344,7 +346,9 @@ public class Strings {
      */
     public static String removeSuffix(String str, int len) {
         requireNonNull(str);
-        Preconditions.assertArgument(len >= 0, () -> "invalid len: " + len);
+        if (len < 0) {
+            throw new IllegalArgumentException("invalid len: " + len);
+        }
         if (len >= str.length()) {
             return "";
         }

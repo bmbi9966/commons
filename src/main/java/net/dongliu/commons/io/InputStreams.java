@@ -1,12 +1,11 @@
 package net.dongliu.commons.io;
 
-import net.dongliu.commons.Preconditions;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Utils for InputStreams.
@@ -43,7 +42,7 @@ public class InputStreams {
      * @return The real data size read. If InputStream does not has enough data for read, will return a size less than desired.
      */
     public static int readExact(InputStream in, byte[] data, int offset, int size) throws IOException {
-        Preconditions.checkSubRange(data.length, offset, size);
+        Objects.checkFromIndexSize(offset, size, data.length);
         int read = 0;
         int count;
         while (read < size && (count = in.read(data, offset + read, size - read)) >= 0) {

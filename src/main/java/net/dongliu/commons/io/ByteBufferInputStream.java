@@ -1,11 +1,10 @@
 package net.dongliu.commons.io;
 
-import net.dongliu.commons.Preconditions;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 import static java.lang.Byte.toUnsignedInt;
 import static java.util.Objects.requireNonNull;
@@ -32,7 +31,7 @@ public class ByteBufferInputStream extends InputStream {
     @Override
     public synchronized int read(byte[] b, int off, int len) {
         requireNonNull(b);
-        Preconditions.checkSubRange(b.length, off, len);
+        Objects.checkFromIndexSize(off, len, b.length);
         if (!buffer.hasRemaining()) {
             return -1;
         }
