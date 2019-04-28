@@ -4,7 +4,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Spliterators;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.util.Objects.requireNonNull;
 
@@ -22,7 +24,7 @@ public class Iterators {
      */
     public static <T> Stream<T> stream(Iterator<T> it) {
         requireNonNull(it);
-        return Iterables.stream(() -> it);
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(it, 0), false);
     }
 
     /**

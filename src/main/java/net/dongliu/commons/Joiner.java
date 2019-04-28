@@ -59,10 +59,11 @@ public class Joiner {
     }
 
     /**
-     * Return a new Builder instance with default initial settings.
+     * Return a new Builder instance with delimiter.
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(String delimiter) {
+        requireNonNull(delimiter);
+        return new Builder(delimiter);
     }
 
     /**
@@ -121,14 +122,15 @@ public class Joiner {
 
 
     public static final class Builder {
+        private CharSequence delimiter;
         private CharSequence prefix = "";
         private CharSequence suffix = "";
-        private CharSequence delimiter = "";
         private boolean skipNulls = false;
         private boolean nullToEmpty = false;
         private boolean skipEmpty = false;
 
-        private Builder() {
+        private Builder(String delimiter) {
+            this.delimiter = delimiter;
         }
 
         /**
@@ -144,14 +146,6 @@ public class Joiner {
          */
         public Builder suffix(CharSequence suffix) {
             this.suffix = suffix;
-            return this;
-        }
-
-        /**
-         * Set delimiter for joined string result. Default is empty str.
-         */
-        public Builder delimiter(CharSequence delimiter) {
-            this.delimiter = delimiter;
             return this;
         }
 

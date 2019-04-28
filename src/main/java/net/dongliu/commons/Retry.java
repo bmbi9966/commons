@@ -51,10 +51,11 @@ public class Retry {
     }
 
     /**
-     * Create a new Builder with default initial settings.
+     * Create a new Builder with times.
+     * @param times the total times may run the code. If pass a value less than 1, will run the code one and only one time.
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(int times) {
+        return new Builder(times);
     }
 
     /**
@@ -114,20 +115,12 @@ public class Retry {
      * 用于自定义Builder实例
      */
     public static final class Builder {
-        private int times = 1;
+        private int times;
         private IntFunction<Duration> intervalProvider = i -> Duration.ZERO;
         private Predicate<Throwable> predicate = e -> true;
 
-        private Builder() {
-        }
-
-        /**
-         * Set the total times may run the code. Default is 1.
-         * If pass a value less than 1, will run the code one and only one time.
-         */
-        public Builder times(int times) {
+        private Builder(int times) {
             this.times = times;
-            return this;
         }
 
         /**
