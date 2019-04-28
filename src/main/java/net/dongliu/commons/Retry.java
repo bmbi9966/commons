@@ -50,16 +50,11 @@ public class Retry {
         return new Retry(times, i -> interval, e -> true);
     }
 
-    public static Builder newBuilder() {
+    /**
+     * Create a new Builder with default initial settings.
+     */
+    public static Builder builder() {
         return new Builder();
-    }
-
-    public Builder toBuilder() {
-        Builder builder = new Builder();
-        builder.times = times;
-        builder.intervalProvider = intervalProvider;
-        builder.predicate = predicate;
-        return builder;
     }
 
     /**
@@ -147,6 +142,7 @@ public class Retry {
          * Set interval between retries
          */
         public Builder interval(Duration interval) {
+            requireNonNull(interval);
             return intervalProvider(i -> interval);
         }
 
@@ -165,6 +161,9 @@ public class Retry {
             return retryIf(cls::isInstance);
         }
 
+        /**
+         * Create a new Retry instance with settings.
+         */
         public Retry build() {
             return new Retry(this);
         }
