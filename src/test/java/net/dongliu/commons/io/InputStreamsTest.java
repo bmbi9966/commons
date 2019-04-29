@@ -25,6 +25,7 @@ public class InputStreamsTest {
     }
 
     @Test
+    @Deprecated
     public void transferTo() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         InputStreams.transferTo(new ByteArrayInputStream(data), bos);

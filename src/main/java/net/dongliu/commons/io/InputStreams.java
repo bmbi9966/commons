@@ -1,11 +1,14 @@
 package net.dongliu.commons.io;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Utils for InputStreams.
@@ -17,23 +20,20 @@ public class InputStreams {
     /**
      * Copy all data in InputStream to OutputStream.
      * Both in and out are left unclosed when copy finished, or Exception occurred.
+     * @deprecated using {@link InputStream#transferTo(OutputStream)}
      */
+    @Deprecated
     public static void transferTo(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[BUFFER_SIZE];
-        int count;
-        while ((count = in.read(buffer)) >= 0) {
-            out.write(buffer, 0, count);
-        }
+        in.transferTo(out);
     }
 
     /**
      * Read all data in InputStream. The Stream is left unclosed when read finished, or Exception occurred.
+     @deprecated using {@link InputStream#readAllBytes()}
      */
+    @Deprecated
     public static byte[] readAll(InputStream in) throws IOException {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-            transferTo(in, bos);
-            return bos.toByteArray();
-        }
+        return in.readAllBytes();
     }
 
     /**
@@ -104,4 +104,28 @@ public class InputStreams {
         return EmptyInputStream.instance;
     }
 
+    /**
+     * Return a new InputStream that concat multi sub InputStreams.
+     * The close() method of returned InputStream will close all sub InputStreams.
+     */
+    public static InputStream concat(List<InputStream> inputs) {
+        return new ConcatenatedInputStream(List.copyOf(inputs));
+    }
+
+    /**
+     * Return a new InputStream that concat multi sub InputStreams.
+     * The close() method of returned InputStream will close all sub InputStreams.
+     */
+    public static InputStream concat(InputStream... inputs) {
+        return new ConcatenatedInputStream(List.of(inputs));
+    }
+
+    /**
+     * Return a new InputStream that concat additional prepended data and InputStream.
+     * The close() method of returned InputStream will close the passed in InputStream.
+     */
+    public static InputStream concat(byte[] data, InputStream in) {
+        requireNonNull(data);
+        return concat(new ByteArrayInputStream(data), in);
+    }
 }
