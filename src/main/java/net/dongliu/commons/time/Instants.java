@@ -10,6 +10,13 @@ import static java.util.Objects.requireNonNull;
 public class Instants {
 
     /**
+     * Nanos since epoch
+     */
+    public static long toEpochNanos(Instant instant) {
+        return instant.getEpochSecond() * 1000_000_000L + instant.getNano();
+    }
+
+    /**
      * subtract two instant
      */
     public static Duration subtract(Instant minuend, Instant subtrahend) {

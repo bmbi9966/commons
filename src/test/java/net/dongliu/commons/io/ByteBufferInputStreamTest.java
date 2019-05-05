@@ -16,7 +16,7 @@ public class ByteBufferInputStreamTest {
         byte[] bytes = new byte[4096];
         random.nextBytes(bytes);
         ByteBufferInputStream in = new ByteBufferInputStream(ByteBuffer.wrap(bytes));
-        byte[] newBytes = InputStreams.readAll(in);
+        byte[] newBytes = in.readAllBytes();
         assertArrayEquals(bytes, newBytes);
     }
 
@@ -48,7 +48,7 @@ public class ByteBufferInputStreamTest {
         assertEquals(3072, in.available());
         in.reset();
         assertEquals(4096, in.available());
-        byte[] newBytes = InputStreams.readAll(in);
+        byte[] newBytes = in.readAllBytes();
         assertArrayEquals(bytes, newBytes);
     }
 }

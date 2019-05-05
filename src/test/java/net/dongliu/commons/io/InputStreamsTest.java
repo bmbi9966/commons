@@ -33,6 +33,7 @@ public class InputStreamsTest {
     }
 
     @Test
+    @Deprecated
     public void readAll() throws IOException {
         InputStream in = new ByteArrayInputStream(data);
         byte[] bytes = InputStreams.readAll(in);
