@@ -6,10 +6,10 @@ import java.lang.invoke.VarHandle;
 /**
  * Abstract class for reference counted resources.
  *
- * @param <T> the resource type
+ * @param <T> the concrete implementation type
  */
 public abstract class ReferenceCounted<T extends ReferenceCounted<T>> {
-    private volatile int count = 1;
+    private int count;
 
     private static final VarHandle COUNT;
 
@@ -18,8 +18,13 @@ public abstract class ReferenceCounted<T extends ReferenceCounted<T>> {
             COUNT = MethodHandles.lookup()
                     .findVarHandle(ReferenceCounted.class, "count", int.class);
         } catch (NoSuchFieldException | IllegalAccessException e) {
+            // should not happen
             throw new RuntimeException(e);
         }
+    }
+
+    protected ReferenceCounted() {
+        this.count = 1;
     }
 
     /**

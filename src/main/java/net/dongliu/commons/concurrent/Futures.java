@@ -22,11 +22,16 @@ public class Futures {
             () -> new ScheduledThreadPoolExecutor(1, ThreadFactories.newDaemonThreadFactory("delay-executor")));
 
     /**
-     * Just future get value, but throwing uncheck exception.
+     * Wait until future finished, and return the value.
+     * If error occurred, throw unchecked exception.
+     * If is interrupted, a CancellationException is thrown, and the interrupt bit is set for this thread.
      *
      * @param future the future
      * @param <T>    the future value type
      * @return the future value
+     *
+     * @throws CancellationException if future is canceled, or get operation is interrupted
+     * @throws CompletionException if exception is thrown during future compute
      */
     public static <T> T join(Future<T> future) {
         if (future instanceof CompletableFuture) {
@@ -43,24 +48,24 @@ public class Futures {
     }
 
     /**
-     * Just alias for CompletableFuture.completedFuture
+     * Alias for CompletableFuture.completedFuture
      *
      * @param result the value
      * @param <T>    the value type
      * @return the completed CompletableFuture
      */
-    public static <T> CompletableFuture<T> value(T result) {
+    public static <T> CompletableFuture<T> just(T result) {
         return CompletableFuture.completedFuture(result);
     }
 
     /**
-     * Just alias for CompletableFuture.failedFuture
+     * Alias for CompletableFuture.failedFuture
      *
      * @param throwable the throwable
      * @param <T>       the value type
      * @return the failed CompletableFuture
      */
-    public static <T> CompletableFuture<T> failed(Throwable throwable) {
+    public static <T> CompletableFuture<T> error(Throwable throwable) {
         CompletableFuture<T> completableFuture = new CompletableFuture<>();
         completableFuture.completeExceptionally(throwable);
         return completableFuture;

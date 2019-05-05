@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FuturesTest {
 
     @Test
-    public void value() {
-        CompletableFuture<Integer> future = Futures.value(1);
+    public void just() {
+        CompletableFuture<Integer> future = Futures.just(1);
         assertEquals(Integer.valueOf(1), future.join());
     }
 
     @Test
-    public void failed() {
-        CompletableFuture<Integer> future = Futures.failed(new RuntimeException());
+    public void error() {
+        CompletableFuture<Integer> future = Futures.error(new RuntimeException());
         assertThrows(CompletionException.class, future::join);
     }
 
@@ -28,7 +28,7 @@ public class FuturesTest {
     public void delay() {
         Duration duration = Duration.ofMillis(10);
         long begin = currentTimeMillis();
-        CompletableFuture<Integer> future = Futures.delay(Futures.value(10), duration);
+        CompletableFuture<Integer> future = Futures.delay(Futures.just(10), duration);
         assertEquals(Integer.valueOf(10), future.join());
         assertTrue(currentTimeMillis() - begin >= duration.toMillis());
     }
@@ -48,7 +48,7 @@ public class FuturesTest {
     public void allOf() {
         CompletableFuture<List<Integer>> future = Futures.allOf(
                 Futures.delay(10, Duration.ofMillis(10)),
-                Futures.value(1)
+                Futures.just(1)
         );
         assertEquals(List.of(10, 1), future.join());
     }
@@ -57,7 +57,7 @@ public class FuturesTest {
     public void anyOf() {
         CompletableFuture<Integer> future = Futures.anyOf(
                 Futures.delay(10, Duration.ofMillis(10)),
-                Futures.value(1)
+                Futures.just(1)
         );
         assertEquals(Integer.valueOf(1), future.join());
     }
