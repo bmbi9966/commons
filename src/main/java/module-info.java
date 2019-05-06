@@ -12,4 +12,5 @@ module net.dongliu.commons {
     exports net.dongliu.commons.regex;
     exports net.dongliu.commons.net;
     exports net.dongliu.commons.time;
+    exports net.dongliu.commons.sequence;
 }

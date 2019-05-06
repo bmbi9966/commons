@@ -1,12 +1,14 @@
 package net.dongliu.commons;
 
-import net.dongliu.commons.collection.Iterators;
+import net.dongliu.commons.sequence.Sequence;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.RandomAccess;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -81,15 +83,14 @@ public class Splitter {
     }
 
     /**
-     * Split the str as a String {@link Stream}.
+     * Split the str as a String {@link Sequence}.
      */
-    public Stream<String> split(String str) {
+    public Sequence<String> split(String str) {
         requireNonNull(str);
         if (str.isEmpty()) {
-            return skipEmpty ? Stream.empty() : Stream.of(str);
+            return skipEmpty ? Sequence.of() : Sequence.of(str);
         }
-        var iterator = createSplitIterator(str);
-        return Iterators.stream(iterator);
+        return createSplitSequence(str);
     }
 
     /**
@@ -101,7 +102,7 @@ public class Splitter {
         if (str.isEmpty()) {
             return skipEmpty ? List.of() : List.of(str);
         }
-        var iterator = createSplitIterator(str);
+        var iterator = createSplitSequence(str);
         if (!iterator.hasNext()) {
             return List.of();
         }
@@ -112,7 +113,7 @@ public class Splitter {
         return list;
     }
 
-    private SplitIterator createSplitIterator(String str) {
+    private SplitSequence createSplitSequence(String str) {
         int from;
         if (!prefix.isEmpty() && str.startsWith(prefix)) {
             from = prefix.length();
@@ -130,15 +131,15 @@ public class Splitter {
             from = to = 0;
         }
         if (delimiterPattern != null) {
-            return new RegexSplitIterator(str, from, to, delimiterPattern, trimResults, skipEmpty);
+            return new RegexSplitSequence(str, from, to, delimiterPattern, trimResults, skipEmpty);
         }
         if (delimiter != null) {
-            return new PlainSplitIterator(str, from, to, delimiter, trimResults, skipEmpty);
+            return new PlainSplitSequence(str, from, to, delimiter, trimResults, skipEmpty);
         }
         throw new IllegalStateException();
     }
 
-    private abstract static class SplitIterator implements Iterator<String> {
+    private abstract static class SplitSequence implements Sequence<String> {
         private final String str;
         private final int from; // inclusive
         private final int to; // exclusive
@@ -147,7 +148,7 @@ public class Splitter {
         private int pos;
         private String next;
 
-        private SplitIterator(String str, int from, int to, boolean trimResults, boolean skipEmpty) {
+        private SplitSequence(String str, int from, int to, boolean trimResults, boolean skipEmpty) {
             this.str = str;
             this.from = from;
             this.to = to;
@@ -210,10 +211,10 @@ public class Splitter {
         protected abstract long findNext(String str, int from);
     }
 
-    private static class PlainSplitIterator extends SplitIterator {
+    private static class PlainSplitSequence extends SplitSequence {
         private final String delimiter;
 
-        private PlainSplitIterator(String str, int from, int to, String delimiter,
+        private PlainSplitSequence(String str, int from, int to, String delimiter,
                                    boolean trimResults, boolean skipEmpty) {
             super(str, from, to, trimResults, skipEmpty);
             this.delimiter = delimiter;
@@ -227,10 +228,10 @@ public class Splitter {
         }
     }
 
-    private static class RegexSplitIterator extends SplitIterator {
+    private static class RegexSplitSequence extends SplitSequence {
         private final Matcher matcher;
 
-        private RegexSplitIterator(String str, int from, int to, Pattern pattern,
+        private RegexSplitSequence(String str, int from, int to, Pattern pattern,
                                    boolean trimResults, boolean skipEmpty) {
             super(str, from, to, trimResults, skipEmpty);
             this.matcher = pattern.matcher(str.substring(from, to));

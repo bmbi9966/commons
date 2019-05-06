@@ -13,7 +13,7 @@ class SplitterTest {
     @Test
     void splitAsStream() {
         var splitter = Splitter.of(",");
-        assertEquals(List.of("1", "2"), splitter.split("1,2").collect(toList()));
+        assertEquals(List.of("1", "2"), splitter.split("1,2").toList());
     }
 
     @Test

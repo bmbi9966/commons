@@ -92,11 +92,32 @@ public interface Sequence<T> extends Iterator<T> {
     }
 
     /**
+     * Return a empty sequence
+     *
+     * @param <T> the element type
+     */
+    static <T> Sequence<T> of(T value) {
+        return new SingletonSequence<>(value);
+    }
+
+    /**
      * Create sequence from values
      */
     @SafeVarargs
     static <T> Sequence<T> of(T... values) {
         return new ArraySequence<>(values);
+    }
+
+    /**
+     * Return a empty sequence
+     *
+     * @param <T> the element type
+     */
+    static <T> Sequence<T> of(Optional<T> optional) {
+        if (optional.isPresent()) {
+            return new SingletonSequence<>(optional.get());
+        }
+        return of();
     }
 
     /**
@@ -825,6 +846,9 @@ public interface Sequence<T> extends Iterator<T> {
      * Return a Stream that wrap this sequence.
      */
     default Stream<T> asStream() {
+        if (!hasNext()) {
+            return Stream.empty();
+        }
         return Iterators.stream(this);
     }
 
