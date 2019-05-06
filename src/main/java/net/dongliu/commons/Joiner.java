@@ -25,14 +25,13 @@ public class Joiner {
     // skip empty string
     private final boolean skipEmpty;
 
-    private Joiner(CharSequence prefix, CharSequence suffix, CharSequence delimiter, boolean skipNulls,
-                   boolean nullToEmpty, boolean skipEmpty) {
-        this.prefix = prefix;
-        this.suffix = suffix;
-        this.delimiter = delimiter;
-        this.skipNulls = skipNulls;
-        this.nullToEmpty = nullToEmpty;
-        this.skipEmpty = skipEmpty;
+    private Joiner(Builder builder) {
+        prefix = builder.prefix;
+        suffix = builder.suffix;
+        delimiter = builder.delimiter;
+        skipNulls = builder.skipNulls;
+        nullToEmpty = builder.nullToEmpty;
+        skipEmpty = builder.skipEmpty;
     }
 
     /**
@@ -44,8 +43,7 @@ public class Joiner {
      * @return Joiner
      */
     public static Joiner of(CharSequence prefix, CharSequence suffix, CharSequence delimiter) {
-        return new Joiner(requireNonNull(prefix), requireNonNull(suffix), requireNonNull(delimiter),
-                false, false, false);
+        return builder(delimiter).prefix(prefix).suffix(suffix).build();
     }
 
     /**
@@ -61,7 +59,7 @@ public class Joiner {
     /**
      * Return a new Builder instance with delimiter.
      */
-    public static Builder builder(String delimiter) {
+    public static Builder builder(CharSequence delimiter) {
         requireNonNull(delimiter);
         return new Builder(delimiter);
     }
@@ -129,7 +127,7 @@ public class Joiner {
         private boolean nullToEmpty = false;
         private boolean skipEmpty = false;
 
-        private Builder(String delimiter) {
+        private Builder(CharSequence delimiter) {
             this.delimiter = delimiter;
         }
 
@@ -183,7 +181,7 @@ public class Joiner {
          * Build a new Joiner instance with settings.
          */
         public Joiner build() {
-            return new Joiner(prefix, suffix, delimiter, skipNulls, nullToEmpty, skipEmpty);
+            return new Joiner(this);
         }
     }
 }

@@ -25,30 +25,27 @@ public class Splitter {
     private final String prefix;
     private final String suffix;
 
-    public Splitter(String delimiter, Pattern delimiterPattern, boolean trimResults, boolean skipEmpty,
-                    String prefix, String suffix) {
-        this.delimiter = delimiter;
-        this.delimiterPattern = delimiterPattern;
-        this.trimResults = trimResults;
-        this.skipEmpty = skipEmpty;
-        this.prefix = prefix;
-        this.suffix = suffix;
+    private Splitter(Builder builder) {
+        delimiter = builder.delimiter;
+        delimiterPattern = builder.delimiterPattern;
+        trimResults = builder.trimResults;
+        skipEmpty = builder.skipEmpty;
+        prefix = builder.prefix;
+        suffix = builder.suffix;
     }
 
     /**
      * Create a splitter which split string by plain raw string delimiter.
      */
     public static Splitter of(String delimiter) {
-        requireNonNull(delimiter);
-        return new Splitter(delimiter, null, false, false, "", "");
+        return builder(delimiter).build();
     }
 
     /**
      * Create a splitter which split string by regular expression delimiter.
      */
     public static Splitter ofRegex(Pattern pattern) {
-        requireNonNull(pattern);
-        return new Splitter(null, pattern, false, false, "", "");
+        return regexBuilder(pattern).build();
     }
 
     /**
@@ -299,7 +296,7 @@ public class Splitter {
         }
 
         public Splitter build() {
-            return new Splitter(delimiter, delimiterPattern, trimResults, skipEmpty, prefix, suffix);
+            return new Splitter(this);
         }
     }
 }

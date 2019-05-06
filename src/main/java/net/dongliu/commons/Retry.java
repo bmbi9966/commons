@@ -16,12 +16,6 @@ public class Retry {
     // decode if retry by the exception thrown
     private final Predicate<Throwable> predicate;
 
-    private Retry(int times, IntFunction<Duration> intervalProvider, Predicate<Throwable> predicate) {
-        this.times = times;
-        this.intervalProvider = intervalProvider;
-        this.predicate = predicate;
-    }
-
     private Retry(Builder builder) {
         times = builder.times;
         intervalProvider = builder.intervalProvider;
@@ -46,8 +40,7 @@ public class Retry {
      * @return new Retry instance
      */
     public static Retry of(int times, Duration interval) {
-        requireNonNull(interval);
-        return new Retry(times, i -> interval, e -> true);
+        return builder(times).interval(interval).build();
     }
 
     /**
