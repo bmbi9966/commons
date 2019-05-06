@@ -8,13 +8,13 @@ class RateLimiterTest {
 
     @Test
     void test() {
-        var rateLimiter = RateLimiter.of(10);
+        var rateLimiter = RateLimiter.of(100);
         long begin = System.currentTimeMillis();
         for (int i = 0; i < 10; i++) {
             rateLimiter.acquire();
         }
         var elappsed = System.currentTimeMillis() - begin;
-        assertTrue(elappsed > 900 && elappsed < 1100);
+        assertTrue(elappsed >= 100 && elappsed < 200);
     }
 
 }
