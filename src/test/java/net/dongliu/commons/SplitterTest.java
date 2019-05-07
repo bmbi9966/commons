@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SplitterTest {
@@ -13,7 +12,7 @@ class SplitterTest {
     @Test
     void splitAsStream() {
         var splitter = Splitter.of(",");
-        assertEquals(List.of("1", "2"), splitter.split("1,2").toList());
+        assertEquals(List.of("1", "2"), splitter.split("1,2").toImmutableList());
     }
 
     @Test

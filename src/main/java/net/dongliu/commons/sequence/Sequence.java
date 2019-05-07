@@ -12,11 +12,13 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
 
-import static java.util.Collections.*;
+import static java.util.Comparator.naturalOrder;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Sequence, like {@link java.util.stream.Stream}
+ * A sequence of elements supporting support map and reduce operations.
+ * Sequence like {@link java.util.stream.Stream}, but comes with more convenient methods.
+ * Sequence not support parallel operations, so the implementation can be simpler.
  */
 public interface Sequence<T> extends Iterator<T> {
 
@@ -61,7 +63,8 @@ public interface Sequence<T> extends Iterator<T> {
     }
 
     /**
-     * Create sequence from collection
+     * Create sequence from collection.
+     * This method do not do defensive copy.
      */
     static <T> Sequence<T> of(Collection<T> collection) {
         requireNonNull(collection);
@@ -101,7 +104,8 @@ public interface Sequence<T> extends Iterator<T> {
     }
 
     /**
-     * Create sequence from values
+     * Create sequence from values, or array.
+     * This method do not do defensive copy.
      */
     @SafeVarargs
     static <T> Sequence<T> of(T... values) {
@@ -241,7 +245,7 @@ public interface Sequence<T> extends Iterator<T> {
 
 
     /**
-     * Return a Sequence only contains NonNull values.
+     * Return a Sequence only contains non-null values.
      */
     default Sequence<T> filterNonNull() {
         return filter(Objects::nonNull);
@@ -328,6 +332,16 @@ public interface Sequence<T> extends Iterator<T> {
         List<T> list = toArrayList();
         list.sort(comparator);
         return of(list);
+    }
+
+    /**
+     * Return a sorted Sequence, Sequence element type T should implement {@link Comparable} interface.
+     * The elements should not be null, or NPE maybe thrown.
+     * {@link ClassCastException}  may be thrown if T not sub type of Comparable
+     */
+    @SuppressWarnings("unchecked")
+    default Sequence<T> sorted() {
+        return sortedBy((Comparator<T>) naturalOrder());
     }
 
     /**
@@ -419,11 +433,11 @@ public interface Sequence<T> extends Iterator<T> {
     /**
      * reduce to immutable List.
      */
-    default List<T> toList() {
+    default List<T> toImmutableList() {
         if (!hasNext()) {
             return List.of();
         }
-        return unmodifiableList(toArrayList());
+        return List.copyOf(toArrayList());
     }
 
     /**
@@ -436,11 +450,11 @@ public interface Sequence<T> extends Iterator<T> {
     /**
      * reduce to immutable Set.
      */
-    default Set<T> toSet() {
+    default Set<T> toImmutableSet() {
         if (!hasNext()) {
             return Set.of();
         }
-        return unmodifiableSet(toHashSet());
+        return Set.copyOf(toHashSet());
     }
 
     /**
@@ -485,14 +499,14 @@ public interface Sequence<T> extends Iterator<T> {
     /**
      * collect elements to immutable Map.
      */
-    default <K, V> Map<K, V> toMap(Function<? super T, ? extends K> keyMapper,
-                                   Function<? super T, ? extends V> valueMapper) {
+    default <K, V> Map<K, V> toImmutableMap(Function<? super T, ? extends K> keyMapper,
+                                            Function<? super T, ? extends V> valueMapper) {
         requireNonNull(keyMapper);
         requireNonNull(valueMapper);
         if (!hasNext()) {
             return Map.of();
         }
-        return unmodifiableMap(toHashMap(keyMapper, valueMapper));
+        return Map.copyOf(toHashMap(keyMapper, valueMapper));
     }
 
     /**
@@ -503,9 +517,7 @@ public interface Sequence<T> extends Iterator<T> {
      * @param reducer   reduce function
      * @param <K>       the group key type
      * @param <R>       the reduce result type
-     * @return a immutable map contains grouped result
-     * @
-     * @
+     * @return a map contains grouped result. The is no guaranty for the map's immutability.
      */
     default <K, R> Map<K, R> groupAndReduce(Function<? super T, ? extends K> keyMapper, Supplier<R> initial,
                                             BiFunction<? super R, ? super T, ? extends R> reducer) {
@@ -521,7 +533,7 @@ public interface Sequence<T> extends Iterator<T> {
                 map.put(key, reducer.apply(map.get(key), value));
             }
         }
-        return unmodifiableMap(map);
+        return map;
     }
 
     /**
@@ -531,7 +543,7 @@ public interface Sequence<T> extends Iterator<T> {
      * @param collector the collector supplier
      * @param <K>       the group key type
      * @param <R>       the reduce result type
-     * @return a immutable map contains grouped result
+     * @return a map contains grouped result. The is no guaranty for the map's immutability.
      */
     default <K, R> Map<K, R> groupAndCollect(Function<? super T, ? extends K> keyMapper,
                                              Supplier<? extends CollectConsumer<? super T, ? extends R>> collector) {
@@ -550,22 +562,22 @@ public interface Sequence<T> extends Iterator<T> {
      * Group the element by key mapper; for per single key, reduce elements with this key to the result value.
      *
      * @param keyMapper get key from element
-     * @param supplier  supplier to make a Collection instance
+     * @param collectionSupplier  supplier to make a Collection instance
      * @param <K>       the group key type
      * @param <R>       the reduce result type
-     * @return a immutable map contains grouped result
+     * @return a map contains grouped result. The is no guaranty for the map's immutability.
      */
     default <K, R extends Collection<T>> Map<K, R> groupToCollection(Function<? super T, ? extends K> keyMapper,
-                                                                     Supplier<R> supplier) {
+                                                                     Supplier<R> collectionSupplier) {
         requireNonNull(keyMapper);
-        requireNonNull(supplier);
+        requireNonNull(collectionSupplier);
         var map = new HashMap<K, R>();
         while (hasNext()) {
             T value = next();
             K key = keyMapper.apply(value);
-            map.computeIfAbsent(key, k -> supplier.get()).add(value);
+            map.computeIfAbsent(key, k -> collectionSupplier.get()).add(value);
         }
-        return unmodifiableMap(map);
+        return map;
     }
 
     /**
@@ -573,12 +585,11 @@ public interface Sequence<T> extends Iterator<T> {
      *
      * @param keyMapper get key from element
      * @param <K>       the group key type
-     * @return a immutable map contains grouped result as immutable list
+     * @return a map contains grouped result as immutable list. The is no guaranty for the returned map's, or the list's immutability.
      */
     default <K> Map<K, List<T>> groupToList(Function<? super T, ? extends K> keyMapper) {
         requireNonNull(keyMapper);
-        var map = groupToCollection(keyMapper, ArrayList::new);
-        return Maps.convert(map, key -> key, Collections::unmodifiableList);
+        return groupToCollection(keyMapper, ArrayList::new);
     }
 
     /**
@@ -588,7 +599,6 @@ public interface Sequence<T> extends Iterator<T> {
      * @param initial   initial value supplier for reducing
      * @param reducer   reduce function
      * @param <R>       the reduce result type
-     * @return a map contains grouped result
      */
     default <R> PartitionResult<R> partitionAndReduce(Predicate<? super T> predicate, Supplier<R> initial,
                                                       BiFunction<? super R, ? super T, ? extends R> reducer) {
@@ -636,11 +646,11 @@ public interface Sequence<T> extends Iterator<T> {
      * Partition the elements by predicate, and then collect elements to immutable list.
      *
      * @param predicate predicate for partition
-     * @return a map contains grouped result as immutable list
+     * @return a PartitionResult contains grouped result as list. The is no guaranty for the returned lists's immutability.
      */
     default PartitionResult<List<T>> partitionToList(Predicate<? super T> predicate) {
         var result = partitionAndCollect(predicate, ArrayList::new);
-        return new PartitionResult<>(unmodifiableList(result.matched()), unmodifiableList(result.missed()));
+        return new PartitionResult<>(result.matched(), result.missed());
     }
 
     /**
@@ -712,7 +722,6 @@ public interface Sequence<T> extends Iterator<T> {
 
     /**
      * Get the max value by comparator. If Sequence has no element, return empty Optional.
-     * Elements in this Sequence should not be null.
      * If T is sub type of Comparable and want to use it's compare impl for comparing, {@link Comparator#naturalOrder()} can be passed in.
      *
      * @param comparator the comparator
@@ -732,8 +741,17 @@ public interface Sequence<T> extends Iterator<T> {
     }
 
     /**
-     * Get the min value by comparator. If Sequence has no element, return empty Optional.
+     * Get the max value by natural order comparator. If Sequence has no element, return empty Optional.
      * Elements in this Sequence should not be null.
+     * {@link ClassCastException}  may be thrown if T not sub type of Comparable
+     */
+    @SuppressWarnings("unchecked")
+    default Optional<T> max() {
+        return maxBy((Comparator<T>) naturalOrder());
+    }
+
+    /**
+     * Get the min value by comparator. If Sequence has no element, return empty Optional.
      * If T is sub type of Comparable and want to use it's compare impl for comparing, {@link Comparator#naturalOrder()} can be passed in.
      *
      * @param comparator the comparator
@@ -750,6 +768,16 @@ public interface Sequence<T> extends Iterator<T> {
             }
         }
         return Optional.of(min);
+    }
+
+    /**
+     * Get the min value by natural order comparator. If Sequence has no element, return empty Optional.
+     * Elements in this Sequence should not be null.
+     * {@link ClassCastException}  may be thrown if T not sub type of Comparable
+     */
+    @SuppressWarnings("unchecked")
+    default Optional<T> min() {
+        return minBy((Comparator<T>) naturalOrder());
     }
 
     /**
@@ -835,6 +863,7 @@ public interface Sequence<T> extends Iterator<T> {
         }
         return true;
     }
+
     /**
      * Return a iterable that wrap this sequence, and can iterate only once.
      */

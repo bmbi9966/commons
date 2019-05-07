@@ -35,5 +35,4 @@ class ArraySequence<T> implements Sequence<T> {
         return array[index++];
     }
 
-
 }

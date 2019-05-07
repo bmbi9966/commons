@@ -17,6 +17,7 @@ public interface CollectConsumer<T, R> extends Consumer<T> {
 
     /**
      * Elements emit finished. This method is called only once, after all elements are send.
+     * This method should be called only once.
      *
      * @return should return the final value.
      */

@@ -36,90 +36,90 @@ class SequenceTest {
 
     @Test
     void concat() {
-        assertEquals(List.of(1, 2, 3), Sequence.of().concat(Sequence.of(1, 2, 3)).toList());
-        assertEquals(List.of(1, 2, 3), Sequence.of(1).concat(Sequence.of(2, 3)).toList());
-        assertEquals(List.of(1), Sequence.of(1).concat(Sequence.of()).toList());
+        assertEquals(List.of(1, 2, 3), Sequence.of().concat(Sequence.of(1, 2, 3)).toImmutableList());
+        assertEquals(List.of(1, 2, 3), Sequence.of(1).concat(Sequence.of(2, 3)).toImmutableList());
+        assertEquals(List.of(1), Sequence.of(1).concat(Sequence.of()).toImmutableList());
 
-        assertEquals(List.of(1, 2), Sequence.of(1).concat(List.of(Sequence.of(), Sequence.of(2))).toList());
-        assertEquals(List.of(2), Sequence.of().concat(List.of(Sequence.of(), Sequence.of(2))).toList());
-        assertEquals(List.of(), Sequence.of().concat(List.of()).toList());
+        assertEquals(List.of(1, 2), Sequence.of(1).concat(List.of(Sequence.of(), Sequence.of(2))).toImmutableList());
+        assertEquals(List.of(2), Sequence.of().concat(List.of(Sequence.of(), Sequence.of(2))).toImmutableList());
+        assertEquals(List.of(), Sequence.of().concat(List.of()).toImmutableList());
     }
 
     @Test
     void map() {
-        assertEquals(List.of(1, 2, 3), Sequence.of("1", "2", "3").map(Integer::valueOf).toList());
+        assertEquals(List.of(1, 2, 3), Sequence.of("1", "2", "3").map(Integer::valueOf).toImmutableList());
         assertFalse(Sequence.of().map(Object::toString).hasNext());
     }
 
     @Test
     void filter() {
-        assertEquals(List.of(3), Sequence.of(1, 2, 3).filter(i -> i > 2).toList());
-        assertEquals(List.of(), Sequence.of(1, 2, 3).filter(i -> i > 3).toList());
-        assertEquals(List.of(), Sequence.<Integer>of().filter(i -> i > 3).toList());
+        assertEquals(List.of(3), Sequence.of(1, 2, 3).filter(i -> i > 2).toImmutableList());
+        assertEquals(List.of(), Sequence.of(1, 2, 3).filter(i -> i > 3).toImmutableList());
+        assertEquals(List.of(), Sequence.<Integer>of().filter(i -> i > 3).toImmutableList());
     }
 
     @Test
     void flatMap() {
-        assertEquals(List.of(1, 1, 1, 2), Sequence.of(1, 2).flatMap(i -> Sequence.of(1, i)).toList());
-        assertEquals(List.of(1, 1), Sequence.of(1).flatMap(i -> Sequence.of(1, i)).toList());
-        assertEquals(List.of(), Sequence.of(1).flatMap(i -> Sequence.of()).toList());
-        assertEquals(List.of(), Sequence.of().flatMap(i -> Sequence.of(1, 2)).toList());
+        assertEquals(List.of(1, 1, 1, 2), Sequence.of(1, 2).flatMap(i -> Sequence.of(1, i)).toImmutableList());
+        assertEquals(List.of(1, 1), Sequence.of(1).flatMap(i -> Sequence.of(1, i)).toImmutableList());
+        assertEquals(List.of(), Sequence.of(1).flatMap(i -> Sequence.of()).toImmutableList());
+        assertEquals(List.of(), Sequence.of().flatMap(i -> Sequence.of(1, 2)).toImmutableList());
     }
 
     @Test
     void distinct() {
-        assertEquals(List.of(1, 2), Sequence.of(1, 1, 1, 2).distinct().toList());
-        assertEquals(List.of(), Sequence.of().distinct().toList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 1, 1, 2).distinct().toImmutableList());
+        assertEquals(List.of(), Sequence.of().distinct().toImmutableList());
     }
 
     @Test
     void distinctBy() {
-        assertEquals(List.of(1, 2), Sequence.of(1, 1, 1, 2).distinctBy(i -> i + 1).toList());
-        assertEquals(List.of(1, 2), Sequence.of(1, 1, 1, 2).distinctBy(i -> i % 2).toList());
-        assertEquals(List.of(), Sequence.of().distinctBy(i -> i).toList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 1, 1, 2).distinctBy(i -> i + 1).toImmutableList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 1, 1, 2).distinctBy(i -> i % 2).toImmutableList());
+        assertEquals(List.of(), Sequence.of().distinctBy(i -> i).toImmutableList());
     }
 
 
     @Test
     void filterNonNull() {
-        assertEquals(List.of(1, 2), Sequence.of(1, 2).filterNonNull().toList());
-        assertEquals(List.of(1, 2), Sequence.of(1, 2, null).filterNonNull().toList());
-        assertEquals(List.of(), Sequence.of((Integer) null).filterNonNull().toList());
-        assertEquals(List.of(), Sequence.of().filterNonNull().toList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 2).filterNonNull().toImmutableList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 2, null).filterNonNull().toImmutableList());
+        assertEquals(List.of(), Sequence.of((Integer) null).filterNonNull().toImmutableList());
+        assertEquals(List.of(), Sequence.of().filterNonNull().toImmutableList());
     }
 
     @Test
     void drop() {
-        assertEquals(List.of(2), Sequence.of(1, 2).drop(1).toList());
-        assertEquals(List.of(1, 2), Sequence.of(1, 2).drop(0).toList());
-        assertEquals(List.of(), Sequence.of(1, 2).drop(2).toList());
-        assertEquals(List.of(), Sequence.of(1, 2).drop(3).toList());
-        assertEquals(List.of(), Sequence.of().drop(2).toList());
+        assertEquals(List.of(2), Sequence.of(1, 2).drop(1).toImmutableList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 2).drop(0).toImmutableList());
+        assertEquals(List.of(), Sequence.of(1, 2).drop(2).toImmutableList());
+        assertEquals(List.of(), Sequence.of(1, 2).drop(3).toImmutableList());
+        assertEquals(List.of(), Sequence.of().drop(2).toImmutableList());
     }
 
     @Test
     void dropWhile() {
-        assertEquals(List.of(2, 3), Sequence.of(1, 2, 3).dropWhile(i -> i <= 1).toList());
-        assertEquals(List.of(1, 2, 3), Sequence.of(1, 2, 3).dropWhile(i -> i < 1).toList());
-        assertEquals(List.of(), Sequence.of(1, 2, 3).dropWhile(i -> i <= 3).toList());
-        assertEquals(List.of(), Sequence.<Integer>of().dropWhile(i -> i <= 3).toList());
+        assertEquals(List.of(2, 3), Sequence.of(1, 2, 3).dropWhile(i -> i <= 1).toImmutableList());
+        assertEquals(List.of(1, 2, 3), Sequence.of(1, 2, 3).dropWhile(i -> i < 1).toImmutableList());
+        assertEquals(List.of(), Sequence.of(1, 2, 3).dropWhile(i -> i <= 3).toImmutableList());
+        assertEquals(List.of(), Sequence.<Integer>of().dropWhile(i -> i <= 3).toImmutableList());
     }
 
     @Test
     void take() {
-        assertEquals(List.of(1), Sequence.of(1, 2).take(1).toList());
-        assertEquals(List.of(), Sequence.of(1, 2).take(0).toList());
-        assertEquals(List.of(1, 2), Sequence.of(1, 2).take(2).toList());
-        assertEquals(List.of(1, 2), Sequence.of(1, 2).take(3).toList());
-        assertEquals(List.of(), Sequence.of().take(2).toList());
+        assertEquals(List.of(1), Sequence.of(1, 2).take(1).toImmutableList());
+        assertEquals(List.of(), Sequence.of(1, 2).take(0).toImmutableList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 2).take(2).toImmutableList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 2).take(3).toImmutableList());
+        assertEquals(List.of(), Sequence.of().take(2).toImmutableList());
     }
 
     @Test
     void takeWhile() {
-        assertEquals(List.of(1), Sequence.of(1, 2, 3).takeWhile(i -> i <= 1).toList());
-        assertEquals(List.of(), Sequence.of(1, 2, 3).takeWhile(i -> i < 1).toList());
-        assertEquals(List.of(1, 2, 3), Sequence.of(1, 2, 3).takeWhile(i -> i <= 3).toList());
-        assertEquals(List.of(), Sequence.<Integer>of().takeWhile(i -> i <= 3).toList());
+        assertEquals(List.of(1), Sequence.of(1, 2, 3).takeWhile(i -> i <= 1).toImmutableList());
+        assertEquals(List.of(), Sequence.of(1, 2, 3).takeWhile(i -> i < 1).toImmutableList());
+        assertEquals(List.of(1, 2, 3), Sequence.of(1, 2, 3).takeWhile(i -> i <= 3).toImmutableList());
+        assertEquals(List.of(), Sequence.<Integer>of().takeWhile(i -> i <= 3).toImmutableList());
     }
 
     @Test
@@ -131,9 +131,9 @@ class SequenceTest {
 
     @Test
     void buffered() {
-        assertEquals(List.of(List.of(1, 2), List.of(3, 4)), Sequence.of(1, 2, 3, 4).buffered(2).toList());
-        assertEquals(List.of(List.of(1, 2), List.of(3)), Sequence.of(1, 2, 3).buffered(2).toList());
-        assertEquals(List.of(), Sequence.of().buffered(2).toList());
+        assertEquals(List.of(List.of(1, 2), List.of(3, 4)), Sequence.of(1, 2, 3, 4).buffered(2).toImmutableList());
+        assertEquals(List.of(List.of(1, 2), List.of(3)), Sequence.of(1, 2, 3).buffered(2).toImmutableList());
+        assertEquals(List.of(), Sequence.of().buffered(2).toImmutableList());
     }
 
     @SuppressWarnings("unchecked")
@@ -149,7 +149,7 @@ class SequenceTest {
     @Test
     void peek() {
         Consumer<Integer> consumer = mock(Consumer.class);
-        assertEquals(List.of(1, 2), Sequence.of(1, 2).peek(consumer).toList());
+        assertEquals(List.of(1, 2), Sequence.of(1, 2).peek(consumer).toImmutableList());
         verify(consumer).accept(eq(1));
         verify(consumer).accept(eq(2));
     }
@@ -198,8 +198,8 @@ class SequenceTest {
 
     @Test
     void toSet() {
-        assertEquals(Set.of(1, 2), Sequence.of(1, 1, 2).toSet());
-        assertEquals(Set.of(), Sequence.of().toSet());
+        assertEquals(Set.of(1, 2), Sequence.of(1, 1, 2).toImmutableSet());
+        assertEquals(Set.of(), Sequence.of().toImmutableSet());
     }
 
     @Test
@@ -214,8 +214,8 @@ class SequenceTest {
 
     @Test
     void toMap() {
-        assertEquals(Map.of("1", 1, "2", 2), Sequence.of(1, 1, 2).toMap(String::valueOf, i -> i));
-        assertEquals(Map.of(), Sequence.of().toMap(String::valueOf, i -> i));
+        assertEquals(Map.of("1", 1, "2", 2), Sequence.of(1, 1, 2).toImmutableMap(String::valueOf, i -> i));
+        assertEquals(Map.of(), Sequence.of().toImmutableMap(String::valueOf, i -> i));
     }
 
     @Test
@@ -292,12 +292,20 @@ class SequenceTest {
     void maxBy() {
         assertEquals(Optional.of(4), Sequence.of(1, 2, 3, 4).maxBy(naturalOrder()));
         assertEquals(Optional.empty(), Sequence.<Integer>of().maxBy(naturalOrder()));
+
+        assertEquals(Optional.of(4), Sequence.of(1, 2, 3, 4).max());
+        assertEquals(Optional.empty(), Sequence.<Integer>of().max());
+
+        assertThrows(ClassCastException.class, () -> Sequence.of(new Object(), new Object()).max());
     }
 
     @Test
     void minBy() {
         assertEquals(Optional.of(1), Sequence.of(1, 2, 3, 4).minBy(naturalOrder()));
         assertEquals(Optional.empty(), Sequence.<Integer>of().minBy(naturalOrder()));
+
+        assertEquals(Optional.of(1), Sequence.of(1, 2, 3, 4).min());
+        assertEquals(Optional.empty(), Sequence.<Integer>of().min());
     }
 
     @Test
@@ -350,7 +358,10 @@ class SequenceTest {
 
     @Test
     void sortedBy() {
-        assertEquals(List.of(1, 2, 3), Sequence.of(2, 3, 1).sortedBy(naturalOrder()).toList());
+        assertEquals(List.of(1, 2, 3), Sequence.of(2, 3, 1).sortedBy(naturalOrder()).toImmutableList());
+        assertEquals(List.of(1, 2, 3), Sequence.of(2, 3, 1).sorted().toImmutableList());
+
+        assertThrows(ClassCastException.class, () -> Sequence.of(new Object(), new Object()).sorted().toImmutableList());
     }
 
     @Test
@@ -361,7 +372,7 @@ class SequenceTest {
     void zip() {
         assertFalse(Sequence.zip(Sequence.of(), Sequence.of(1)).hasNext());
         assertEquals(List.of(Pair.of(1, "1"), Pair.of(2, "2")),
-                Sequence.zip(Sequence.of(1, 2), Sequence.of("1", "2", "3")).toList());
+                Sequence.zip(Sequence.of(1, 2), Sequence.of("1", "2", "3")).toImmutableList());
     }
 
     @Test
