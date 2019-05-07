@@ -63,6 +63,8 @@ public class Lazy<T> implements Supplier<T> {
                 if (value == null) {
                     T value = requireNonNull(supplier.get());
                     valueHandle.setVolatile(this, value);
+                    // set supplier to null so the related objects can be recycled
+                    supplier = null;
                 }
             }
         }
