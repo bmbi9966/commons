@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
+
 /**
- * Immutable Pair/Tuple2.
+ * Immutable Pair/Tuple2. The key and value can not be null.
  *
  * @param <K> the key type
  * @param <V> the value type
@@ -17,8 +19,8 @@ public class Pair<K, V> implements Map.Entry<K, V>, Serializable {
     private final V value;
 
     private Pair(K key, V value) {
-        this.key = key;
-        this.value = value;
+        this.key = requireNonNull(key);
+        this.value = requireNonNull(value);
     }
 
     /**

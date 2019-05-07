@@ -3,8 +3,10 @@ package net.dongliu.commons.collection;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
+
 /**
- * Immutable Tuple3.
+ * Immutable Tuple with three elements. The values of tuple cannot be null.
  */
 public class Triple<A, B, C> implements Serializable {
     private static final long serialVersionUID = -6791546755492843197L;
@@ -13,9 +15,9 @@ public class Triple<A, B, C> implements Serializable {
     private final C third;
 
     private Triple(A first, B second, C third) {
-        this.first = first;
-        this.second = second;
-        this.third = third;
+        this.first = requireNonNull(first);
+        this.second = requireNonNull(second);
+        this.third = requireNonNull(third);
     }
 
     /**
