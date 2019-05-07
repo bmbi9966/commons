@@ -329,9 +329,7 @@ public interface Sequence<T> extends Iterator<T> {
      */
     default Sequence<T> sortedBy(Comparator<? super T> comparator) {
         requireNonNull(comparator);
-        List<T> list = toArrayList();
-        list.sort(comparator);
-        return of(list);
+        return new SortedSequence<>(this, comparator);
     }
 
     /**

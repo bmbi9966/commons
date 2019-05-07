@@ -361,6 +361,7 @@ class SequenceTest {
         assertEquals(List.of(1, 2, 3), Sequence.of(2, 3, 1).sortedBy(naturalOrder()).toImmutableList());
         assertEquals(List.of(1, 2, 3), Sequence.of(2, 3, 1).sorted().toImmutableList());
 
+        assertThrows(ClassCastException.class, () -> Sequence.of(new Object()).sorted().toImmutableList());
         assertThrows(ClassCastException.class, () -> Sequence.of(new Object(), new Object()).sorted().toImmutableList());
     }
 
