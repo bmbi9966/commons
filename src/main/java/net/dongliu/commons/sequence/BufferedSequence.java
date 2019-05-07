@@ -3,8 +3,6 @@ package net.dongliu.commons.sequence;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.unmodifiableList;
-
 class BufferedSequence<T> implements Sequence<List<T>> {
     private final Sequence<T> sequence;
     private final int size;
@@ -28,6 +26,6 @@ class BufferedSequence<T> implements Sequence<List<T>> {
             }
             list.add(sequence.next());
         }
-        return unmodifiableList(list);
+        return List.copyOf(list);
     }
 }

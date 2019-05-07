@@ -837,7 +837,8 @@ public interface Sequence<T> extends Iterator<T> {
     }
 
     /**
-     * If any element in this sequence meet the predicate
+     * If any element in this sequence meet the predicate.
+     * This method would always return false if Sequence is empty.
      */
     default boolean anyMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
@@ -850,12 +851,27 @@ public interface Sequence<T> extends Iterator<T> {
     }
 
     /**
-     * If all elements in this sequence meet the predicate
+     * If all elements in this sequence meet the predicate.
+     * This method would always return true if Sequence is empty.
      */
     default boolean allMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
         while (hasNext()) {
             if (!predicate.test(next())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * If no elements in this sequence meet the predicate.
+     * This method would always return true if Sequence is empty.
+     */
+    default boolean noneMatch(Predicate<? super T> predicate) {
+        requireNonNull(predicate);
+        while (hasNext()) {
+            if (predicate.test(next())) {
                 return false;
             }
         }

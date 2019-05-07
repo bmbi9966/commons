@@ -335,15 +335,24 @@ class SequenceTest {
 
     @Test
     void anyMatch() {
+        assertFalse(Sequence.<Integer>of().anyMatch(i -> i >= 1));
         assertTrue(Sequence.of(1, 2, 3, 4).anyMatch(i -> i > 1));
         assertFalse(Sequence.of(1, 2, 3, 4).anyMatch(i -> i > 4));
     }
 
     @Test
     void allMatch() {
+        assertTrue(Sequence.<Integer>of().allMatch(i -> i >= 1));
         assertTrue(Sequence.of(1, 2, 3, 4).allMatch(i -> i >= 1));
         assertFalse(Sequence.of(1, 2, 3, 4).allMatch(i -> i > 1));
         assertFalse(Sequence.of(1, 2, 3, 4).allMatch(i -> i > 4));
+    }
+
+    @Test
+    void noneMatch() {
+        assertTrue(Sequence.<Integer>of().noneMatch(i -> i >= 1));
+        assertFalse(Sequence.of(1, 2, 3, 4).noneMatch(i -> i >= 1));
+        assertTrue(Sequence.of(1, 2, 3, 4).noneMatch(i -> i > 4));
     }
 
     @Test
