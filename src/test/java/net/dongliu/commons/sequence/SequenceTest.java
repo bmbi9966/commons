@@ -130,10 +130,10 @@ class SequenceTest {
     }
 
     @Test
-    void buffered() {
-        assertEquals(List.of(List.of(1, 2), List.of(3, 4)), Sequence.of(1, 2, 3, 4).buffered(2).toImmutableList());
-        assertEquals(List.of(List.of(1, 2), List.of(3)), Sequence.of(1, 2, 3).buffered(2).toImmutableList());
-        assertEquals(List.of(), Sequence.of().buffered(2).toImmutableList());
+    void chunked() {
+        assertEquals(List.of(List.of(1, 2), List.of(3, 4)), Sequence.of(1, 2, 3, 4).chunked(2).toImmutableList());
+        assertEquals(List.of(List.of(1, 2), List.of(3)), Sequence.of(1, 2, 3).chunked(2).toImmutableList());
+        assertEquals(List.of(), Sequence.of().chunked(2).toImmutableList());
     }
 
     @SuppressWarnings("unchecked")
@@ -185,25 +185,9 @@ class SequenceTest {
     }
 
     @Test
-    void toArrayList() {
-    }
-
-    @Test
-    void toList() {
-    }
-
-    @Test
-    void toHashSet() {
-    }
-
-    @Test
     void toSet() {
         assertEquals(Set.of(1, 2), Sequence.of(1, 1, 2).toImmutableSet());
         assertEquals(Set.of(), Sequence.of().toImmutableSet());
-    }
-
-    @Test
-    void toHashMap() {
     }
 
     @Test
@@ -257,14 +241,6 @@ class SequenceTest {
     }
 
     @Test
-    void partitionAndReduce() {
-    }
-
-    @Test
-    void partitionAndCollect() {
-    }
-
-    @Test
     void partitionToList() {
         assertEquals(new PartitionResult<>(List.of(2, 4), List.of(1, 3)),
                 Sequence.of(1, 2, 3, 4).partitionToList(i -> i % 2 == 0));
@@ -282,10 +258,6 @@ class SequenceTest {
     void joinToString() {
         assertEquals("1,2,3,4", Sequence.of(1, 2, 3, 4).joinToString(","));
         assertEquals("(1,2,3,4)", Sequence.of(1, 2, 3, 4).joinToString(",", "(", ")"));
-    }
-
-    @Test
-    void count() {
     }
 
     @Test
@@ -356,10 +328,6 @@ class SequenceTest {
     }
 
     @Test
-    void asIterable() {
-    }
-
-    @Test
     void asStream() {
         assertEquals(List.of(1, 2, 3), Sequence.of(1, 2, 3).asStream().collect(Collectors.toList()));
 
@@ -375,10 +343,6 @@ class SequenceTest {
     }
 
     @Test
-    void remove() {
-    }
-
-    @Test
     void zip() {
         assertFalse(Sequence.zip(Sequence.of(), Sequence.of(1)).hasNext());
         assertEquals(List.of(Pair.of(1, "1"), Pair.of(2, "2")),
@@ -386,6 +350,8 @@ class SequenceTest {
     }
 
     @Test
-    void toCollection() {
+    void sum() {
+        assertEquals(10, Sequence.of(1, 2, 3, 4).sumInt(Integer::intValue));
+        assertEquals(10L, Sequence.of(1, 2, 3, 4).sumLong(Integer::longValue));
     }
 }

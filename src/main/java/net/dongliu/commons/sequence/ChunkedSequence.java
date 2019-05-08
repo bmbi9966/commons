@@ -3,11 +3,11 @@ package net.dongliu.commons.sequence;
 import java.util.ArrayList;
 import java.util.List;
 
-class BufferedSequence<T> implements Sequence<List<T>> {
+class ChunkedSequence<T> implements Sequence<List<T>> {
     private final Sequence<T> sequence;
     private final int size;
 
-    public BufferedSequence(Sequence<T> sequence, int size) {
+    public ChunkedSequence(Sequence<T> sequence, int size) {
         this.sequence = sequence;
         this.size = size;
     }

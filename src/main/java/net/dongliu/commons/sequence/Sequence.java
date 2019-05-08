@@ -198,7 +198,7 @@ public interface Sequence<T> extends Iterator<T> {
         if (!hasNext()) {
             return of();
         }
-        return new TransformSequence<>(this, requireNonNull(mapper));
+        return new MappedSequence<>(this, requireNonNull(mapper));
     }
 
     /**
@@ -313,12 +313,12 @@ public interface Sequence<T> extends Iterator<T> {
      *
      * @param size the max size for buffer
      */
-    default Sequence<List<T>> buffered(int size) {
+    default Sequence<List<T>> chunked(int size) {
         Utils.checkSize(size);
         if (!hasNext()) {
             return of();
         }
-        return new BufferedSequence<>(this, size);
+        return new ChunkedSequence<>(this, size);
     }
 
     /**
@@ -358,19 +358,7 @@ public interface Sequence<T> extends Iterator<T> {
      * Return a Sequence, with has a side effect when a element is take out, it is consume by specified consumer.
      */
     default Sequence<T> peek(Consumer<? super T> consumer) {
-        return new Sequence<>() {
-            @Override
-            public boolean hasNext() {
-                return Sequence.this.hasNext();
-            }
-
-            @Override
-            public T next() {
-                T value = Sequence.this.next();
-                consumer.accept(value);
-                return value;
-            }
-        };
+        return new PeekSequence<>(this, requireNonNull(consumer));
     }
 
     /**
@@ -776,6 +764,75 @@ public interface Sequence<T> extends Iterator<T> {
     @SuppressWarnings("unchecked")
     default Optional<T> min() {
         return minBy((Comparator<T>) naturalOrder());
+    }
+
+    /**
+     * Sum the int values calculated by the elements.
+     *
+     * @param function the function convert elements to int values
+     */
+    default int sumInt(ToIntFunction<T> function) {
+        int total = 0;
+        while (hasNext()) {
+            total += function.applyAsInt(next());
+        }
+        return total;
+    }
+
+    /**
+     * Sum the long values calculated by the elements.
+     *
+     * @param function the function convert elements to long values
+     */
+    default long sumLong(ToLongFunction<T> function) {
+        long total = 0;
+        while (hasNext()) {
+            total += function.applyAsLong(next());
+        }
+        return total;
+    }
+
+    /**
+     * Sum the double values calculated by the elements.
+     *
+     * @param function the function convert elements to double values
+     */
+    default double sumDouble(ToDoubleFunction<T> function) {
+        double total = 0;
+        while (hasNext()) {
+            total += function.applyAsDouble(next());
+        }
+        return total;
+    }
+
+    /**
+     * Calculate the average value of values calculated by the elements.
+     *
+     * @param function the function convert elements to long values
+     */
+    default double averageLong(ToLongFunction<T> function) {
+        long total = 0;
+        long count = 0;
+        while (hasNext()) {
+            total += function.applyAsLong(next());
+            count++;
+        }
+        return (double) total / count;
+    }
+
+    /**
+     * Calculate the average value of values calculated by the elements.
+     *
+     * @param function the function convert elements to double float values
+     */
+    default double averageDouble(ToDoubleFunction<T> function) {
+        double total = 0;
+        long count = 0;
+        while (hasNext()) {
+            total += function.applyAsDouble(next());
+            count++;
+        }
+        return total / count;
     }
 
     /**
