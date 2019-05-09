@@ -8,6 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
@@ -44,6 +45,18 @@ public class Objects2 {
             return value1;
         }
         return requireNonNull(value2);
+    }
+
+
+    /**
+     * Convenient method for manipulating object.
+     * <pre>
+     * Pojo pojo = runWith(new Pojo(), p -> {p.setX(x); p.setY(y);})
+     * </pre>
+     */
+    public static <T> T runWith(T value, Consumer<T> consumer) {
+        consumer.accept(value);
+        return value;
     }
 
     /**
