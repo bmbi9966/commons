@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
@@ -103,6 +104,21 @@ public class Sets {
     @SafeVarargs
     public static <T> HashSet<T> newHashSet(T... values) {
         HashSet<T> set = new HashSet<>(Math.max(INIT_CAPACITY, (int) (values.length / LOAD_FACTOR)));
+        Collections.addAll(set, values);
+        return set;
+    }
+
+    /**
+     * For easy set creation with initial values.
+     *
+     * @param supplier the sest supplier
+     * @param values   the elements to add into set
+     * @param <T>      element type
+     * @return the set
+     */
+    @SafeVarargs
+    public static <T, R extends Set<T>> R newSet(Supplier<R> supplier, T... values) {
+        var set = supplier.get();
         Collections.addAll(set, values);
         return set;
     }

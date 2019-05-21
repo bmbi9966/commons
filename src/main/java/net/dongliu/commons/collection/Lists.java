@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static java.lang.Math.addExact;
 import static java.util.Collections.unmodifiableList;
@@ -100,12 +101,24 @@ public class Lists {
     }
 
     /**
-     * Create new immutable List. Values cannot be null.
-     * This method will do defensive copy for the param values.
+     * Create new array List.
      */
     @SafeVarargs
     public static <T> ArrayList<T> newArrayList(T... values) {
-        ArrayList<T> list = new ArrayList<>(Math.max(16, values.length));
+        return newList(ArrayList::new, values);
+    }
+
+    /**
+     * For easy list creation with initial values.
+     *
+     * @param supplier the list supplier
+     * @param values   the elements to add into list
+     * @param <T>      element type
+     * @return the list
+     */
+    @SafeVarargs
+    public static <T, R extends List<T>> R newList(Supplier<R> supplier, T... values) {
+        var list = supplier.get();
         Collections.addAll(list, values);
         return list;
     }

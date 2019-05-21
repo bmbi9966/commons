@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.util.Collections.singletonMap;
 import static java.util.Collections.unmodifiableMap;
@@ -47,12 +48,7 @@ public class Maps {
      */
     @SafeVarargs
     public static <K, V> HashMap<K, V> newHashMap(Map.Entry<? extends K, ? extends V>... entries) {
-        int initSize = Math.max(DEFAULT_INIT_CAPACITY, (int) (entries.length / DEFAULT_LOAD_FACTOR));
-        HashMap<K, V> map = new HashMap<>(initSize, DEFAULT_LOAD_FACTOR);
-        for (var entry : entries) {
-            map.put(requireNonNull(entry.getKey()), requireNonNull(entry.getValue()));
-        }
-        return map;
+        return newMap(HashMap::new, entries);
     }
 
     /**
@@ -67,9 +63,24 @@ public class Maps {
      */
     @SafeVarargs
     public static <V> Map<String, V> newCaseInsensitiveMap(Map.Entry<String, ? extends V>... entries) {
-        var map = new TreeMap<String, V>(String.CASE_INSENSITIVE_ORDER);
+        return newMap(Maps::newCaseInsensitiveMap, entries);
+    }
+
+    /**
+     * For easy map creation with initial values.
+     *
+     * @param supplier the map supplier
+     * @param entries  the entries to put into map
+     * @param <K>      key type
+     * @param <V>      value type
+     * @return the map
+     */
+    @SafeVarargs
+    public static <K, V, R extends Map<K, V>> R newMap(Supplier<R> supplier,
+                                                       Map.Entry<? extends K, ? extends V>... entries) {
+        var map = supplier.get();
         for (var entry : entries) {
-            map.put(requireNonNull(entry.getKey()), requireNonNull(entry.getValue()));
+            map.put(entry.getKey(), entry.getValue());
         }
         return map;
     }
