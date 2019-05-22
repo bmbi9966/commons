@@ -256,6 +256,31 @@ public class Maps {
     /**
      * Create new immutable map from a collection of keys, the values are constructed by valueMaker.
      *
+     * @param elements     the key collections
+     * @param keyRetriever to get key from elements
+     * @param valueMaker   to make value from elements
+     * @param <K>          key type
+     * @param <V>          value type
+     * @return new map
+     */
+    public static <T, K, V> Map<K, V> from(Collection<? extends T> elements,
+                                           Function<? super T, ? extends K> keyRetriever,
+                                           Function<? super T, ? extends V> valueMaker) {
+        requireNonNull(elements);
+        requireNonNull(valueMaker);
+        if (elements.isEmpty()) {
+            return Map.of();
+        }
+        Map<K, V> map = new HashMap<>();
+        for (T e : elements) {
+            map.put(keyRetriever.apply(e), valueMaker.apply(e));
+        }
+        return unmodifiableMap(map);
+    }
+
+    /**
+     * Create new immutable map from a collection of keys, the values are constructed by valueMaker.
+     *
      * @param keys       the key collections
      * @param valueMaker to make value from key
      * @param <K>        key type
@@ -263,38 +288,20 @@ public class Maps {
      * @return new map
      */
     public static <K, V> Map<K, V> fromKeys(Collection<? extends K> keys, Function<? super K, ? extends V> valueMaker) {
-        requireNonNull(keys);
-        requireNonNull(valueMaker);
-        if (keys.isEmpty()) {
-            return Map.of();
-        }
-        Map<K, V> map = new HashMap<>();
-        for (K key : keys) {
-            map.put(key, valueMaker.apply(key));
-        }
-        return unmodifiableMap(map);
+        return from(keys, Function.identity(), valueMaker);
     }
 
     /**
      * Create new immutable map from a collection of values, the values are constructed by keyMaker.
      *
      * @param values   the value collections
-     * @param keyMaker to get key from value
+     * @param keyRetriever to get key from value
      * @param <K>      key type
      * @param <V>      value type
      * @return new map
      */
     public static <K, V> Map<K, V> fromValues(Collection<? extends V> values,
-                                              Function<? super V, ? extends K> keyMaker) {
-        requireNonNull(values);
-        requireNonNull(keyMaker);
-        if (values.isEmpty()) {
-            return Map.of();
-        }
-        Map<K, V> map = new HashMap<>();
-        for (V value : values) {
-            map.put(keyMaker.apply(value), value);
-        }
-        return unmodifiableMap(map);
+                                              Function<? super V, ? extends K> keyRetriever) {
+        return from(values, keyRetriever, Function.identity());
     }
 }
