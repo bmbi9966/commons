@@ -225,4 +225,11 @@ public class StringsTest {
         assertEquals("ttt", Strings.appendIfMissing("ttt", "tt"));
         assertEquals("a", Strings.appendIfMissing("a", ""));
     }
+
+    @Test
+    void reverse() {
+        assertEquals("", Strings.reverse(""));
+        assertEquals("1", Strings.reverse("1"));
+        assertEquals("21", Strings.reverse("12"));
+    }
 }

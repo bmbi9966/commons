@@ -494,4 +494,22 @@ public class Strings {
         }
         return str;
     }
+
+    /**
+     * Return a reversed string
+     *
+     * @param str the original string
+     * @return a reversed string
+     */
+    public static String reverse(String str) {
+        requireNonNull(str);
+        if (str.length() <= 1) {
+            return str;
+        }
+        var sb = new StringBuilder(str.length());
+        for (int i = str.length() - 1; i >= 0; i--) {
+            sb.append(str.charAt(i));
+        }
+        return sb.toString();
+    }
 }
