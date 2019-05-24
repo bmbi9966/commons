@@ -1,5 +1,7 @@
 package net.dongliu.commons;
 
+import net.dongliu.commons.function.Predicates;
+
 import java.time.Duration;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -8,7 +10,8 @@ import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
 /**
- * For retry execute code. This Class is immutable, and the instance should be reused.
+ * This is a immutable value class for retrying execute code.
+ * The Retry instances should be reused if possible.
  */
 public class Retry {
     private final int times;
@@ -16,10 +19,10 @@ public class Retry {
     // decode if retry by the exception thrown
     private final Predicate<Throwable> predicate;
 
-    private Retry(Builder builder) {
-        times = builder.times;
-        intervalProvider = builder.intervalProvider;
-        predicate = builder.predicate;
+    private Retry(int times, IntFunction<Duration> intervalProvider, Predicate<Throwable> predicate) {
+        this.times = times;
+        this.intervalProvider = intervalProvider;
+        this.predicate = predicate;
     }
 
     /**
@@ -40,15 +43,7 @@ public class Retry {
      * @return new Retry instance
      */
     public static Retry of(int times, Duration interval) {
-        return builder(times).interval(interval).build();
-    }
-
-    /**
-     * Create a new Builder with times.
-     * @param times the total times may run the code. If pass a value less than 1, will run the code one and only one time.
-     */
-    public static Builder builder(int times) {
-        return new Builder(times);
+        return new Retry(times, t -> interval, Predicates.alwaysTrue());
     }
 
     /**
@@ -105,54 +100,39 @@ public class Retry {
 
 
     /**
-     * 用于自定义Builder实例
+     * Return a new Retry with intervalProvider.
+     *
+     * @param intervalProvider Provide interval between retries
      */
-    public static final class Builder {
-        private int times;
-        private IntFunction<Duration> intervalProvider = i -> Duration.ZERO;
-        private Predicate<Throwable> predicate = e -> true;
+    public Retry withIntervalProvider(IntFunction<Duration> intervalProvider) {
+        requireNonNull(intervalProvider);
+        return new Retry(times, intervalProvider, predicate);
+    }
 
-        private Builder(int times) {
-            this.times = times;
-        }
+    /**
+     * Return a new Retry with new interval.
+     */
+    public Retry withInterval(Duration interval) {
+        requireNonNull(interval);
+        return withIntervalProvider(t -> interval);
+    }
 
-        /**
-         * Provide interval between retries
-         */
-        public Builder intervalProvider(IntFunction<Duration> intervalProvider) {
-            this.intervalProvider = requireNonNull(intervalProvider);
-            return this;
-        }
+    /**
+     * Return a new Retry with new retry predicate.
+     * When exception thrown pass the test of predicate(and not exceed the times limit) retry would be done
+     *
+     * @param predicate thr predicate
+     */
+    public Retry retryIf(Predicate<Throwable> predicate) {
+        requireNonNull(intervalProvider);
+        return new Retry(times, intervalProvider, predicate);
+    }
 
-        /**
-         * Set interval between retries
-         */
-        public Builder interval(Duration interval) {
-            requireNonNull(interval);
-            return intervalProvider(i -> interval);
-        }
-
-        /**
-         * Retry when exception thrown pass the test of predicate.
-         */
-        public Builder retryIf(Predicate<Throwable> predicate) {
-            this.predicate = requireNonNull(predicate);
-            return this;
-        }
-
-        /**
-         * Retry when thrown exception is or sub of given exception type.
-         */
-        public Builder retryIfThrown(Class<? extends Throwable> cls) {
-            return retryIf(cls::isInstance);
-        }
-
-        /**
-         * Create a new Retry instance with settings.
-         */
-        public Retry build() {
-            return new Retry(this);
-        }
+    /**
+     * Return a new Retry which would retry when thrown exception is or sub of given exception type.
+     */
+    public Retry retryIfThrown(Class<? extends Throwable> cls) {
+        return retryIf(cls::isInstance);
     }
 
 }

@@ -8,7 +8,7 @@ import java.util.StringJoiner;
 import static java.util.Objects.requireNonNull;
 
 /**
- * For join strings.
+ * A immutable value class for joining strings.
  * This class is immutable, and should be reused across multi invocations of join with same rule.
  */
 public class Joiner {
@@ -25,13 +25,14 @@ public class Joiner {
     // skip empty string
     private final boolean skipEmpty;
 
-    private Joiner(Builder builder) {
-        prefix = builder.prefix;
-        suffix = builder.suffix;
-        delimiter = builder.delimiter;
-        skipNulls = builder.skipNulls;
-        nullToEmpty = builder.nullToEmpty;
-        skipEmpty = builder.skipEmpty;
+    private Joiner(CharSequence prefix, CharSequence suffix, CharSequence delimiter, boolean skipNulls,
+                   boolean nullToEmpty, boolean skipEmpty) {
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.delimiter = delimiter;
+        this.skipNulls = skipNulls;
+        this.nullToEmpty = nullToEmpty;
+        this.skipEmpty = skipEmpty;
     }
 
     /**
@@ -43,7 +44,10 @@ public class Joiner {
      * @return Joiner
      */
     public static Joiner of(CharSequence prefix, CharSequence suffix, CharSequence delimiter) {
-        return builder(delimiter).prefix(prefix).suffix(suffix).build();
+        requireNonNull(prefix);
+        requireNonNull(suffix);
+        requireNonNull(delimiter);
+        return new Joiner(prefix, suffix, delimiter, false, false, false);
     }
 
     /**
@@ -56,13 +60,6 @@ public class Joiner {
         return of("", "", delimiter);
     }
 
-    /**
-     * Return a new Builder instance with delimiter.
-     */
-    public static Builder builder(CharSequence delimiter) {
-        requireNonNull(delimiter);
-        return new Builder(delimiter);
-    }
 
     /**
      * Join strings, with prefix, suffix, and delimiter
@@ -119,69 +116,47 @@ public class Joiner {
     }
 
 
-    public static final class Builder {
-        private CharSequence delimiter;
-        private CharSequence prefix = "";
-        private CharSequence suffix = "";
-        private boolean skipNulls = false;
-        private boolean nullToEmpty = false;
-        private boolean skipEmpty = false;
-
-        private Builder(CharSequence delimiter) {
-            this.delimiter = delimiter;
-        }
-
-        /**
-         * Set prefix for joined string result. Default is empty str.
-         */
-        public Builder prefix(CharSequence prefix) {
-            this.prefix = requireNonNull(prefix);
-            return this;
-        }
-
-        /**
-         * Set suffix for joined string result. Default is empty str.
-         */
-        public Builder suffix(CharSequence suffix) {
-            this.suffix = suffix;
-            return this;
-        }
-
-        /**
-         * If a element to be joined is null, skip this element.
-         *
-         * @return new Joiner
-         */
-        public Builder skipNulls() {
-            this.skipNulls = true;
-            return this;
-        }
-
-        /**
-         * If a element to be joined is null, treat as empty str instead of "null".
-         * This setting works only when {@link #skipNulls} is false
-         *
-         * @return new Joiner
-         */
-        public Builder nullToEmpty() {
-            this.nullToEmpty = true;
-            return this;
-        }
-
-        /**
-         * If a element's toString result is empty str, the skip this element.
-         * Set skipEmpty to true would not skip null values, but if {@link #nullToEmpty} is be set also, the null values would be skipped.
-         */
-        public Builder skipEmpty() {
-            this.skipEmpty = true;
-            return this;
-        }
-
-        /**
-         * Build a new Joiner instance with settings.
-         */
-        public Joiner build() {
-            return new Joiner(this);
-        }
+    /**
+     * Return a new Joiner which using the given prefix for joined string result.
+     */
+    public Joiner withPrefix(CharSequence prefix) {
+        requireNonNull(prefix);
+        return new Joiner(prefix, suffix, delimiter, skipNulls, nullToEmpty, skipEmpty);
     }
+
+    /**
+     * Return a new Joiner which using the given suffix for joined string result.
+     */
+    public Joiner withSuffix(CharSequence suffix) {
+        requireNonNull(suffix);
+        return new Joiner(prefix, suffix, delimiter, skipNulls, nullToEmpty, skipEmpty);
+    }
+
+    /**
+     * Return a new Joiner with skip the null elements.
+     *
+     * @return new Joiner
+     */
+    public Joiner skipNulls() {
+        return new Joiner(prefix, suffix, delimiter, true, nullToEmpty, skipEmpty);
+    }
+
+    /**
+     * Return a new Joiner which treat null elements as empty str instead of "null".
+     * This setting works only when {@link #skipNulls} is false
+     *
+     * @return new Joiner
+     */
+    public Joiner nullToEmpty() {
+        return new Joiner(prefix, suffix, delimiter, skipNulls, true, skipEmpty);
+    }
+
+    /**
+     * Return a new Joiner which skip empty strings.
+     * Set skipEmpty to true would not skip null values, but if {@link #nullToEmpty} is be set also, the null values would be skipped.
+     */
+    public Joiner skipEmpty() {
+        return new Joiner(prefix, suffix, delimiter, skipNulls, nullToEmpty, true);
+    }
+
 }

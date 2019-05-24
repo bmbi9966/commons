@@ -56,24 +56,24 @@ class SplitterTest {
 
     @Test
     void skipEmpty() {
-        var splitter = Splitter.builder(",").skipEmpty().build();
+        var splitter = Splitter.of(",").skipEmpty();
         assertEquals(List.of(), splitter.splitToList(""));
         assertEquals(List.of(), splitter.splitToList(","));
         assertEquals(List.of("1"), splitter.splitToList(",1"));
 
-        splitter = Splitter.builder("").skipEmpty().build();
+        splitter = Splitter.of("").skipEmpty();
         assertEquals(List.of(), splitter.splitToList(""));
         assertEquals(List.of("1"), splitter.splitToList("1"));
     }
 
     @Test
     void trimResults() {
-        var splitter = Splitter.builder(",").trimResults().build();
+        var splitter = Splitter.of(",").trimResults();
         assertEquals(List.of(""), splitter.splitToList(""));
         assertEquals(List.of(""), splitter.splitToList(" "));
         assertEquals(List.of("", "1"), splitter.splitToList(",1"));
 
-        splitter = Splitter.builder(",").trimResults().skipEmpty().build();
+        splitter = Splitter.of(",").trimResults().skipEmpty();
         assertEquals(List.of(), splitter.splitToList(""));
         assertEquals(List.of(), splitter.splitToList(" "));
         assertEquals(List.of("1"), splitter.splitToList(",1"));
@@ -81,13 +81,13 @@ class SplitterTest {
 
     @Test
     void prefixSuffix() {
-        var splitter = Splitter.builder(",").prefix("{").suffix("}").build();
+        var splitter = Splitter.of(",").skipPrefix("{").skipSuffix("}");
         assertEquals(List.of(""), splitter.splitToList(""));
         assertEquals(List.of("1", "2"), splitter.splitToList("1,2"));
         assertEquals(List.of(""), splitter.splitToList("{}"));
         assertEquals(List.of("1", "2"), splitter.splitToList("{1,2}"));
 
-        splitter = Splitter.builder(",").prefix("{").suffix("}").skipEmpty().build();
+        splitter = Splitter.of(",").skipPrefix("{").skipSuffix("}").skipEmpty();
         assertEquals(List.of(), splitter.splitToList("{}"));
         assertEquals(List.of(), splitter.splitToList("{,}"));
         assertEquals(List.of("1"), splitter.splitToList("{1,}"));

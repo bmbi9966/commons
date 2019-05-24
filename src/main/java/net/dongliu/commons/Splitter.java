@@ -3,17 +3,14 @@ package net.dongliu.commons;
 import net.dongliu.commons.sequence.Sequence;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.RandomAccess;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * For splitting strings, with plain raw string or regular expression delimiter.
+ * A immutable value class for splitting strings, with plain raw string or regular expression delimiter.
  * This class is immutable, should be reused if possible.
  */
 public class Splitter {
@@ -27,27 +24,30 @@ public class Splitter {
     private final String prefix;
     private final String suffix;
 
-    private Splitter(Builder builder) {
-        delimiter = builder.delimiter;
-        delimiterPattern = builder.delimiterPattern;
-        trimResults = builder.trimResults;
-        skipEmpty = builder.skipEmpty;
-        prefix = builder.prefix;
-        suffix = builder.suffix;
+    private Splitter(@Nullable String delimiter, @Nullable Pattern delimiterPattern, boolean trimResults,
+                     boolean skipEmpty, String prefix, String suffix) {
+        this.delimiter = delimiter;
+        this.delimiterPattern = delimiterPattern;
+        this.trimResults = trimResults;
+        this.skipEmpty = skipEmpty;
+        this.prefix = prefix;
+        this.suffix = suffix;
     }
 
     /**
      * Create a splitter which split string by plain raw string delimiter.
      */
     public static Splitter of(String delimiter) {
-        return builder(delimiter).build();
+        Objects.requireNonNull(delimiter);
+        return new Splitter(delimiter, null, false, false, "", "");
     }
 
     /**
      * Create a splitter which split string by regular expression delimiter.
      */
     public static Splitter ofRegex(Pattern pattern) {
-        return regexBuilder(pattern).build();
+        Objects.requireNonNull(pattern);
+        return new Splitter(null, pattern, false, false, "", "");
     }
 
     /**
@@ -56,30 +56,6 @@ public class Splitter {
     public static Splitter ofRegex(String pattern) {
         requireNonNull(pattern);
         return ofRegex(Pattern.compile(pattern));
-    }
-
-    /**
-     * Create a builder using plain str delimiter.
-     */
-    public static Builder builder(String delimiter) {
-        requireNonNull(delimiter);
-        return new Builder(delimiter);
-    }
-
-    /**
-     * Create a builder using regex delimiter.
-     */
-    public static Builder regexBuilder(Pattern pattern) {
-        requireNonNull(pattern);
-        return new Builder(pattern);
-    }
-
-    /**
-     * Create a builder using regex delimiter.
-     */
-    public static Builder regexBuilder(String pattern) {
-        requireNonNull(pattern);
-        return new Builder(Pattern.compile(pattern));
     }
 
     /**
@@ -247,57 +223,35 @@ public class Splitter {
         }
     }
 
-    public static final class Builder {
-        private @Nullable String delimiter;
-        private @Nullable Pattern delimiterPattern;
-        private boolean trimResults;
-        private boolean skipEmpty;
-        private String prefix = "";
-        private String suffix = "";
 
-        private Builder(String delimiter) {
-            this.delimiter = delimiter;
-        }
-
-        private Builder(Pattern pattern) {
-            this.delimiterPattern = pattern;
-        }
-
-
-        /**
-         * Trim split results
-         */
-        public Builder trimResults() {
-            this.trimResults = true;
-            return this;
-        }
-
-        /**
-         * Skip empty results. If {@link #trimResults} is enabled, would skip blank result too.
-         */
-        public Builder skipEmpty() {
-            this.skipEmpty = true;
-            return this;
-        }
-
-        /**
-         * When do split, skip the prefix of given string if it has the prefix
-         */
-        public Builder prefix(String prefix) {
-            this.prefix = prefix;
-            return this;
-        }
-
-        /**
-         * When do split, skip the suffix of given string if it has the suffix
-         */
-        public Builder suffix(String suffix) {
-            this.suffix = suffix;
-            return this;
-        }
-
-        public Splitter build() {
-            return new Splitter(this);
-        }
+    /**
+     * Return a new Splitter which trim split results
+     */
+    public Splitter trimResults() {
+        return new Splitter(delimiter, delimiterPattern, true, skipEmpty, prefix, suffix);
     }
+
+    /**
+     * Return a new Splitter which skip empty results. If {@link #trimResults} is enabled, would skip blank result too.
+     */
+    public Splitter skipEmpty() {
+        return new Splitter(delimiter, delimiterPattern, trimResults, true, prefix, suffix);
+    }
+
+    /**
+     * Return a new Splitter which when do split, skip the prefix of given string if it has the prefix
+     */
+    public Splitter skipPrefix(String prefix) {
+        Objects.requireNonNull(prefix);
+        return new Splitter(delimiter, delimiterPattern, trimResults, skipEmpty, prefix, suffix);
+    }
+
+    /**
+     * Return a new Splitter which when do split, skip the suffix of given string if it has the suffix
+     */
+    public Splitter skipSuffix(String suffix) {
+        Objects.requireNonNull(suffix);
+        return new Splitter(delimiter, delimiterPattern, trimResults, skipEmpty, prefix, suffix);
+    }
+
 }
