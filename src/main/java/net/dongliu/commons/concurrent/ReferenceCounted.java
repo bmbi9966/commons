@@ -24,7 +24,7 @@ public abstract class ReferenceCounted<T extends ReferenceCounted<T>> {
     }
 
     protected ReferenceCounted() {
-        this.count = 1;
+        COUNT.setVolatile(this, 1);
     }
 
     /**
