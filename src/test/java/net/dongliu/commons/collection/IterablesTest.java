@@ -1,8 +1,10 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.exception.TooManyElementsException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,5 +52,16 @@ public class IterablesTest {
         Iterables.forEach(List.of("1", "2"), (v, last) -> {
             assertEquals(v.equals("2"), last);
         });
+    }
+
+    @Test
+    void getOneExactly() {
+        assertThrows(TooManyElementsException.class, () -> Iterables.getOneExactly(List.of(1, 2)));
+        assertThrows(NoSuchElementException.class, () -> Iterables.getOneExactly(List.of()));
+        assertEquals(Integer.valueOf(1), Iterables.getOneExactly(List.of(1)));
+    }
+
+    @Test
+    void forEachIndexed() {
     }
 }

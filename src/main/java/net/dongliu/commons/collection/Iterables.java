@@ -1,10 +1,13 @@
 package net.dongliu.commons.collection;
 
+import net.dongliu.commons.exception.TooManyElementsException;
 import net.dongliu.commons.function.IndexedConsumer;
 import net.dongliu.commons.function.LastAwareConsumer;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -16,6 +19,35 @@ import static java.util.Objects.requireNonNull;
  * Utils methods for Iterable
  */
 public class Iterables {
+
+    /**
+     * Return the element in iterable, if iterable has one and only one element.
+     * Throw a exception otherwise.
+     *
+     * @throws NoSuchElementException   if iterable has no element
+     * @throws TooManyElementsException if iterable has more than one element
+     */
+    public static <T> T getOneExactly(Iterable<T> iterable) throws NoSuchElementException, TooManyElementsException {
+        requireNonNull(iterable);
+        if (iterable instanceof Collection) {
+            int size = ((Collection) iterable).size();
+            if (size == 0) {
+                throw new NoSuchElementException();
+            }
+            if (size > 1) {
+                throw new TooManyElementsException("iterable has more than one elements");
+            }
+        }
+        Iterator<T> iterator = iterable.iterator();
+        if (!iterator.hasNext()) {
+            throw new NoSuchElementException();
+        }
+        T value = iterator.next();
+        if (iterator.hasNext()) {
+            throw new TooManyElementsException("iterable has more than one elements");
+        }
+        return value;
+    }
 
     /**
      * Fetch the first element of iterable.
